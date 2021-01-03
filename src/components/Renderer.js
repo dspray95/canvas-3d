@@ -1,14 +1,11 @@
 import React, { Component } from "react";
 import { colors } from "../tools/Colors";
-import ParticleHandler from "../js/particles/collections/ParticleHandler";
-import Cuboid from "../js/mesh/primitives/Cube";
-import { Coordinate3D } from "../js/Coordinate";
+import { Worldspace } from "../js/rendering/Worldspace";
 
 export default class BasicRenderer extends Component {
   constructor(props) {
     super(props);
 
-    let cubeLocation = new Coordinate3D(100, 100, 0);
     this.state = {
       width: window.innerWidth,
       height: window.innerHeight,
@@ -18,17 +15,21 @@ export default class BasicRenderer extends Component {
       //   window.innerHeight
       // ),
 
-      particleHandler: new Cuboid(
-        cubeLocation,
-        200,
-        200,
-        400,
+      worldspace: new Worldspace(
         window.innerWidth,
-        window.innerHeight
+        window.innerHeight,
+        window.innerWidth,
+        window.innerWidth,
+        window.innerHeight,
+        "perspective"
       ),
     };
 
     this.updateAnimationState = this.updateAnimationState.bind(this);
+  }
+
+  onKeyPressed(e) {
+    console.log(e.keyCode);
   }
 
   componentDidMount() {
@@ -54,7 +55,8 @@ export default class BasicRenderer extends Component {
       <CanvasAnimationInterface
         width={this.state.width}
         height={this.state.height}
-        particleHandler={this.state.particleHandler}
+        worldspace={this.state.worldspace}
+        onKeyDown={this.onKeyPressed}
       />
     );
   }
@@ -69,6 +71,7 @@ class CanvasAnimationInterface extends React.Component {
       projectionCentreX: this.props.width * 0.5,
       projectionCentreY: this.props.height * 0.5,
       fov: 1.0 / Math.tan(90 / 2.0),
+      aspectRatio: this.props.width / this.props.height,
     };
   }
 
@@ -86,31 +89,8 @@ class CanvasAnimationInterface extends React.Component {
     ctx.globalAlpha = 1;
     ctx.fillStyle = `rgb(${colors.spaceBlue})`;
     ctx.fillRect(0, 0, width, height);
-    if (this.props.particleHandler) {
-      this.props.particleHandler.tick();
-      this.props.particleHandler.draw(
-        ctx,
-        width,
-        this.state.projectionCentreX,
-        this.state.projectionCentreY,
-        this.state.perspective,
-        this.state.angle
-      );
-    }
-  }
-
-  drawParticles(ctx) {
-    this.props.particleHandler.tick();
-    this.props.particleHandler.particles.forEach((particle) => {
-      ctx.fillStyle = particle.rectColor;
-      ctx.fillRect(
-        particle.location.x,
-        particle.location.y,
-        particle.size,
-        particle.size
-      );
-    });
-    this.props.particleHandler.tick();
+    this.props.worldspace.draw(ctx);
+    // console.log("drawing");
   }
 
   render() {

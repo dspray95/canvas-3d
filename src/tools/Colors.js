@@ -7,6 +7,7 @@ const colors = {
   red: [163, 64, 64],
   spaceBlue: [30, 33, 49],
   yellow: [247, 237, 171],
+  pink: [236, 95, 255]
 };
 
 function RandomColor() {
@@ -14,4 +15,8 @@ function RandomColor() {
   return colors[keys[Math.round(keys.length * Math.random())]];
 }
 
-export { colors, RandomColor };
+function RGBA(color) {
+  return `rgba(${color})`;
+}
+
+export { colors, RandomColor, RGBA };
