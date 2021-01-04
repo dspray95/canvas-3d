@@ -31,6 +31,30 @@ function RigidbodyMatrix(T, R) {
 //   ];
 // }
 
+function VectorRotationMatrix3D(axis, angle){
+  if (axis == "x") {
+    return [
+      [1, 0, 0],
+      [0, Math.cos(angle), -Math.sin(angle)],
+      [0, Math.sin(angle), Math.cos(angle)],
+    ];
+  }
+  if (axis == "y") {
+    return [
+      [Math.cos(angle), 0, Math.sin(angle)],
+      [0, 1, 0],
+      [-Math.sin(angle), 0, Math.cos(angle)]
+    ];
+  }
+  if (axis == "z") {
+    return [
+      [Math.cos(angle), -Math.sin(angle), 0],
+      [Math.sin(angle), Math.cos(angle), 0],
+      [0, 0, 1]
+    ];
+  }
+}
+
 function RotationMatrix3D(axis, angle) {
   if (axis == "x") {
     return [
@@ -58,4 +82,4 @@ function RotationMatrix3D(axis, angle) {
   }
 }
 
-export { RotationMatrix3D, TranslationMatrix3D, ScaleMatrix3D };
+export { RotationMatrix3D, TranslationMatrix3D, ScaleMatrix3D, VectorRotationMatrix3D };

@@ -1,3 +1,6 @@
+import { RotationMatrix3D, VectorRotationMatrix3D } from "./matrices/Transform";
+import { dot } from "./matrices/Matrix"
+
 export default class Vector {
   constructor(x, y, z) {
     this.matrix = [x, y, z];
@@ -5,6 +8,13 @@ export default class Vector {
     this.y = y;
     this.z = z;
     this.length = this.getLength();
+  }
+
+  updateValues(){
+    this.x = this.matrix[0]
+    this.y = this.matrix[1]
+    this.z = this.matrix[2]
+    this.length = this.getLength()
   }
 
   scale(scalar) {
@@ -25,6 +35,15 @@ export default class Vector {
       this.y - otherVector.y,
       this.z - otherVector.z
     );
+  }
+
+  rotate(axis, degree){
+    let rotationMatrix = VectorRotationMatrix3D(axis, degree)
+    let outputMatrix = dot(this.columnMatrix(), rotationMatrix)
+    this.matrix = outputMatrix[2]
+    console.log(this.matrix)
+    this.updateValues()
+    return this
   }
 
   getLength() {
@@ -49,6 +68,14 @@ export default class Vector {
     return (
       this.x * otherVector.x + this.y * otherVector.y + this.z * otherVector.z
     );
+  }
+
+  columnMatrix() {
+    return [
+      [this.x],
+      [this.y],
+      [this.z]
+    ]
   }
 
   crossProduct(otherVector) {}

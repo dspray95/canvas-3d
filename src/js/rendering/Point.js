@@ -10,6 +10,7 @@ class Point {
   constructor(x, y, z, w = 1) {
     this.matrix = [x, y, z, w];
     this.perspectiveSpaceMatrix = [x, y, z, w];
+    this.logged = false
     this.updateValues();
     this.perspectiveSpace();
   }
@@ -51,10 +52,8 @@ class Point {
   columnVector() {
     return [[this.x], [this.y], [this.z], [this.w]];
   }
+
   perspectiveSpace() {
-    //TODO HAVE TO TRANSLATE THIS TO WORLD SPACE
-    //CURRENTLY JUST IN "PARENT" SPACE OF OBJECT
-    //SHITE
     this.perspectiveSpaceMatrix = [
       this.x / this.w,
       this.y / this.w,

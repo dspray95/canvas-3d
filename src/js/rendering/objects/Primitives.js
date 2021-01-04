@@ -2,15 +2,19 @@ import { RGBA, colors } from "../../../tools/Colors";
 import { Point } from "../Point";
 import { dot } from "../matrices/Matrix";
 export default class Primitive {
-  constructor(location, parent) {
+  constructor(location, parent, name="Primitive") {
     this.location = location;
     this.parent = parent;
     this.points = [];
     this.perspectivePoints = [];
-    this.edges = [[0, 1]];
+    this.edges = [];
+    this.lines = []
     this.done = false;
     this.verticeColor = colors.yellow;
     this.lineColor = colors.blue;
+    this.name = name
+    this.logPerspectivePos = false;
+    this.logged = false;
   }
 
   drawOrtho(ctx) {
@@ -31,24 +35,12 @@ export default class Primitive {
     this.perspectivePoints = [];
 
     this.points.forEach((point) => {
-      let projectingPoint = point.copy();
-      projectingPoint.add(projectingPoint.getVectorTo(this.location));
-      let cameraAP = camera.project(projectingPoint);
-      let projectedPoint = new Point(
-        cameraAP[0][0],
-        cameraAP[0][1],
-        cameraAP[0][2],
-        cameraAP[0][3]
-      );
-      projectedPoint.screenSpaceX =
-        projectedPoint.screenSpaceX * camera.viewportHeight +
-        camera.viewportWidth * 0.5;
-      projectedPoint.screenSpaceY =
-        projectedPoint.screenSpaceY * camera.viewportHeight +
-        camera.viewportHeight * 0.5;
-      // console.log(
-      //   `drawing at x:${projectedPoint.screenSpaceX}, y:${projectedPoint.screenSpaceY}`
-      // );
+      let pointCopy = point.copy();
+      pointCopy.add(pointCopy.getVectorTo(this.location));
+
+      let projectedPoint = camera.projectPoint(pointCopy);
+      // camera.pointToScreenSpace(projectedPoint)
+
       this.perspectivePoints.push(projectedPoint);
     });
   }
@@ -57,23 +49,60 @@ export default class Primitive {
     this.perspectiveCalculations(camera);
 
     ctx.fillStyle = RGBA(this.verticeColor);
+    ctx.strokeStyle = RGBA(this.lineColor);
 
-    this.edges.forEach((edge) => {
-      ctx.beginPath();
-      let currentLocation = this.perspectivePoints[edge[0]];
-      ctx.moveTo(currentLocation.screenSpaceX, currentLocation.screenSpaceY);
-      for (let i = 1; i < edge.length; i++) {
-        currentLocation = this.perspectivePoints[edge[i]];
-        ctx.lineTo(currentLocation.screenSpaceX, currentLocation.screenSpaceY);
+    this.lines.forEach((line) => {
+      let pointA = this.perspectivePoints[line[0]]
+      let pointB = this.perspectivePoints[line[1]]
+      //Do clipping
+      let clipResults = camera.clipLine(pointA, pointB)
+      if (clipResults.showLine && clipResults.intersectVector !== null){
+        if(pointA.w > pointB.w){
+          pointB = clipResults.intersectVector
+        }
+        else(
+          pointA = clipResults.intersectVector
+        )
       }
-      ctx.strokeStyle = RGBA(this.lineColor);
+      else if (!clipResults.showLine){
+        return
+      }
+      
+      //Do screen space projection
+      if (!pointA.toScreenSpace){
+        camera.pointToScreenSpace(pointA)
+        pointA.toScreenSpace = true;
+      }
+      if (!pointB.toScreenSpace){
+        camera.pointToScreenSpace(pointB)
+        pointB.toScreenSpace = true;
+      }
+
+      //Draw wireframe
+      ctx.beginPath()
+      ctx.moveTo(pointA.screenSpaceX, pointA.screenSpaceY)
+      ctx.lineTo(pointB.screenSpaceX, pointB.screenSpaceY)
+      
       ctx.stroke();
-    });
+    })
+
+    // this.edges.forEach((edge) => {
+
+    //   let edgeStart = camera.pointToScreenSpace(this.perspectivePoints[edge[0]])
+  
+    //   ctx.beginPath();
+    //   let currentLocation = this.perspectivePoints[edge[0]];
+    //   ctx.moveTo(currentLocation.screenSpaceX, currentLocation.screenSpaceY);
+    //   for (let i = 1; i < edge.length; i++) {
+    //     currentLocation = this.perspectivePoints[edge[i]];
+    //     ctx.lineTo(currentLocation.screenSpaceX, currentLocation.screenSpaceY);
+    //   }
+    //   ctx.strokeStyle = RGBA(this.lineColor);
+    //   ctx.stroke();
+    // });
 
     this.perspectivePoints.forEach((point) => {
       ctx.fillRect(point.screenSpaceX - 2, point.screenSpaceY - 2, 4, 4);
-      // console.log(projectedPoint);
-      // console.log(point.matrix);
     });
   }
 

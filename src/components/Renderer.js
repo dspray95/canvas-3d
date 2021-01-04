@@ -2,6 +2,13 @@ import React, { Component } from "react";
 import { colors } from "../tools/Colors";
 import { Worldspace } from "../js/rendering/Worldspace";
 
+
+
+function handleKeyPress(event) {
+  console.log(event.key)
+}
+
+
 export default class BasicRenderer extends Component {
   constructor(props) {
     super(props);
@@ -24,12 +31,7 @@ export default class BasicRenderer extends Component {
         "perspective"
       ),
     };
-
     this.updateAnimationState = this.updateAnimationState.bind(this);
-  }
-
-  onKeyPressed(e) {
-    console.log(e.keyCode);
   }
 
   componentDidMount() {
@@ -56,6 +58,7 @@ export default class BasicRenderer extends Component {
         width={this.state.width}
         height={this.state.height}
         worldspace={this.state.worldspace}
+        tabIndex="0" 
         onKeyDown={this.onKeyPressed}
       />
     );
@@ -117,6 +120,7 @@ class NonUpdatingCanvas extends React.Component {
         ref={(node) =>
           node ? this.props.parentCanvasRef(node.getContext("2d")) : null
         }
+        onKeyDown={this.handleKeyPress} 
       />
     );
   }

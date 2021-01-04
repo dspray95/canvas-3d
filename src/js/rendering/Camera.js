@@ -1,6 +1,7 @@
 import { RotationMatrix3D, TranslationMatrix3D } from "./matrices/Transform";
 import { dot } from "./matrices/Matrix";
 import { cot } from "../../tools/Trig";
+import { Point } from "./Point";
 
 class Camera {
   constructor(
@@ -18,20 +19,60 @@ class Camera {
     this.location = location;
     this.viewingDirection = viewingDirection;
     this.upDirection = upDirection;
-    this.fov = 90;
+    this.fov = 1.0 / Math.tan(0.45/2.0);
     //
     this.near = near;
     this.far = far;
     this.viewportWidth = viewportWidth;
     this.viewportHeight = viewportHeight;
-    this.perspectiveMatrix = viewingMatrix(this.fov, this.far, this.near);
+    this.perspectiveMatrix = projectionMatrix(this.fov, this.far, this.near);
     this.cameraToOriginMatrix = this.cameraToOrigin();
   }
 
-  project(point) {
+  projectPoint(point) {
     let pointAsCameraSpace = dot(point.getMatrix(), this.cameraToOriginMatrix);
     let perspectivePoint = dot(pointAsCameraSpace, this.perspectiveMatrix);
-    return perspectivePoint;
+    return new Point(
+      perspectivePoint[0][0],
+      perspectivePoint[0][1],
+      perspectivePoint[0][2],
+      perspectivePoint[0][3]
+    );;
+  }
+
+  pointToScreenSpace(projectedPoint) {
+    projectedPoint.screenSpaceX =
+      projectedPoint.screenSpaceX * this.viewportHeight +
+      this.viewportWidth * 0.5;
+    projectedPoint.screenSpaceY =
+      projectedPoint.screenSpaceY * this.viewportHeight +
+      this.viewportHeight * 0.5;
+  }
+
+  clipLine(A, B){
+    if(A.w < this.near && B.w < this.near){
+      return {showLine: false, intersectVector: null}
+    }
+    else if(A.w >= this.near && B.w >= this.near){
+      return {showLine: true, intersectVector: null}
+    }
+    else{
+      //one of the points is behind the clipping plane, 
+      //and one is in front
+      let n = (A.w - this.near) / (A.w - B.w)
+      let xIntersects = (n * A.x) + ((1-n) * B.x)
+      let yIntersects = (n * A.y) + ((1-n) * B.y)
+      let zIntersects = (n * A.z) + ((1-n) * B.z)
+      let wIntersects = this.near
+      // The point where the line intersects with the clipping plane
+      let intersectVector = new Point(
+        xIntersects, 
+        yIntersects, 
+        zIntersects, 
+        wIntersects
+      )
+      return {showLine: true, intersectVector: intersectVector}
+    }
   }
 
   cameraToOrigin() {
@@ -80,7 +121,7 @@ class Camera {
   }
 }
 
-function viewingMatrix(alpha, far, near) {
+function projectionMatrix(alpha, far, near) {
   return [
     [cot(alpha / 2), 0, 0, 0],
     [0, cot(alpha / 2), 0, 0],

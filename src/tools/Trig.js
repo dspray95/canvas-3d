@@ -6,4 +6,8 @@ function arcctg(x) {
   return Math.PI / 2 - Math.atan(x);
 }
 
-export { cot, arcctg };
+function getIntersectPoint(A, B) {
+
+}
+
+export { cot, arcctg, getIntersectPoint };

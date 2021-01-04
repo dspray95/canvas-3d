@@ -1,8 +1,9 @@
 import { Camera } from "./Camera";
 import { Point } from "./Point";
 import { Vector, vectorCrossProduct } from "./Vector";
-import { Cuboid, RotatingCuboid, MovingCuboid } from "./objects/Cuboid";
+import { Cuboid, RotatingCuboid, MovingCuboid, StaticRotatedCuboid } from "./objects/Cuboid";
 import { ParralaxParticle } from "../particles/Particle";
+import CameraController from "../interface/CameraController";
 
 class Worldspace {
   constructor(xLim, yLim, zLim, viewportWidth, viewportHeight, projectionMode) {
@@ -18,21 +19,36 @@ class Worldspace {
       new Cuboid(new Point(500, 0, -1000), this),
       new Cuboid(new Point(-500, 0, -1000), this),
       new Cuboid(new Point(0, 500, -1000), this),
-      new Cuboid(new Point(0, -500, -1000), this),
-      new RotatingCuboid(new Point(0, 0, -1000), this),
-      new Cuboid(new Point(-250, -250, -1000), this),
+      new Cuboid(new Point(0, -500, 1000), this),
+      new RotatingCuboid(new Point(0, 0, 1000), this),
+      new Cuboid(new Point(-250, -250, 1000), this),
       new Cuboid(new Point(-250, 250, -1000), this),
       new Cuboid(new Point(250, -250, -1000), this),
       new Cuboid(new Point(250, 250, -1000), this),
-      new Cuboid(new Point(250, 0, 1000), this),
-      new Cuboid(new Point(-250, 0, 1000), this),
-      new MovingCuboid(new Point(0, 0, -1000), this)
+      new StaticRotatedCuboid(new Point(500, 0, 1000), this, 45, "C BEHIND 1"),
+      new StaticRotatedCuboid(new Point(-500, 0, 1000), this, 45, "C BEHIND 2"),
+      new StaticRotatedCuboid(new Point(500, 0, -1000), this, 45, "C IN FRONT 1"),
+      new MovingCuboid(new Point(0, 0, 1000), this),
+      new Cuboid(new Point(0, 0, 100), this, "CLIPPER")
+      
     ];
+
     this.camera = this.createMainCamera(
       this.centre,
       viewportWidth,
       viewportHeight
     );
+    this.cameraController = new CameraController(this.camera)
+
+    // window.addEventListener("keydown", event => {
+    //   if (event.key === "a"){
+    //     this.cameraController.turn("left", 0.001)
+    //     // console.log(v)
+    //   }
+    //   else if (event.key === "d"){
+    //     this.cameraController.turn("right", 0.001)
+    //   }
+    // })
   }
 
   createMainCamera(worldCentre, viewportWidth, viewportHeight) {
@@ -49,8 +65,8 @@ class Worldspace {
     ).unitLengthVector();
 
     let fov = 90;
-    let near = 20;
-    let far = 200;
+    let near = 1;
+    let far = 2000;
     return new Camera(
       this,
       cameraLoc,

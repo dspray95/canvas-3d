@@ -4,11 +4,12 @@ import { Point } from "../Point";
 import { randomIntRange } from "../../../tools/Random";
 
 class Cuboid extends Primitive {
-  constructor(location, parent) {
-    super(location, parent);
+  constructor(location, parent, name="Cuboid") {
+    super(location, parent, name=name);
     let cube = this.createCube(20, 20, 20);
     this.points = cube["vertices"];
     this.edges = cube["edges"];
+    this.lines = cube["lines"]
   }
 
   createCube(cuboidWidth, cuboidHeight, cuboidLength) {
@@ -44,15 +45,41 @@ class Cuboid extends Primitive {
       [2, 6],
       [3, 7],
     ];
+    let lines = [
+      [0, 1],
+      [1, 2],
+      [2, 3],
+      [3, 0],
+      [4, 5],
+      [5, 6],
+      [6, 7],
+      [7, 4],
+      [0, 4],
+      [1, 5],
+      [2, 6],
+      [3, 7]
+    ]
 
-    return { vertices: cuboid, edges: edges };
+    return { vertices: cuboid, edges: edges, lines: lines };
   }
 }
+
+class StaticRotatedCuboid extends Cuboid{
+  constructor(location, parent, angle, name="StaticRotatingCuboid"){
+    super(location, parent, name=name);
+    this.verticeColor = colors.green;
+    this.logPerspectivePos = true;
+    this.points.forEach((point) => {
+      point.rotate("x", angle * (Math.PI / 180))
+      point.rotate("y", angle * (Math.PI / 180))
+    })
+  }
+}
+
 
 class RotatingCuboid extends Cuboid {
   constructor(location, parent) {
     super(location, parent);
-
     this.verticeColor = colors.pink
     this.points.forEach((point) => {
       // point.translate(200, 0, 0);
@@ -81,7 +108,6 @@ class WanderingCuboid extends Cuboid {
   tick() {
     if (Math.random() < 0.05){
       let direction = randomIntRange(0, 2)
-      // console.log(direction)
       switch(direction){
         case 0:
           this.direction = [1, randomIntRange(-1, 1), randomIntRange(-1, 1)];
@@ -96,7 +122,7 @@ class WanderingCuboid extends Cuboid {
           this.direction = [1, 0, 0]
       }
     }
-    
+
     this.points.forEach((point) => {
       // console.log(this.direction)
       point.translate(this.direction[0], this.direction[1], this.direction[2])
@@ -104,4 +130,4 @@ class WanderingCuboid extends Cuboid {
   }
 }
 
-export { Cuboid, RotatingCuboid, WanderingCuboid as MovingCuboid };
+export { Cuboid, RotatingCuboid, WanderingCuboid as MovingCuboid, StaticRotatedCuboid };
