@@ -27,6 +27,7 @@ class Camera {
     this.viewportHeight = viewportHeight;
     this.perspectiveMatrix = projectionMatrix(this.fov, this.far, this.near);
     this.cameraToOriginMatrix = this.cameraToOrigin();
+    console.log(this.perspectiveMatrix)
   }
 
   projectPoint(point) {
@@ -50,29 +51,35 @@ class Camera {
   }
 
   clipLine(A, B){
-    if(A.w < this.near && B.w < this.near){
-      return {showLine: false, intersectVector: null}
-    }
-    else if(A.w >= this.near && B.w >= this.near){
-      return {showLine: true, intersectVector: null}
-    }
-    else{
-      //one of the points is behind the clipping plane, 
-      //and one is in front
-      let n = (A.w - this.near) / (A.w - B.w)
-      let xIntersects = (n * A.x) + ((1-n) * B.x)
-      let yIntersects = (n * A.y) + ((1-n) * B.y)
-      let zIntersects = (n * A.z) + ((1-n) * B.z)
-      let wIntersects = this.near
-      // The point where the line intersects with the clipping plane
-      let intersectVector = new Point(
-        xIntersects, 
-        yIntersects, 
-        zIntersects, 
-        wIntersects
-      )
-      return {showLine: true, intersectVector: intersectVector}
-    }
+      if(A.w < this.near && B.w < this.near){
+        return {showLine: false, intersectVector: null}
+      }
+      else if(A.w >= this.near && B.w >= this.near){
+        return {showLine: true, intersectVector: null}
+      }
+      else{
+        //one of the points is behind the clipping plane, 
+        //and one is in front
+        let n = (A.w - this.near) / (A.w - B.w)
+        let xIntersects = (n * A.x) + ((1-n) * B.x)
+        let yIntersects = (n * A.y) + ((1-n) * B.y)
+        let zIntersects = (n * A.z) + ((1-n) * B.z)
+        let wIntersects = this.near
+        // The point where the line intersects with the clipping plane
+        let intersectVector = new Point(
+          xIntersects, 
+          yIntersects, 
+          zIntersects, 
+          wIntersects
+        )
+        return {showLine: true, intersectVector: intersectVector}
+      }
+    // }
+    // else{
+    //   // console.log(A)
+    //   // console.log(B)
+    //   return {showLine: false, intersectVector: null}
+    // }
   }
 
   cameraToOrigin() {

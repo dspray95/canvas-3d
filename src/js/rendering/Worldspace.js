@@ -40,15 +40,15 @@ class Worldspace {
     );
     this.cameraController = new CameraController(this.camera)
 
-    // window.addEventListener("keydown", event => {
-    //   if (event.key === "a"){
-    //     this.cameraController.turn("left", 0.001)
-    //     // console.log(v)
-    //   }
-    //   else if (event.key === "d"){
-    //     this.cameraController.turn("right", 0.001)
-    //   }
-    // })
+    window.addEventListener("keydown", event => {
+      if (event.key === "a"){
+        this.cameraController.turn("left", 0.001)
+        // console.log(v)
+      }
+      else if (event.key === "d"){
+        this.cameraController.turn("right", 0.25)
+      }
+    })
   }
 
   createMainCamera(worldCentre, viewportWidth, viewportHeight) {
