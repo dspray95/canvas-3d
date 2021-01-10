@@ -99,10 +99,11 @@ class RotatingCuboid extends Cuboid {
 }
 
 class WanderingCuboid extends Cuboid {
-  constructor(location, parent) {
+  constructor(location, parent, speed) {
     super(location, parent)
     this.verticeColor = colors.pink;
     this.direction = [1, 0, 0]
+    this.speed = speed
   }
 
   tick() {
@@ -110,16 +111,16 @@ class WanderingCuboid extends Cuboid {
       let direction = randomIntRange(0, 2)
       switch(direction){
         case 0:
-          this.direction = [1, randomIntRange(-1, 1), randomIntRange(-1, 1)];
+          this.direction = [this.speed, randomIntRange(-this.speed, this.speed), randomIntRange(-this.speed, this.speed)];
           break;
         case 1:
-          this.direction = [randomIntRange(-1, 1), 1, randomIntRange(-1, 1)];
+          this.direction = [randomIntRange(-this.speed, this.speed), this.speed, randomIntRange(-this.speed, this.speed)];
           break;
         case 2:
-          this.direction = [randomIntRange(-1, 1), randomIntRange(-1, 1), 1];
+          this.direction = [randomIntRange(-this.speed, this.speed), randomIntRange(-this.speed, this.speed), this.speed];
           break;
         default:
-          this.direction = [1, 0, 0]
+          this.direction = [0, 0, 0]
       }
     }
 

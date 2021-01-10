@@ -6,51 +6,59 @@ import {
 } from "./matrices/Transform";
 import { dot } from "./matrices/Matrix";
 
-class Point {
-  constructor(x, y, z, w = 1) {
-    this.matrix = [x, y, z, w];
+export default class Point {
+  constructor(x, y, z, w=1, parent=null) {
+    this.setMatrix(x, y, z, w)
     this.perspectiveSpaceMatrix = [x, y, z, w];
     this.logged = false
+    this.parent=parent
     this.updateValues();
     this.perspectiveSpace();
   }
 
   add(vector) {
-    this.matrix = [this.x + vector.x, this.y + vector.y, this.z + vector.z, 1];
+    this.setMatrix(this.x + vector.x, this.y + vector.y, this.z + vector.z, 1);
     this.updateValues();
   }
 
   rotate(axis, degree) {
     let rotationMatrix = RotationMatrix3D(axis, degree);
-    let outputMatrix = dot(this.getMatrix(), rotationMatrix)[0];
+    let outputMatrix = dot(rotationMatrix, this.matrix);
     this.matrix = outputMatrix;
     this.updateValues();
   }
 
   translate(x, y, z) {
     let translationMatrix = TranslationMatrix3D(x, y, z);
-    let outputMatrix = dot(this.getMatrix(), translationMatrix)[0];
+    let outputMatrix = dot(translationMatrix, this.matrix);
     this.matrix = outputMatrix;
     this.updateValues();
   }
 
   scale(x, y, z) {
     let scaleMatrix = ScaleMatrix3D(x, y, z);
-    let outputMatrix = dot(this.getMatrix(), scaleMatrix)[0];
+    let outputMatrix = dot(scaleMatrix, this.matrix);
     this.matrix = outputMatrix;
     this.updateValues();
   }
 
   getVectorTo(pointB) {
-    return new Vector(this.x - pointB.x, this.y - pointB.y, this.z - pointB.z);
+    return new Vector(pointB.x - this.x, 
+                      pointB.y - this.y, 
+                      pointB.z - this.z);
   }
 
   getMatrix() {
-    return [this.matrix];
+    return [[this.x], [this.y], [this.z], [this.w]];
   }
 
-  columnVector() {
-    return [[this.x], [this.y], [this.z], [this.w]];
+  setMatrix(x, y, z, w){
+    this.matrix = [[x], [y], [z], [w]]
+    this.updateValues()
+  }
+
+  asList(){
+    return [this.x, this.y, this.z, this.w]
   }
 
   perspectiveSpace() {
@@ -69,24 +77,14 @@ class Point {
     this.screenSpaceY = this.y;
   }
 
-  vectorToPoint(otherPoint) {
-    return new Vector(
-      this.x - otherPoint.x,
-      this.y - otherPoint.y,
-      this.z - otherPoint.z
-    );
-  }
-
   updateValues() {
-    this.x = this.matrix[0];
-    this.y = this.matrix[1];
-    this.z = this.matrix[2];
-    this.w = this.matrix[3];
+    this.x = this.matrix[0][0];
+    this.y = this.matrix[1][0];
+    this.z = this.matrix[2][0];
+    this.w = this.matrix[3][0];
   }
 
   copy() {
     return new Point(this.x, this.y, this.z, this.w);
   }
 }
-
-export { Point };

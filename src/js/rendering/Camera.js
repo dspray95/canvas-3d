@@ -1,7 +1,7 @@
 import { RotationMatrix3D, TranslationMatrix3D } from "./matrices/Transform";
 import { dot } from "./matrices/Matrix";
 import { cot } from "../../tools/Trig";
-import { Point } from "./Point";
+import Point from "./Point";
 
 class Camera {
   constructor(
@@ -27,7 +27,6 @@ class Camera {
     this.viewportHeight = viewportHeight;
     this.perspectiveMatrix = projectionMatrix(this.fov, this.far, this.near);
     this.cameraToOriginMatrix = this.cameraToOrigin();
-    console.log(this.perspectiveMatrix)
   }
 
   projectPoint(point) {
@@ -74,12 +73,6 @@ class Camera {
         )
         return {showLine: true, intersectVector: intersectVector}
       }
-    // }
-    // else{
-    //   // console.log(A)
-    //   // console.log(B)
-    //   return {showLine: false, intersectVector: null}
-    // }
   }
 
   cameraToOrigin() {
@@ -129,6 +122,10 @@ class Camera {
 }
 
 function projectionMatrix(alpha, far, near) {
+  // [1, 0, 0, 0]
+  // [0, 1, 0, 0]
+  // [0, 0, a, -1]
+  // [0, 0, b, 0]
   return [
     [cot(alpha / 2), 0, 0, 0],
     [0, cot(alpha / 2), 0, 0],
@@ -139,4 +136,4 @@ function projectionMatrix(alpha, far, near) {
 
 function clippingMatrix() {}
 
-export { Camera };
+export { Camera, projectionMatrix };

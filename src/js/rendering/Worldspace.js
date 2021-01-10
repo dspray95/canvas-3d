@@ -28,7 +28,7 @@ class Worldspace {
       new StaticRotatedCuboid(new Point(500, 0, 1000), this, 45, "C BEHIND 1"),
       new StaticRotatedCuboid(new Point(-500, 0, 1000), this, 45, "C BEHIND 2"),
       new StaticRotatedCuboid(new Point(500, 0, -1000), this, 45, "C IN FRONT 1"),
-      new MovingCuboid(new Point(0, 0, 1000), this),
+      new MovingCuboid(new Point(0, 0, 1000), this, 100),
       new Cuboid(new Point(0, 0, 100), this, "CLIPPER")
       
     ];
