@@ -1,6 +1,5 @@
-const Transform = require("../../../js/rendering/matrices/Transform")
-const Matrix = require("../../../js/rendering/matrices/Matrix")
-const { StaticRotatedCuboid } = require("../../../js/rendering/objects/Cuboid")
+const Transform = require("../../../js/engine/rendering/matrices/Transform");
+const Matrix = require("../../../js/engine/rendering/matrices/Matrix");
 
 test("translate positive 3D", () => {
   let A = [[1], [2], [3], [1]]

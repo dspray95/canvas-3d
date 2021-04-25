@@ -1,4 +1,4 @@
-  const Matrix = require("../../../js/rendering/matrices/Matrix")
+  const Matrix = require("../../../js/engine/rendering/matrices/Matrix")
 
   test('matrix dot(ROW*COL)', () =>{
     let A = [[1, 2, 3]];
