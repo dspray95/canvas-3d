@@ -72,15 +72,15 @@ class CanvasAnimationInterface extends React.Component {
     super(props);
     this.storeContext = this.storeContext.bind(this);
     this.state = {
-      // stats: new Stats(),
+      stats: new Stats(),
       perspective: this.props.width * 0.8,
       projectionCentreX: this.props.width * 0.5,
       projectionCentreY: this.props.height * 0.5,
       fov: 1.0 / Math.tan(90 / 2.0),
       aspectRatio: this.props.width / this.props.height,
     };
-    // this.state.stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-    // document.body.appendChild( this.state.stats.dom );
+    this.state.stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+    document.body.appendChild( this.state.stats.dom );
   }
 
   // Run in the 'base canvas' component to pass the context up
@@ -93,14 +93,11 @@ class CanvasAnimationInterface extends React.Component {
   }
 
   canvasDraw(ctx, width, height) {
-    // this.state.stats.begin()
     ctx.clearRect(0, 0, width, height);
     ctx.globalAlpha = 1;
     ctx.fillStyle = this.props.worldspace.backgroundColor.toHtmlRgba()
     ctx.fillRect(0, 0, width, height);
     this.props.worldspace.tick(ctx);
-    // this.props.noise.draw(ctx)
-    // this.state.stats.end()
   }
 
   render() {

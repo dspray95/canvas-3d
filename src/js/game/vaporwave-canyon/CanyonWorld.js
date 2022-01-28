@@ -54,7 +54,7 @@ class CanyonWorld extends Worldspace{
 
     // this.camera.location = new Point(0, 10, 0);
     // this.lightSources.push(new LightSource(new Point(0, -10, 0), Color.WHITE, 200 ))
-    this.camera.translate(new Vector(0, 0, -2))
+    this.camera.translate(new Vector(0, 0, 1))
 
     
     
@@ -67,7 +67,7 @@ class CanyonWorld extends Worldspace{
     }
     else{
       this.ui.push(new ZigZag(10, this.viewportWidth*0.01, this.viewportHeight*0.02, this.viewportWidth, 300, "right"))
-    this.ui.push(new ZigZag(10, this.viewportWidth*0.01, this.viewportHeight*0.02, this.viewportWidth - this.viewportWidth*0.01, 350, "right"))
+      this.ui.push(new ZigZag(10, this.viewportWidth*0.01, this.viewportHeight*0.02, this.viewportWidth - this.viewportWidth*0.01, 350, "right"))
       this.ui.push(new Morse(".... .. .-. . / -- .", 10, 250, 100, 100, this.viewportHeight))
       this.ui.push(new NeuralNet(6, 4, 30, 100, 100))
       this.ui.push(new Fretboard(30, 27.5, this.viewportWidth - this.viewportWidth * 0.075, 0))

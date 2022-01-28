@@ -122,6 +122,19 @@ export default class Mesh{
     })
   }
 
+  drawPerspective(canvas, camera, opacity=1){
+    this.shader.draw(
+      camera, 
+      canvas,
+      this.triangles,
+      this.parent.parent.lightSources,
+      this.drawFaces, 
+      this.drawWireframe,
+      opacity,
+      this.drawCalls
+    )
+  }
+
   draw(canvas, camera, opacity=1){
 
     if(!this.doDrawCall){
@@ -152,7 +165,6 @@ export default class Mesh{
       this.drawCalls
     )
       
-    this.drawCalls += 1
     // this.triangles.forEach(triangle => {
 
     //   let faceCull = triangle.normal.dotProduct(triangle.calculatePlaneCenter().getVectorTo(camera.location)) <= 0 ? true : false
@@ -212,7 +224,6 @@ export default class Mesh{
     // These calls aren't inside the triangle loop above, since we wan them to always be drawn on top,
     // and painters algorithm is limited
     if (this.drawVertices){
-      // console.log(`draw points len ${this.points.length}`)
       let idxHigh = 0
       this.points.forEach(point => {
         canvas.fillStyle = this.verticeColor.toHtmlRgba()
@@ -229,7 +240,6 @@ export default class Mesh{
 
       })
       if(this.done === false){
-        console.log(`points draw idx ${idxHigh}`)
         this.done = true
       }
     }

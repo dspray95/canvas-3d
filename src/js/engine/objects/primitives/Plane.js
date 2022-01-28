@@ -21,10 +21,7 @@ class Plane extends WorldObject{
     let vertexIndex = 0
     let topLeftX = (width-1) / -2;
     let topLeftZ = (height-1) / 2
-    // console.log("n verts")
-    // console.log(width * height)
-    // console.log("n tris")
-    // console.log((width-1) * (height -1) * 6)
+
     for(let y = 0; y < height; y++){
         for(let x = 0; x < width; x++){
           vertices.push(new Point((topLeftX + x)*scale, 0, (topLeftZ - y)*scale))
@@ -47,8 +44,7 @@ class Plane extends WorldObject{
           vertexIndex++;
       }
     }
-    // console.log(triangles)
-    // console.log(vertices)
+
     return { vertices: vertices, triangles: triangles };
   }
 }

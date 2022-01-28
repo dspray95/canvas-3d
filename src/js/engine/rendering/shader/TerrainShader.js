@@ -9,19 +9,19 @@ class TerrainShader{
     for(let i = 0; i<triangles.length; i++){
       let triA = triangles[i]
 
-      if(triA.A.drawCalls <= drawCalls){
-        camera.perspectivePointProjectionPipeline(triA.A)
-        triA.A.drawCalls++
-      }
-      if(triA.B.drawCalls <= drawCalls){
-        camera.perspectivePointProjectionPipeline(triA.B)
-        triA.B.drawCalls++
+      // if(triA.A.drawCalls <= drawCalls){
+      //   camera.perspectivePointProjectionPipeline(triA.A)
+      //   triA.A.drawCalls++
+      // }
+      // if(triA.B.drawCalls <= drawCalls){
+      //   camera.perspectivePointProjectionPipeline(triA.B)
+      //   triA.B.drawCalls++
 
-      }
-      if(triA.C.drawCalls <= drawCalls){
-        camera.perspectivePointProjectionPipeline(triA.C)
-        triA.C.drawCalls++
-      }
+      // }
+      // if(triA.C.drawCalls <= drawCalls){
+      //   camera.perspectivePointProjectionPipeline(triA.C)
+      //   triA.C.drawCalls++
+      // }
 
       let color = triangles[i].color
       color.opacity = opacityModifier * 0.5
@@ -32,11 +32,6 @@ class TerrainShader{
         }
         // continue
         color = Color.PINK
-      }
-      
-
-      if (i >= y-20 && i <= y+2){
-        // color = Color.WHITE
       }
 
 

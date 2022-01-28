@@ -6,6 +6,7 @@ import Point from "./objects/primitives/Point";
 import WorldObject from "../objects/WorldObject";
 import Vector from "./objects/primitives/Vector";
 import { Vector2D } from "../physics/vector/Vector2D";
+import { superKernelPerspectivePipeline, projectionPipelineSetOutputShape } from "./gpu/ProjectionPipelineKernels";
 
 
 class Camera extends WorldObject{
@@ -50,16 +51,21 @@ class Camera extends WorldObject{
     //s 
     this.viewportWidth = viewportWidth;
     this.viewportHeight = viewportHeight
+    this.previousPespectivePipelineSize = -1;
     // this.translate(new Vector(0, 0, 10))
+    
+  }
+
+  doMatrixPerspectivePointProjection(matrices){
+    return superKernelPerspectivePipeline(this.cameraToOriginMatrix, this.perspectiveMatrix, matrices)
   }
 
   perspectivePointProjectionPipeline(point){
-    //Move point into perspective space by applying the
-    //camera transform
+    //Move point into perspective space by applying the camera transform
     this.projectPointToPerspectiveSpace(point)
-    //Divide by w!
+    // //Divide by w!
     point.inPerspectiveSpace.divideByW()
-    //Finally move the point from perspecitve space into screen space
+    // //Finally move the point from perspecitve space into screen space
     this.projectPointToScreenSpace(point)
   }
 
@@ -188,7 +194,6 @@ class Camera extends WorldObject{
   }
 
   rotate(axis, degree){
-    console.log("rot")
     this.viewingDirection = this.viewingDirection.rotate(axis, degree).unitLengthVector()
     this.perspectiveMatrix = Camera.getPerspeciveMatrix(
       this.fov,

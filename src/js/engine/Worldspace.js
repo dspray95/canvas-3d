@@ -35,18 +35,36 @@ class Worldspace {
     this.scripts.forEach(script => {
       script.execute()
     })
+    
+    let vertexMatrices = []
+
     for(var objectGroup in this.objects){
       this.objects[objectGroup].forEach(object => {
         object.tick();
+        // vertexMatrices = vertexMatrices.concat(object.mesh.points.map(point => point.matrix))
         object.drawPerspective(ctx, this.camera);
       })
     }
+
+    // let transformedMatrices = this.camera.doMatrixPerspectivePointProjection(vertexMatrices)
+
+    // let nPointsTraversed = 0
+    // for(var objectGroup in this.objects){
+    //   this.objects[objectGroup].forEach(object => {
+    //     object.mesh.points.forEach(point => {
+    //       point.inPerspectiveSpace.setMatrixFromList(transformedMatrices[nPointsTraversed])
+    //       nPointsTraversed++
+    //     })
+    //     object.mesh.drawPerspective(ctx, this.camera)
+    //   })
+    // }
+
+    this.camera.tick()
 
     this.lightSources.forEach((lightSource) => {
       lightSource.tick();
     })
 
-    this.camera.tick()
     this.ui.forEach((element) => {
       element.draw(ctx)
     })

@@ -75,15 +75,15 @@ class TerrainGenerator extends BehaviourScript {
   }
   
   execute(){
-    if(this.cameraPos.distanceTo(this.previousCameraPosition) > 11 && this.canCreateNextTerrain){
-      this.loadNextChunk()
-      this.canCreateNextTerrain = false
-    } 
-    if(this.cameraPos.distanceTo(this.previousCameraPosition) > 23){
-      this.previousCameraPosition = this.cameraPos.copy();
-      this.terrainObjects.pop()
-      this.canCreateNextTerrain = true
-    }
+    // if(this.cameraPos.distanceTo(this.previousCameraPosition) > 11 && this.canCreateNextTerrain){
+    //   // this.loadNextChunk()
+    //   this.canCreateNextTerrain = false
+    // } 
+    // if(this.cameraPos.distanceTo(this.previousCameraPosition) > 23){
+    //   this.previousCameraPosition = this.cameraPos.copy();
+    //   // this.terrainObjects.pop()
+    //   this.canCreateNextTerrain = true
+    // }
   }
 }
 

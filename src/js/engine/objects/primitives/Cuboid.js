@@ -93,15 +93,6 @@ class RotatingCuboid extends Cuboid {
       this.rotate(rotation, 1 * this.speed)
     })
   }
-    // tick() {
-    //   this.points.forEach((point) => {
-    //     point.subtract(new Vector(this.location.x, this.location.y, this.location.z))
-    //     point.rotate("y", 1 * (Math.PI / 180))
-    //     point.rotate("z", 1 * (Math.PI / 180))
-    //     point.rotate("x", 1 * (Math.PI / 180))
-    //     point.add(new Vector(this.location.x, this.location.y, this.location.z))
-    //   })
-    // }
 }
 
 export { Cuboid, RotatingCuboid };
