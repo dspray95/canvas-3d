@@ -1,6 +1,14 @@
 import { Color } from "../tools/Colors";
 import { Camera } from "./rendering/Camera";
+import { kernelDynamicPerspectiveToScreenSpace } from "./rendering/gpu/ProjectionPipelineKernels";
 import Point from "./rendering/objects/primitives/Point";
+const Stats = require('stats.js')
+
+let stats = new Stats()
+stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+document.body.appendChild( stats.dom );
+
+let doOnce = true
 
 class Worldspace {
   constructor(xLim, yLim, zLim, viewportWidth, viewportHeight, projectionMode) {
@@ -22,7 +30,9 @@ class Worldspace {
       "default": []
     }; 
     this.lightSources = []
-    this.scripts = []
+    this.scripts = [
+
+    ]
     this.ui = []
   }
 
@@ -32,32 +42,44 @@ class Worldspace {
 
 
   tick(ctx) {
+    stats.begin()
     this.scripts.forEach(script => {
       script.execute()
     })
     
-    let vertexMatrices = []
+    let worldSpaceMatrices = []
+    let screenspaceMatrices = []
 
     for(var objectGroup in this.objects){
       this.objects[objectGroup].forEach(object => {
         object.tick();
-        // vertexMatrices = vertexMatrices.concat(object.mesh.points.map(point => point.matrix))
-        object.drawPerspective(ctx, this.camera);
+        worldSpaceMatrices = worldSpaceMatrices.concat(object.mesh.points.map(point => point.matrix))
+        // object.drawPerspective(ctx, this.camera);
       })
     }
-
-    // let transformedMatrices = this.camera.doMatrixPerspectivePointProjection(vertexMatrices)
-
-    // let nPointsTraversed = 0
-    // for(var objectGroup in this.objects){
-    //   this.objects[objectGroup].forEach(object => {
-    //     object.mesh.points.forEach(point => {
-    //       point.inPerspectiveSpace.setMatrixFromList(transformedMatrices[nPointsTraversed])
-    //       nPointsTraversed++
-    //     })
-    //     object.mesh.drawPerspective(ctx, this.camera)
-    //   })
+        
+    // if(doOnce){
+    //   doOnce = false
+    //   console.log(worldSpaceMatrices.length)
     // }
+
+    //TODO Should be able to combine these kernels and still get the perspective space output...
+    //Will be way faster than passing data cpu>gpu>cpugpu>cpu
+    let perspectiveSpaceMatrices = this.camera.doMatrixPerspectivePointProjection(worldSpaceMatrices)
+    let screenSpaceMatrices = kernelDynamicPerspectiveToScreenSpace(perspectiveSpaceMatrices, this.viewportWidth, this.viewportHeight)
+
+    let nPointsTraversed = 0
+    for(var objectGroup in this.objects){
+      this.objects[objectGroup].forEach(object => {
+        object.mesh.points.forEach(point => {
+          point.inPerspectiveSpace.setMatrixFromList(perspectiveSpaceMatrices[nPointsTraversed])
+          point.screenSpaceX = screenSpaceMatrices[nPointsTraversed][0]
+          point.screenSpaceY = screenSpaceMatrices[nPointsTraversed][1]
+          nPointsTraversed++
+        })
+        object.mesh.drawPerspective(ctx, this.camera)
+      })
+    }
 
     this.camera.tick()
 
@@ -68,6 +90,7 @@ class Worldspace {
     this.ui.forEach((element) => {
       element.draw(ctx)
     })
+    stats.end()
     // ctx.beginPath()
     // ctx.moveTo(this.viewportWidth, this.viewportHeight * 0.26)
     // ctx.lineTo(this.viewportWidth * 0.995, this.viewportHeight * 0.24)

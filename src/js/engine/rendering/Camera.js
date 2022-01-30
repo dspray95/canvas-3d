@@ -206,7 +206,7 @@ class Camera extends WorldObject{
 
   tick(){
     // if (this.location.z < 30){
-      this.translate(new Vector(0, 0, 0.4))
+      // this.translate(new Vector(0, 0, 0.4))
     // }
   }
 }

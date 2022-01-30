@@ -3,12 +3,11 @@ import { Color } from "../js/tools/Colors";
 import { Worldspace } from "../js/engine/Worldspace";
 import { CanyonWorld} from "../js/game/vaporwave-canyon/CanyonWorld"
 import { NoiseToCanvas } from "../js/game/vaporwave-canyon/scripts/NoiseToCanvas";
-const Stats = require('stats.js')
+import { CubeWorld } from "../js/game/vaporwave-canyon/CubeWorld";
 
 function handleKeyPress(event) {
   console.log(event.key)
 }
-
 
 export default class BasicRenderer extends Component {
   constructor(props) {
@@ -31,6 +30,14 @@ export default class BasicRenderer extends Component {
         window.innerHeight,
         "perspective"
       )
+      // worldspace: new CubeWorld(
+      //   window.innerWidth,
+      //   window.innerHeight,
+      //   window.innerWidth,
+      //   window.innerWidth,
+      //   window.innerHeight,
+      //   "perspective"
+      // )
     };
     this.updateAnimationState = this.updateAnimationState.bind(this);
   }
@@ -72,15 +79,12 @@ class CanvasAnimationInterface extends React.Component {
     super(props);
     this.storeContext = this.storeContext.bind(this);
     this.state = {
-      stats: new Stats(),
       perspective: this.props.width * 0.8,
       projectionCentreX: this.props.width * 0.5,
       projectionCentreY: this.props.height * 0.5,
       fov: 1.0 / Math.tan(90 / 2.0),
       aspectRatio: this.props.width / this.props.height,
     };
-    this.state.stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-    document.body.appendChild( this.state.stats.dom );
   }
 
   // Run in the 'base canvas' component to pass the context up

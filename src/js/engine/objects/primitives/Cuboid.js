@@ -1,10 +1,10 @@
-import { Color } from "../../../../tools/Colors"
 import WorldObject from "../WorldObject";
-import Point from "../../../rendering/objects/primitives/Point";
-import { randomIntRange } from "../../../../tools/Random";
-import Line from "../../../rendering/objects/primitives/Line";
-import Vector from "../../../rendering/objects/primitives/Vector";
-import Mesh from "../../../rendering/objects/mesh/Mesh";
+import Point from "../../rendering/objects/primitives/Point";
+import { randomIntRange } from "../../../tools/Random";
+import Line from "../../rendering/objects/primitives/Line";
+import Vector from "../../rendering/objects/primitives/Vector";
+import Mesh from "../../rendering/objects/mesh/Mesh";
+import { Color } from "../../../tools/Colors";
 
 class Cuboid extends WorldObject {
   constructor(location, parent, name="Cuboid") {
@@ -12,7 +12,7 @@ class Cuboid extends WorldObject {
     let cube = this.createCube(10, 10, 10);
     this.mesh = new Mesh(this, parent.camera, cube['vertices'], cube['triangles'], true, false, false)
     this.mesh.triangles.forEach(triangle => {
-      triangle.color = Color.DEFAULTS.blue;
+      triangle.color = Color.LIGHTBLUE;
     })
   }
 
@@ -71,10 +71,10 @@ class Cuboid extends WorldObject {
       [2, 7, 6]
     ]
     
-    let color = Color.DEFAULTS[Object.keys(Color.DEFAULTS)[randomIntRange(0, 9)]]
+    // let color = Color.DEFAULTS[Object.keys(Color.DEFAULTS)[randomIntRange(0, 9)]]
     let faceColors = []
     for(let i = 0; i < 6; i++){
-      faceColors.push(color)
+      faceColors.push(Color.LIGHTBLUE)
     }
     this.faceColors = faceColors
     return { vertices: cuboid, faces: faces, triangles: triangles };

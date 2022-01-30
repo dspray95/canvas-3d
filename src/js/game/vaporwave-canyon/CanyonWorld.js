@@ -10,6 +10,8 @@ import { ZigZag } from "./gui/ZigZag";
 import { Morse } from "./gui/Morse";
 import { NeuralNet } from "./gui/NeuralNet";
 import { Fretboard } from "./gui/Fretboard";
+import { Camera } from "../../engine/rendering/Camera";
+import { CameraController } from "./scripts/CameraController";
 class CanyonWorld extends Worldspace{
 
   constructor(xLim, yLim, zLim, viewportWidth, viewportHeight, projectionMode){
@@ -49,14 +51,15 @@ class CanyonWorld extends Worldspace{
         terrainSizeY,
         heightMultiplier,
         terrainColor
+      ),
+      new CameraController(
+        this.camera
       )
     ]
 
     // this.camera.location = new Point(0, 10, 0);
     // this.lightSources.push(new LightSource(new Point(0, -10, 0), Color.WHITE, 200 ))
-    this.camera.translate(new Vector(0, 0, 1))
-
-    
+    this.camera.translate(new Vector(0, 0, 1)) 
     
     if(this.viewportHeight > this.viewportWidth){
       this.ui.push(new ZigZag(10, this.viewportWidth*0.02, this.viewportHeight*0.02, this.viewportWidth, 300, "right"))
