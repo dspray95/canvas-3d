@@ -9,6 +9,6 @@ export class CameraController extends BehaviourScript{
     }
 
     execute(){
-        this.camera.translate(new Vector(0, 0, 1))
+        this.camera.translate(new Vector(0, 0, 0.4))
     }
 }
