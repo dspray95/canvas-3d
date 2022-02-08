@@ -2,9 +2,9 @@ import { CameraConfig } from "./CameraConfig"
 import { RotationMatrix3D, TranslationMatrix3D } from "./matrices/Transform";
 import { dot } from "./matrices/Matrix";
 import { cot } from "../../tools/Trig";
-import Point from "./objects/primitives/Point";
+import Point from "./rendering-objects/primitives/Point";
 import WorldObject from "../objects/WorldObject";
-import Vector from "./objects/primitives/Vector";
+import Vector from "./rendering-objects/primitives/Vector";
 import { Vector2D } from "../physics/vector/Vector2D";
 import { superKernelPerspectivePipeline, projectionPipelineSetOutputShape } from "./gpu/ProjectionPipelineKernels";
 

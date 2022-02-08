@@ -1,8 +1,8 @@
 import { isCompositeComponent } from "react-dom/test-utils";
 import WorldObject from "../../../../engine/objects/WorldObject"
-import Mesh from "../../../../engine/rendering/objects/mesh/Mesh";
-import Point from "../../../../engine/rendering/objects/primitives/Point";
-import Vector from "../../../../engine/rendering/objects/primitives/Vector";
+import Mesh from "../../../../engine/rendering/rendering-objects/mesh/Mesh";
+import Point from "../../../../engine/rendering/rendering-objects/primitives/Point";
+import Vector from "../../../../engine/rendering/rendering-objects/primitives/Vector";
 import { FlatShading } from "../../../../engine/rendering/shader/FlatShading";
 import { TerrainShader } from "../../../../engine/rendering/shader/TerrainShader";
 import { Color } from "../../../../tools/Colors";

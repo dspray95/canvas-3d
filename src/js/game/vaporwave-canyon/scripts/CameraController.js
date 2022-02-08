@@ -1,4 +1,4 @@
-import Vector from "../../../engine/rendering/objects/primitives/Vector";
+import Vector from "../../../engine/rendering/rendering-objects/primitives/Vector";
 import { BehaviourScript } from "./BehaviourScript";
 
 export class CameraController extends BehaviourScript{

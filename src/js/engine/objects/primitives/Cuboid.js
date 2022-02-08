@@ -1,9 +1,9 @@
 import WorldObject from "../WorldObject";
-import Point from "../../rendering/objects/primitives/Point";
+import Point from "../../rendering/rendering-objects/primitives/Point";
 import { randomIntRange } from "../../../tools/Random";
-import Line from "../../rendering/objects/primitives/Line";
-import Vector from "../../rendering/objects/primitives/Vector";
-import Mesh from "../../rendering/objects/mesh/Mesh";
+import Line from "../../rendering/rendering-objects/primitives/Line";
+import Vector from "../../rendering/rendering-objects/primitives/Vector";
+import Mesh from "../../rendering/rendering-objects/mesh/Mesh";
 import { Color } from "../../../tools/Colors";
 
 class Cuboid extends WorldObject {

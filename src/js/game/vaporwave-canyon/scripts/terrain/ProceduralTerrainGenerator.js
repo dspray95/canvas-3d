@@ -1,6 +1,6 @@
 import { Vector2D } from "../../../../engine/physics/vector/Vector2D";
-import Point from "../../../../engine/rendering/objects/primitives/Point";
-import Vector from "../../../../engine/rendering/objects/primitives/Vector";
+import Point from "../../../../engine/rendering/rendering-objects/primitives/Point";
+import Vector from "../../../../engine/rendering/rendering-objects/primitives/Vector";
 import { Color } from "../../../../tools/Colors";
 import { Terrain } from "../../game-objects/world/Terrain";
 import { BehaviourScript } from "../BehaviourScript";

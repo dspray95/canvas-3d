@@ -1,5 +1,5 @@
 import { Vector2D } from "../../../engine/physics/vector/Vector2D";
-import Vector from "../../../engine/rendering/objects/primitives/Vector";
+import Vector from "../../../engine/rendering/rendering-objects/primitives/Vector";
 import { Color } from "../../../tools/Colors";
 import { TerrainNoise } from "./noise/TerrainNoise";
 

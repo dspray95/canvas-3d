@@ -1,6 +1,6 @@
 import { VectorRotationMatrix3D } from "./matrices/Transform";
-import Point from "./objects/primitives/Point";
-import Vector from "./objects/primitives/Vector";
+import Point from "./rendering-objects/primitives/Point";
+import Vector from "./rendering-objects/primitives/Vector";
 
 class CameraConfig{
 
@@ -17,7 +17,7 @@ class CameraConfig{
 
 class TestingCameraConfig {
   static CAMERA_START_LOCATION = new Point(0, 0, 0)
-  static CAMERA_START_VIEWING_DIRECTION = new Vector(0, 0, -1)
+  static CAMERA_START_VIEWING_DIRECTION = new Vector(0, 0, 1)
   static CAMERA_START_UP_DIRECTION = new Vector(0, 1, 0)
   static VIEWPORT_WIDTH = 1920
   static VIEWPORT_HEIGHT = 1080

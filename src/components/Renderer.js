@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Color } from "../js/tools/Colors";
-import { Worldspace } from "../js/engine/Worldspace";
 import { CanyonWorld} from "../js/game/vaporwave-canyon/CanyonWorld"
 import { NoiseToCanvas } from "../js/game/vaporwave-canyon/scripts/NoiseToCanvas";
 import { CubeWorld } from "../js/game/vaporwave-canyon/CubeWorld";
@@ -22,15 +21,7 @@ export default class BasicRenderer extends Component {
       //   window.innerHeight
       // ),
       noise: new NoiseToCanvas(),
-      worldspace: new CanyonWorld(
-        window.innerWidth,
-        window.innerHeight,
-        window.innerWidth,
-        window.innerWidth,
-        window.innerHeight,
-        "perspective"
-      )
-      // worldspace: new CubeWorld(
+      // worldspace: new CanyonWorld(
       //   window.innerWidth,
       //   window.innerHeight,
       //   window.innerWidth,
@@ -38,6 +29,14 @@ export default class BasicRenderer extends Component {
       //   window.innerHeight,
       //   "perspective"
       // )
+      worldspace: new CubeWorld(
+        window.innerWidth,
+        window.innerHeight,
+        window.innerWidth,
+        window.innerWidth,
+        window.innerHeight,
+        "perspective"
+      )
     };
     this.updateAnimationState = this.updateAnimationState.bind(this);
   }

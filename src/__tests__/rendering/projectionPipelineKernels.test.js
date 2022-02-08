@@ -18,7 +18,7 @@ test("testProjectionPipelineKernels", () => {
     let matrices = [
         [[5], [10], [15], [2]],
         [[2], [2], [2], [1]],
-        [[8], [8], [8], [5]] 
+        [[8], [8], [8], [5]],
     ]
 
     let expectedOutput = [

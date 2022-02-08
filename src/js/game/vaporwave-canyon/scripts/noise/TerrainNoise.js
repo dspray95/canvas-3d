@@ -2,7 +2,7 @@ import { isCompositeComponent } from "react-dom/test-utils";
 import { PerlinNoise } from "./PerlinNoise";
 import { clamp, inverseLerp } from "../../../../tools/Numbers";
 import { PRNG } from "../../../../tools/Random";
-import { vectorCrossProduct } from "../../../../engine/rendering/objects/primitives/Vector";
+import { vectorCrossProduct } from "../../../../engine/rendering/rendering-objects/primitives/Vector";
 import { Vector2D } from "../../../../engine/physics/vector/Vector2D";
 import { Noise } from '../../../../../../node_modules/noisejs'
 

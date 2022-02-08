@@ -1,5 +1,5 @@
 import { Color } from "../../../tools/Colors"
-import { MeshDefaults } from "../objects/mesh/MeshDefaults"
+import { MeshDefaults } from "../rendering-objects/mesh/MeshDefaults"
 
 class TerrainShader{
 

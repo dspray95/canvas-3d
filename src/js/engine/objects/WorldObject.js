@@ -1,6 +1,6 @@
 import { Color } from "../../tools/Colors";
-import { Point, averageDimension, averagePoint } from "../rendering/objects/primitives/Point";
-import { Worldspace } from "../Worldspace";
+import { Point, averageDimension, averagePoint } from "../rendering/rendering-objects/primitives/Point";
+import { Worldspace } from "../worldspaces/Worldspace";
 
 export default class WorldObject {
   constructor(location, parent, name="WorldObject") {
