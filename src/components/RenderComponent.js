@@ -21,15 +21,7 @@ export default class BasicRenderer extends Component {
       //   window.innerHeight
       // ),
       noise: new NoiseToCanvas(),
-      // worldspace: new CanyonWorld(
-      //   window.innerWidth,
-      //   window.innerHeight,
-      //   window.innerWidth,
-      //   window.innerWidth,
-      //   window.innerHeight,
-      //   "perspective"
-      // )
-      worldspace: new CubeWorld(
+      worldspace: new CanyonWorld(
         window.innerWidth,
         window.innerHeight,
         window.innerWidth,
@@ -37,6 +29,14 @@ export default class BasicRenderer extends Component {
         window.innerHeight,
         "perspective"
       )
+      // worldspace: new CubeWorld(
+      //   window.innerWidth,
+      //   window.innerHeight,
+      //   window.innerWidth,
+      //   window.innerWidth,
+      //   window.innerHeight,
+      //   "perspective"
+      // )
     };
     this.updateAnimationState = this.updateAnimationState.bind(this);
   }
@@ -89,17 +89,21 @@ class CanvasAnimationInterface extends React.Component {
   // Run in the 'base canvas' component to pass the context up
   storeContext(canvasContext) {
     this.ctx = canvasContext;
+    this.initCanvas(this.ctx, this.props.width, this.props.height)
   }
 
   componentDidUpdate() {
     this.canvasDraw(this.ctx, this.props.width, this.props.height);
   }
 
-  canvasDraw(ctx, width, height) {
+  initCanvas(ctx, width, height){
     ctx.clearRect(0, 0, width, height);
     ctx.globalAlpha = 1;
     ctx.fillStyle = this.props.worldspace.backgroundColor.toHtmlRgba()
     ctx.fillRect(0, 0, width, height);
+  }
+
+  canvasDraw(ctx, width, height) {
     this.props.worldspace.tick(ctx);
   }
 

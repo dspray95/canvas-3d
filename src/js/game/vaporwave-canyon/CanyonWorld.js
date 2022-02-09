@@ -21,24 +21,57 @@ class CanyonWorld extends CanvasOnlyWorldspace{
     super(xLim, yLim, zLim, viewportWidth, viewportHeight, projectionMode);
     this.name = "worldspace"
 
-    // this.camera.location = new Point(0, 10, 0);
-    // this.lightSources.push(new LightSource(new Point(0, -10, 0), Color.WHITE, 200 ))
-    this.camera.translate(new Vector(0, 0, 1)) 
-    
-    if(this.viewportHeight > this.viewportWidth){
-      this.ui.push(new ZigZag(10, this.viewportWidth*0.02, this.viewportHeight*0.02, this.viewportWidth, 300, "right"))
-      this.ui.push(new ZigZag(10, this.viewportWidth*0.02, this.viewportHeight*0.02, this.viewportWidth - this.viewportWidth*0.01, 350, "right"))
-      this.ui.push(new Morse(".... .. .-. . / -- .", 10, this.viewportHeight * 0.2, 100, this.viewportWidth * 0.05, this.viewportHeight))
-      this.ui.push(new NeuralNet(6, 4, 30, this.viewportHeight * 0.02, this.viewportHeight * 0.02))
-      this.ui.push(new Fretboard(30, 27.5, this.viewportWidth - this.viewportWidth * 0.35, 0))
+    let terrain = new Terrain(
+      new Point(0, 0, 0), //location
+      this, //parent
+      "terrain", //name
+      40, //width
+      20, //height
+      5, //noise scale
+      4, //octaves
+      0.2, //persistance
+      1.87, //lacunarity
+      500, //seed
+      new Vector2D(0, 0), //octave offset
+      1, //height multiplier
+      Color.YELLOW, //terrain color,
+      false,
+      0
+    )
+    this.objects['terrain'] = [terrain]
+          //this extracts out all our objects so we don't have to constantly re-build the matrix list that we'll be operating with
+    this.worldSpaceMatrices = []
+    for(var objectGroup in this.objects){
+      this.objects[objectGroup].forEach(object => {
+        this.worldSpaceMatrices = this.worldSpaceMatrices.concat(object.points)
+      })
     }
-    else{
-      this.ui.push(new ZigZag(10, this.viewportWidth*0.01, this.viewportHeight*0.02, this.viewportWidth, 300, "right"))
-      this.ui.push(new ZigZag(10, this.viewportWidth*0.01, this.viewportHeight*0.02, this.viewportWidth - this.viewportWidth*0.01, 350, "right"))
-      this.ui.push(new Morse(".... .. .-. . / -- .", 10, 250, 100, 100, this.viewportHeight))
-      this.ui.push(new NeuralNet(6, 4, 30, 100, 100))
-      this.ui.push(new Fretboard(30, 27.5, this.viewportWidth - this.viewportWidth * 0.075, 0))
-    }
+    // this.scripts = [
+    //   new TerrainGenerator(
+    //     this,
+    //     this.objects.terrain,
+    //     this.camera.location,
+    //     new Point(0, 0, 0),
+    //     40,
+    //     30,
+    //     1,
+    //     Color.YELLOW
+    //   )
+    // ]
+    // if(this.viewportHeight > this.viewportWidth){
+    //   this.ui.push(new ZigZag(10, this.viewportWidth*0.02, this.viewportHeight*0.02, this.viewportWidth, 300, "right"))
+    //   this.ui.push(new ZigZag(10, this.viewportWidth*0.02, this.viewportHeight*0.02, this.viewportWidth - this.viewportWidth*0.01, 350, "right"))
+    //   this.ui.push(new Morse(".... .. .-. . / -- .", 10, this.viewportHeight * 0.2, 100, this.viewportWidth * 0.05, this.viewportHeight))
+    //   this.ui.push(new NeuralNet(6, 4, 30, this.viewportHeight * 0.02, this.viewportHeight * 0.02))
+    //   this.ui.push(new Fretboard(30, 27.5, this.viewportWidth - this.viewportWidth * 0.35, 0))
+    // }
+    // else{
+    //   this.ui.push(new ZigZag(10, this.viewportWidth*0.01, this.viewportHeight*0.02, this.viewportWidth, 300, "right"))
+    //   this.ui.push(new ZigZag(10, this.viewportWidth*0.01, this.viewportHeight*0.02, this.viewportWidth - this.viewportWidth*0.01, 350, "right"))
+    //   this.ui.push(new Morse(".... .. .-. . / -- .", 10, 250, 100, 100, this.viewportHeight))
+    //   this.ui.push(new NeuralNet(6, 4, 30, 100, 100))
+    //   this.ui.push(new Fretboard(30, 27.5, this.viewportWidth - this.viewportWidth * 0.075, 0))
+    // }
 
 
 

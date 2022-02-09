@@ -1,7 +1,7 @@
 import { gpuInterface } from "./GPU";
 
 const gpu = gpuInterface.getGPU()
-const N_OUTPUT = 8
+const N_OUTPUT = 1500
 /**Perspective pipeline**/
 //1. Move the point to be relative to (0, 0, 0) by doing:
 //  P = cameraToOriginMatrix * point.matrix

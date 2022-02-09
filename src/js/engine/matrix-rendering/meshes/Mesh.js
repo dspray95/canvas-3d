@@ -28,6 +28,7 @@ class BasicMesh{
     })
     this.translate(this.origin[0][0], this.origin[1][0], this.origin[2][0])
     this.triangles = triangles
+    console.log(this)
   }
 
   rotate(axis, angleDegrees){

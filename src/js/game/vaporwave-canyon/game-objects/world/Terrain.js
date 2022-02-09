@@ -1,6 +1,6 @@
 import { isCompositeComponent } from "react-dom/test-utils";
+import { BasicMesh } from "../../../../engine/matrix-rendering/meshes/Mesh";
 import WorldObject from "../../../../engine/objects/WorldObject"
-import Mesh from "../../../../engine/rendering/rendering-objects/mesh/Mesh";
 import Point from "../../../../engine/rendering/rendering-objects/primitives/Point";
 import Vector from "../../../../engine/rendering/rendering-objects/primitives/Vector";
 import { FlatShading } from "../../../../engine/rendering/shader/FlatShading";
@@ -49,16 +49,20 @@ class Terrain extends WorldObject{
       heightMultiplier,
       lastPointsRowOfPrevious
     );
-    
-    this.mesh = new Mesh(
-      this,
-      parent.camera, 
-      terrainMesh['vertices'], 
-      terrainMesh['triangles'], 
-      true, false, false,
-      TerrainShader,
-      terrainColor
+    this.mesh = new BasicMesh(
+      this.location.matrix,
+      terrainMesh.vertices,
+      terrainMesh.triangles
     )
+    // this.mesh = new Mesh(
+    //   this,
+    //   parent.camera, 
+    //   terrainMesh['vertices'], 
+    //   terrainMesh['triangles'], 
+    //   true, false, false,
+    //   TerrainShader,
+    //   terrainColor
+    // )
     this.doSpawnAnim = doSpawnAnim
     this.opacity = 1
     if (doSpawnAnim){

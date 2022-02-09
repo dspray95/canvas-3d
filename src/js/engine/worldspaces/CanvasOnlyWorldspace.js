@@ -8,14 +8,14 @@ let doOnce = true
 
 class CanvasOnlyWorldspace extends Worldspace {
 
-    constructor(xLim, yLim, zLim, viewportWidth, viewportHeight, projectionMode) {
+    constructor(xLim, yLim, zLim, viewportWidth, viewportHeight, projectionMode, ctx) {
         super(xLim, yLim, zLim, viewportWidth, viewportHeight, projectionMode)
         
-      this.objects['cubes'] = []
+      // this.objects['cubes'] = []
       // for(let i = 0; i <= 20; i++){
-      this.objects['cubes'].push(
-        makeCuboid([[0], [0], [100], [1]], 10, 10, 10)
-      )
+      // this.objects['cubes'].push(
+      //   makeCuboid([[0], [0], [100], [1]], 10, 10, 10)
+      // )
           // this.objects['cubes'].push(
           //     new Cuboid(
           //         new Vector(100, randomIntRange(-10, 10), i* 100),
@@ -29,19 +29,29 @@ class CanvasOnlyWorldspace extends Worldspace {
           // new CameraController(this.camera)
       ]
 
-      //this extracts out all our cubes so we don't have to constantly re-build the matrix list that we'll be operating with
+      //this extracts out all our objects so we don't have to constantly re-build the matrix list that we'll be operating with
       this.worldSpaceMatrices = []
       for(var objectGroup in this.objects){
         this.objects[objectGroup].forEach(object => {
           this.worldSpaceMatrices = this.worldSpaceMatrices.concat(object.points)
         })
       }
+      //initailize the bg color
+      // // ctx.clearRect(0, 0, this.viewportWidth, this.viewportHeight);
+      // ctx.globalAlpha = 1;
+      // ctx.fillStyle = this.backgroundColor.toHtmlRgba()
+      // ctx.fillRect(0, 0, this.viewportWidth, this.viewportHeight);
     }
 
     tick(ctx)
     {
         this.stats.begin()
         this.scripts.forEach(script => {
+          if(doOnce){
+            console.log(script)
+            console.log(this.objects.terrain)
+            doOnce = false
+          }
           script.execute()
         })
           
@@ -50,25 +60,10 @@ class CanvasOnlyWorldspace extends Worldspace {
         let perspectiveSpaceMatrices = this.camera.doMatrixPerspectivePointProjection(this.worldSpaceMatrices)
         let screenSpaceMatrices = kernelDynamicPerspectiveToScreenSpace(perspectiveSpaceMatrices, this.viewportWidth, this.viewportHeight)
         //NB: STILL AT ~60FPS HERE ^
-        if(doOnce){
-          console.log("TRI")
-          console.log(this.objects.cubes[0].triangles)
-          console.log("WSM")
-          console.log(this.worldSpaceMatrices)
-          console.log("PSM")
-          console.log(perspectiveSpaceMatrices)
-          console.log("SSM")
-          console.log(screenSpaceMatrices)
-          console.log("CTO")
-          console.log(this.camera.cameraToOriginMatrix)
-          console.log("PRS")
-          console.log(this.camera.perspectiveMatrix)
-          doOnce = false;
-        }
-        ctx.strokeStyle  = `rgb(255,255,255)`
 
-        this.objects.cubes[0].triangles.forEach(tri => {
-          ctx.beginPath()
+        ctx.strokeStyle  = `rgb(255,255,255)`
+        ctx.beginPath()
+        this.objects.terrain[0].mesh.triangles.forEach(tri => {
           ctx.moveTo(
             screenSpaceMatrices[tri[0]][0],
             screenSpaceMatrices[tri[0]][1]
@@ -85,34 +80,10 @@ class CanvasOnlyWorldspace extends Worldspace {
             screenSpaceMatrices[tri[0]][0],
             screenSpaceMatrices[tri[0]][1]
           )
-          ctx.stroke()
-          ctx.closePath()
         })
-        // for(let i = 0; i < this.objects['cubes'].length; i++){
-        //   for(let tri = 0; tri < this.objects['cubes'][i].triangles.length; tri++){
+        ctx.stroke()
+        ctx.closePath()
 
-        //     ctx.beginPath()
-
-        //     ctx.moveTo(
-        //       screenSpaceMatrices[4][0], 
-        //       screenSpaceMatrices[4][1]
-        //     )
-        //     ctx.lineTo(
-        //       screenSpaceMatrices[5][0], 
-        //       screenSpaceMatrices[5][1]
-        //     )
-        //     ctx.lineTo(
-        //       screenSpaceMatrices[6][0], 
-        //       screenSpaceMatrices[6][1]
-        //     )
-        //     ctx.lineTo(
-        //       screenSpaceMatrices[4][0], 
-        //       screenSpaceMatrices[4][1]
-        //     )
-        //     ctx.stroke()
-        //     ctx.closePath()
-        //   }
-        // }
         this.camera.tick()
     
         this.lightSources.forEach((lightSource) => {

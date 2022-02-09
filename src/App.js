@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import BasicRenderer from "./components/Renderer";
+import BasicRenderer from "./components/RenderComponent";
 import { Skills } from "./components/Skills";
 import { Title } from "./components/Title";
 import { Icons } from "./components/Icons";
