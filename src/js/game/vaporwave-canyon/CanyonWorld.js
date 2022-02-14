@@ -22,18 +22,18 @@ class CanyonWorld extends CanvasOnlyWorldspace{
     this.name = "worldspace"
 
     let terrain = new Terrain(
-      new Point(0, 0, 0), //location
+      new Point(-4.5, 0, 20), //location
       this, //parent
       "terrain", //name
-      40, //width
-      20, //height
+      20, //width
+      30, //height
       5, //noise scale
       4, //octaves
       0.2, //persistance
       1.87, //lacunarity
       500, //seed
       new Vector2D(0, 0), //octave offset
-      1, //height multiplier
+      3, //height multiplier
       Color.YELLOW, //terrain color,
       false,
       0
@@ -43,7 +43,7 @@ class CanyonWorld extends CanvasOnlyWorldspace{
     this.worldSpaceMatrices = []
     for(var objectGroup in this.objects){
       this.objects[objectGroup].forEach(object => {
-        this.worldSpaceMatrices = this.worldSpaceMatrices.concat(object.points)
+        this.worldSpaceMatrices = this.worldSpaceMatrices.concat(object.mesh.points)
       })
     }
     // this.scripts = [

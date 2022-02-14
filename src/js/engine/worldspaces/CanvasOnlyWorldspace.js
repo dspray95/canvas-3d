@@ -29,13 +29,6 @@ class CanvasOnlyWorldspace extends Worldspace {
           // new CameraController(this.camera)
       ]
 
-      //this extracts out all our objects so we don't have to constantly re-build the matrix list that we'll be operating with
-      this.worldSpaceMatrices = []
-      for(var objectGroup in this.objects){
-        this.objects[objectGroup].forEach(object => {
-          this.worldSpaceMatrices = this.worldSpaceMatrices.concat(object.points)
-        })
-      }
       //initailize the bg color
       // // ctx.clearRect(0, 0, this.viewportWidth, this.viewportHeight);
       // ctx.globalAlpha = 1;
@@ -47,11 +40,6 @@ class CanvasOnlyWorldspace extends Worldspace {
     {
         this.stats.begin()
         this.scripts.forEach(script => {
-          if(doOnce){
-            console.log(script)
-            console.log(this.objects.terrain)
-            doOnce = false
-          }
           script.execute()
         })
           
@@ -60,10 +48,28 @@ class CanvasOnlyWorldspace extends Worldspace {
         let perspectiveSpaceMatrices = this.camera.doMatrixPerspectivePointProjection(this.worldSpaceMatrices)
         let screenSpaceMatrices = kernelDynamicPerspectiveToScreenSpace(perspectiveSpaceMatrices, this.viewportWidth, this.viewportHeight)
         //NB: STILL AT ~60FPS HERE ^
+        // - At around 47FPS with a matrix output length size of 1500
+        if(doOnce){
+          console.log("RPM")
+          console.log(this.worldSpaceMatrices)
+          console.log("PSM")
+          console.log(perspectiveSpaceMatrices)
+          console.log("SSM")
+          console.log(screenSpaceMatrices)
+          console.log("N Points")
+          console.log(this.objects.terrain[0].mesh.points.length)
+          console.log("Mesh points")
+          console.log(this.objects.terrain[0].mesh.points)
+        }
+
 
         ctx.strokeStyle  = `rgb(255,255,255)`
         ctx.beginPath()
         this.objects.terrain[0].mesh.triangles.forEach(tri => {
+          if(doOnce){
+            // console.log(tri)
+            // console.log(screenSpaceMatrices[tri[0]][0], screenSpaceMatrices[tri[0]][1])
+          }
           ctx.moveTo(
             screenSpaceMatrices[tri[0]][0],
             screenSpaceMatrices[tri[0]][1]
@@ -94,6 +100,7 @@ class CanvasOnlyWorldspace extends Worldspace {
           element.draw(ctx)            //BUT we should still break out these draws onto a separate canvas that lives on top of the game-world one
         })                             //to save on useless updating and CPU ops
         this.stats.end()
+        doOnce = false
     }
 }
 

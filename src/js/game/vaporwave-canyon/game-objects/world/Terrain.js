@@ -54,15 +54,6 @@ class Terrain extends WorldObject{
       terrainMesh.vertices,
       terrainMesh.triangles
     )
-    // this.mesh = new Mesh(
-    //   this,
-    //   parent.camera, 
-    //   terrainMesh['vertices'], 
-    //   terrainMesh['triangles'], 
-    //   true, false, false,
-    //   TerrainShader,
-    //   terrainColor
-    // )
     this.doSpawnAnim = doSpawnAnim
     this.opacity = 1
     if (doSpawnAnim){
@@ -77,14 +68,31 @@ class Terrain extends WorldObject{
     const topLeftY = (height-1) / 2
 
     let vertexIndex = 0
-
+    let x2 = width - width * 0.5 - 2
     for(let y = 0; y < height; y++){
       for(let x = 0; x < width; x++){
-        let p = new Point(
-          (topLeftX + x), 
-          heightmap[y][x] * heightMultiplier, 
-          (topLeftY - y)
-          )
+        // let p = new Point(
+        //   (topLeftX + x), 
+        //   heightmap[y][x] * heightMultiplier, 
+        //   (topLeftY - y)
+        //   )
+        let p = [
+          [topLeftX + x * 1.5],
+          [heightmap[y][x] * heightMultiplier],
+          [topLeftY - y],
+          [1]
+        ]
+        if (x > width / 2 + 1){
+          p[0][0] += 1 * (x - 1 - (width * 0.5 + 1))
+        } else if(x < width / 2 - 2){
+          x2--;
+          p[0][0] -= 1 * (x2 - 1 - (width * 0.5 + 1))
+        } else {
+          x2 = width - width * 0.5 - 2
+        }
+        // else{
+        //   p[0][0] += 1
+        // }
         // if (y == height - 1){
         // }
         // if (y == height - 1 && firstRowPointsOfPrevious != null){
