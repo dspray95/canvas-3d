@@ -22,7 +22,7 @@ class CanyonWorld extends CanvasOnlyWorldspace{
     this.name = "worldspace"
 
     let terrain = new Terrain(
-      new Point(-4.5, 0, 20), //location
+      new Point(4.5, 0, 20), //location
       this, //parent
       "terrain", //name
       20, //width
@@ -38,6 +38,7 @@ class CanyonWorld extends CanvasOnlyWorldspace{
       false,
       0
     )
+    terrain.rotate("y", 180)
     this.objects['terrain'] = [terrain]
           //this extracts out all our objects so we don't have to constantly re-build the matrix list that we'll be operating with
     this.worldSpaceMatrices = []

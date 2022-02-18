@@ -36,9 +36,7 @@ class Matrix {
   }
   
   static translate = (matrix, x, y, z) => {
-    // console.log(matrix)
     let translationMatrix = TranslationMatrix3D(x, y, z);
-    // console.log(Matrix.dot(translationMatrix, matrix))
     return Matrix.dot(translationMatrix, matrix)
   }
   

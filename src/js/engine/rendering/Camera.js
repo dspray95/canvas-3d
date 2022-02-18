@@ -107,7 +107,7 @@ class Camera extends WorldObject{
         //one of the points is behind the clipping plane, 
         //and one is in front
         //We need to find where the line intersects the plane, 
-        //this will be the new point to which we draw
+        //this will be the new point to which we draw (replaces B)
         let n = (A.w - this.near) / (A.w - B.w)
         let xIntersects = (n * A.x) + ((1-n) * B.x)
         let yIntersects = (n * A.y) + ((1-n) * B.y)
