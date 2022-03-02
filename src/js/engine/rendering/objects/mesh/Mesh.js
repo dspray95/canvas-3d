@@ -149,7 +149,9 @@ export default class Mesh{
       this.drawFaces, 
       this.drawWireframe,
       opacity,
-      this.drawCalls
+      this.drawCalls,
+      this.parent.width,
+      this.parent.height
     )
       
     this.drawCalls += 1

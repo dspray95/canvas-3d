@@ -10,17 +10,20 @@ import { ZigZag } from "./gui/ZigZag";
 import { Morse } from "./gui/Morse";
 import { NeuralNet } from "./gui/NeuralNet";
 import { Fretboard } from "./gui/Fretboard";
+import { CameraController } from "./scripts/CameraController";
+
+
 class CanyonWorld extends Worldspace{
 
   constructor(xLim, yLim, zLim, viewportWidth, viewportHeight, projectionMode){
     super(xLim, yLim, zLim, viewportWidth, viewportHeight, projectionMode);
     this.name = "worldspace"
-    let terrainSizeX = 46
-    let terrainSizeY = 24
+    let terrainSizeX = 22
+    let terrainSizeY = 30
     let terrainColor = new Color(60, 66, 98)
-    let terrainHeight = -1.5
+    let terrainHeight = 0
     let heightMultiplier = 2.2
-    let terrainInitPos = new Point(0, terrainHeight, terrainSizeY * 0.5)
+    let terrainInitPos = new Point(0, terrainHeight, 0)
     this.objects["terrain"] = [
       // new Terrain(
       //   terrainInitPos, //location
@@ -49,12 +52,13 @@ class CanyonWorld extends Worldspace{
         terrainSizeY,
         heightMultiplier,
         terrainColor
-      )
+      ),
+      new CameraController(this.camera, 0.5, -1)
     ]
 
     // this.camera.location = new Point(0, 10, 0);
     // this.lightSources.push(new LightSource(new Point(0, -10, 0), Color.WHITE, 200 ))
-    this.camera.translate(new Vector(0, 0, -2))
+    // this.camera.translate(new Vector(0, 0, -2))
 
     
     
@@ -72,10 +76,15 @@ class CanyonWorld extends Worldspace{
       this.ui.push(new NeuralNet(6, 4, 30, 100, 100))
       this.ui.push(new Fretboard(30, 27.5, this.viewportWidth - this.viewportWidth * 0.075, 0))
     }
-
-
-
   }
+
+  handleKeyPress(event){
+    if(['w', 'a', 's', 'd', 'q', 'e'].includes(event.key)){
+      // console.log(this)
+      this.scripts[1].move(event.key)
+    }
+  }
+  
   
 
 }

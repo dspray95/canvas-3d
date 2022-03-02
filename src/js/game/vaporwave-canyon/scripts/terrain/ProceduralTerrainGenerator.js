@@ -27,12 +27,13 @@ class TerrainGenerator extends BehaviourScript {
     this.terrainHeightMultiplier = heightMultiplier
     this.terrainColor = terrainColor
     this.nTerrainObjectsCreated = 0
+    this.prevChunk = null
+
     //init           
-    for(let i = 0; i < 3; i++){
+    for(let i = 0; i < 5; i++){
       this.loadNextChunk()  
     }
     this.canCreateNextTerrain = true
-    this.prevChunk = null
   }
 
   loadNextChunk(){
@@ -42,17 +43,10 @@ class TerrainGenerator extends BehaviourScript {
         this.terrainInitPos.z + (((this.chunkSizeY - 1) * this.nTerrainObjectsCreated))
     )
 
-    let doSpawnAnim = true
-    let lastRowPointsOfPrevious = null     
-
-    if(this.nTerrainObjectsCreated < 3){
-      doSpawnAnim = false
-    } 
-
     let terrain = new Terrain(
       newPos, //location
       this.parent, //parent
-      "terrain", //name
+      `terrain: ${this.nTerrainObjectsCreated}`, //name
       this.chunkSizeX, //width
       this.chunkSizeY, //height
       5, //noise scale
@@ -62,26 +56,31 @@ class TerrainGenerator extends BehaviourScript {
       500, //seed
       new Vector2D(0, this.chunkSizeY * this.nTerrainObjectsCreated), //octave offset
       this.terrainHeightMultiplier, //height multiplier
-      this.terrainColor, //terrain color,
-      doSpawnAnim,
-      lastRowPointsOfPrevious
+      this.terrainColor, 
+      // Color.random(),
+      this.terrainObjects[0]
     )
     this.terrainObjects.unshift(terrain)
     this.nTerrainObjectsCreated++
     terrain.mesh.drawWireframe = true
 
+    this.prevChunk = terrain  
 
     return terrain
   }
   
   execute(){
-    if(this.cameraPos.distanceTo(this.previousCameraPosition) > 11 && this.canCreateNextTerrain){
+
+    if(this.cameraPos.z > this.terrainObjects[this.terrainObjects.length - 1].centrePos.z && this.canCreateNextTerrain){
       this.loadNextChunk()
+      console.log(`spawn at distance at  ${this.cameraPos.z - this.terrainObjects[this.terrainObjects.length - 1].centrePos.z}`)
       this.canCreateNextTerrain = false
     } 
-    if(this.cameraPos.distanceTo(this.previousCameraPosition) > 23){
-      this.previousCameraPosition = this.cameraPos.copy();
+    // this.chunkSizeY - 1
+    if(this.cameraPos.z > this.terrainObjects[this.terrainObjects.length - 1].centrePos.z + this.chunkSizeY * 0.5 && !this.canCreateNextTerrain){
+      console.log(`despawn at distance at  ${this.cameraPos.z - this.terrainObjects[this.terrainObjects.length - 1].centrePos.z}`)
       this.terrainObjects.pop()
+      console.log(`new terrain length: ${this.terrainObjects.length}`)
       this.canCreateNextTerrain = true
     }
   }

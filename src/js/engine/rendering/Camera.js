@@ -188,7 +188,6 @@ class Camera extends WorldObject{
   }
 
   rotate(axis, degree){
-    console.log("rot")
     this.viewingDirection = this.viewingDirection.rotate(axis, degree).unitLengthVector()
     this.perspectiveMatrix = Camera.getPerspeciveMatrix(
       this.fov,
@@ -200,9 +199,7 @@ class Camera extends WorldObject{
   }
 
   tick(){
-    // if (this.location.z < 30){
-      this.translate(new Vector(0, 0, 0.4))
-    // }
+
   }
 }
 

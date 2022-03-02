@@ -83,8 +83,8 @@ class TerrainNoise{
       for (let x = 0; x < width; x++){
           //inverseLerp ponly works with a single 
           // noiseMap[y][x] = inverseLerp(minNoiseHeight, maxNoiseHeight, noiseMap[y][x])
-          let normalisedHeight = (noiseMap[y][x] + 1)/ (2 * maxPossibleHeight / 2)
-          noiseMap[y][x] = clamp(normalisedHeight, 0, Math.max)
+          // let normalisedHeight = (noiseMap[y][x] + 1)/ (2 * maxPossibleHeight / 2)
+          // noiseMap[y][x] = clamp(normalisedHeight, 0, Math.max)
           
       }
     }

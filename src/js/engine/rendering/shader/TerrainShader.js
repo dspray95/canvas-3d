@@ -1,14 +1,33 @@
 import { Color } from "../../../tools/Colors"
 import { MeshDefaults } from "../objects/mesh/MeshDefaults"
 
+let doOnce = true
 class TerrainShader{
 
-  static draw(camera, canvas, triangles, lightSources, drawFaces, drawWireframe, opacityModifier, drawCalls){
-    let y = 45
+  static drawVertLabels(canvas, vertices, mapWidth, terrainName, terrainColor){
+    canvas.fillStyle = "white"
+    canvas.font = "10px Arial"
+    for(let i = 0; i < mapWidth; i++){
+        canvas.fillText(i, vertices[i].screenSpaceX, vertices[i].screenSpaceY)
+    }
+    for(let i = vertices.length - mapWidth; i < vertices.length; i++){
+      canvas.fillText(i, vertices[i].screenSpaceX, vertices[i].screenSpaceY)
+    }
+    canvas.fillStyle = terrainColor
+    canvas.font = "40px Arial"
+    let centerVert = vertices[Math.floor(vertices.length/2)]
+    canvas.fillText(terrainName, centerVert.screenSpaceX, centerVert.screenSpaceY)
+  }
 
-    for(let i = 0; i<triangles.length; i++){
+  static showTerrainObjectLabels(canvas, terrain){
+
+    canvas.fillText()
+  } 
+
+  static draw(camera, canvas, triangles, lightSources, drawFaces, drawWireframe, opacityModifier, drawCalls, mapWidth, mapHeight){
+    canvas.lineWidth = 1;
+    for(let i = 0; i < triangles.length; i++){
       let triA = triangles[i]
-
       if(triA.A.drawCalls <= drawCalls){
         camera.perspectivePointProjectionPipeline(triA.A)
         triA.A.drawCalls++
@@ -16,32 +35,13 @@ class TerrainShader{
       if(triA.B.drawCalls <= drawCalls){
         camera.perspectivePointProjectionPipeline(triA.B)
         triA.B.drawCalls++
-
       }
       if(triA.C.drawCalls <= drawCalls){
         camera.perspectivePointProjectionPipeline(triA.C)
         triA.C.drawCalls++
       }
 
-      let color = triangles[i].color
-      color.opacity = opacityModifier * 0.5
-
-      if(i >= y - 3 && y >= + 2){
-        if(i == y + 2){
-          y += 45
-        }
-        // continue
-        color = Color.PINK
-      }
-      
-
-      if (i >= y-20 && i <= y+2){
-        // color = Color.WHITE
-      }
-
-
       let faceCullA = triA.normal.dotProduct(triA.calculatePlaneCenter().getVectorTo(camera.location)) <= 0 ? true : false
-      // let faceCullB = triB.normal.dotProduct(triB.calculatePlaneCenter().getVectorTo(camera.location)) <= 0 ? true : false
       let clipResultsAB = camera.clipLine(triA.A.inPerspectiveSpace, triA.B.inPerspectiveSpace)
       let clipResultsBC = camera.clipLine(triA.B.inPerspectiveSpace, triA.C.inPerspectiveSpace)
 
@@ -58,20 +58,25 @@ class TerrainShader{
           if(clipResultsBC.showLine){
             canvas.lineTo(triA.C.screenSpaceX, triA.C.screenSpaceY)
           }
-          // canvas.lineTo(triB.C.screenSpaceX, triB.C.screenSpaceY)
-          // canvas.moveTo(triA.A.screenSpaceX, triA.A.screenSpaceY)
           canvas.closePath()
 
-          canvas.fillStyle = color.toHtmlRgba()
-          canvas.fill()       
-          let pink = Color.PINK.copy()
-          pink.opacity = pink.opacity * opacityModifier
-          canvas.strokeStyle = pink.toHtmlRgba();
-          canvas.lineWidth = 1;
+          canvas.fillStyle = triA.fillColor
+          canvas.fill()    
+
+          canvas.strokeStyle = triA.wireframeColor
           canvas.stroke()
+          // if (i == triangles.length - 20){
+          //   canvas.fillStyle = "white"
+          //   canvas.font = "30px Arial"
+          //   canvas.fillText("A", triA.A.screenSpaceX, triA.A.screenSpaceY)
+          //   canvas.fillText("B", triA.B.screenSpaceX, triA.B.screenSpaceY)
+          //   canvas.fillText("C", triA.C.screenSpaceX, triA.C.screenSpaceY)
+
+          // }
         }
       }
     }
+    doOnce = false
   }
 }
 
