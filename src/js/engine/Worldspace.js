@@ -1,4 +1,5 @@
 import { Color } from "../tools/Colors";
+import { Logger } from "./logging/logger";
 import { Camera } from "./rendering/Camera";
 import Point from "./rendering/objects/primitives/Point";
 
@@ -31,6 +32,8 @@ class Worldspace {
 
     this.stats = new Stats()
     this.stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+    this.logger = Logger.logger
+
     document.body.appendChild( this.stats.dom );
   }
 
@@ -59,25 +62,11 @@ class Worldspace {
     }
     this.stats.end()
 
-    // this.lightSources.forEach((lightSource) => {
-    //   lightSource.tick();
-    // })
-
     this.camera.tick()
     this.ui.forEach((element) => {
       element.draw(ctx)
     })
-    // ctx.beginPath()
-    // ctx.moveTo(this.viewportWidth, this.viewportHeight * 0.26)
-    // ctx.lineTo(this.viewportWidth * 0.995, this.viewportHeight * 0.24)
-    // ctx.lineTo(this.viewportWidth * 0.99, this.viewportHeight * 0.26)
-    // ctx.lineTo(this.viewportWidth * 0.985, this.viewportHeight * 0.24)
-    // ctx.lineTo(this.viewportWidth * 0.98, this.viewportHeight * 0.26)
-
-    // ctx.strokeStyle = Color.WHITE.toHtmlRgba()
-    // ctx.lineWidth = 3
-    // ctx.stroke()
-
+    this.logger.tick()
   }
 }
 

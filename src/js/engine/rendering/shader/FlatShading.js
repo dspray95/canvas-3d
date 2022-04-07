@@ -1,65 +1,78 @@
 import { Color } from "../../../tools/Colors"
+import { Logger } from "../../logging/logger"
 import { MeshDefaults } from "../objects/mesh/MeshDefaults"
 
+let doOnce = true
 class FlatShading{
 
-  static draw(camera, canvas, triangles, lightSources, drawFaces, drawWireframe){
-    triangles.forEach(triangle => {
-      
-      let faceCull = triangle.normal.dotProduct(triangle.calculatePlaneCenter().getVectorTo(camera.location)) <= 0 ? true : false
-      if(!faceCull){
-        
-        let clipResultsAB = camera.clipLine(triangle.A.inPerspectiveSpace, triangle.B.inPerspectiveSpace)
-        let clipResultsBC = camera.clipLine(triangle.B.inPerspectiveSpace, triangle.C.inPerspectiveSpace)
+  static drawVertLabels(canvas, vertices, mapWidth, terrainName, terrainColor){
+    canvas.fillStyle = "white"
+    canvas.font = "10px Arial"
+    for(let i = 0; i < mapWidth; i++){
+        canvas.fillText(i, vertices[i].screenSpaceX, vertices[i].screenSpaceY)
+    }
+    for(let i = vertices.length - mapWidth; i < vertices.length; i++){
+      canvas.fillText(i, vertices[i].screenSpaceX, vertices[i].screenSpaceY)
+    }
+    canvas.fillStyle = terrainColor
+    canvas.font = "40px Arial"
+    let centerVert = vertices[Math.floor(vertices.length/2)]
+    canvas.fillText(terrainName, centerVert.screenSpaceX, centerVert.screenSpaceY)
+  }
 
-        canvas.beginPath()
-        if(clipResultsAB.showLine){
-          canvas.moveTo(triangle.A.screenSpaceX, triangle.A.screenSpaceY)
-          canvas.lineTo(triangle.B.screenSpaceX, triangle.B.screenSpaceY)
-        }
-        else{
-          canvas.moveTo(triangle.B.screenSpaceX, triangle.B.screenSpaceY)
-        }
-        if(clipResultsBC.showLine){
-          canvas.lineTo(triangle.C.screenSpaceX, triangle.C.screenSpaceY)
-        }
-        canvas.closePath()
-        
-        //Color!
-        // for B val 
-        // bLit = b(ambient.b + diffuse.b * (n dot l)) + lightSource.b * specular.b(n dot c)^m
-        // Where 
-        //  n = plane normal vector
-        //  l = vector from plane centre point and light source location
-        //  c = vector from plane centre point to camera location
-        //  m = falloff for specularity (constant)
+  static drawVetices(canvas, vertices, color=Color.YELLOW){
+    canvas.fillColor = color.toHtmlRgba()
+    vertices.forEach(vert => {
+      Logger.logOnce(`Drawing vertice at ${vert.screenSpaceX}, ${vert.screenSpaceY}`, "player")
+      canvas.fillRect(vert.screenSpaceX, vert.screenSpaceY, 2, 2)
+    });
+  }
+
+  static draw(camera, canvas, triangles, lightSources, drawFaces, drawWireframe, opacityModifier, drawCalls, mapWidth, mapHeight){
+    canvas.lineWidth = 1;
+    for(let i = 0; i < triangles.length; i++){
+      let triA = triangles[i]
+      if(triA.A.drawCalls <= drawCalls){
+        camera.perspectivePointProjectionPipeline(triA.A)
+        triA.A.drawCalls++
+      }
+      if(triA.B.drawCalls <= drawCalls){
+        camera.perspectivePointProjectionPipeline(triA.B)
+        triA.B.drawCalls++
+      }
+      if(triA.C.drawCalls <= drawCalls){
+        camera.perspectivePointProjectionPipeline(triA.C)
+        triA.C.drawCalls++
+      }
+
+      let faceCullA = triA.normal.dotProduct(triA.calculatePlaneCenter().getVectorTo(camera.location)) <= 0 ? true : false
+      let clipResultsAB = camera.clipLine(triA.A.inPerspectiveSpace, triA.B.inPerspectiveSpace)
+      let clipResultsBC = camera.clipLine(triA.B.inPerspectiveSpace, triA.C.inPerspectiveSpace)
+
+      if(!faceCullA){
         if(clipResultsAB.showLine || clipResultsBC.showLine){
-          if (drawFaces){
-            // let lightSource = lightSources[0]
-            // let diffuse = 0.1
-            // let specularity = 0.01
-            // let planeToLightSourceVector = triangle.planeCentre.getVectorTo(lightSource.location).unitLengthVector()
-            // let planeToCameraVector = triangle.planeCentre.getVectorTo(camera.location).unitLengthVector()
-            
-            // let rLit = triangle.color.R * (MeshDefaults.globalIllumination + diffuse * triangle.normal.dotProduct(planeToLightSourceVector)) + lightSource.color.R * (specularity * planeToLightSourceVector.dotProduct(planeToCameraVector))
-            // let gLit = triangle.color.G * (MeshDefaults.globalIllumination + diffuse * triangle.normal.dotProduct(planeToLightSourceVector)) + lightSource.color.G * (specularity * planeToLightSourceVector.dotProduct(planeToCameraVector))
-            // let bLit = triangle.color.B * (MeshDefaults.globalIllumination + diffuse * triangle.normal.dotProduct(planeToLightSourceVector)) + lightSource.color.B * (specularity * planeToLightSourceVector.dotProduct(planeToCameraVector))
-            // let colorLit = new Color(rLit, gLit, bLit, 1).toHtmlRgba()
-            // canvas.fillStyle = colorLit
-            canvas.fillStyle = triangle.color.toHtmlRgba()
-            canvas.fill()
-            // canvas.strokeStyle = colorLit
-            // canvas.lineWidth = 1;
-            // canvas.stroke()
+
+          canvas.beginPath()
+          if(clipResultsAB.showLine){
+            canvas.moveTo(triA.A.screenSpaceX, triA.A.screenSpaceY)
+            canvas.lineTo(triA.B.screenSpaceX, triA.B.screenSpaceY)
+          } else {
+            canvas.moveTo(triA.B.screenSpaceX, triA.B.screenSpaceY)
           }
-          if(drawWireframe){
-            canvas.strokeStyle = Color.PINK.toHtmlRgba();
-            canvas.lineWidth = 1;
-            canvas.stroke()
+          if(clipResultsBC.showLine){
+            canvas.lineTo(triA.C.screenSpaceX, triA.C.screenSpaceY)
           }
+          canvas.closePath()
+
+          canvas.fillStyle = triA.fillColor
+          canvas.fill()    
+
+          canvas.strokeStyle = triA.wireframeColor
+          canvas.stroke()
         }
       }
-    })
+    }
+    doOnce = false
   }
 }
 

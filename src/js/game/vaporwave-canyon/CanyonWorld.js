@@ -11,6 +11,7 @@ import { Morse } from "./gui/Morse";
 import { NeuralNet } from "./gui/NeuralNet";
 import { Fretboard } from "./gui/Fretboard";
 import { CameraController } from "./scripts/CameraController";
+import { Player } from "./game-objects/actors/Player";
 
 
 class CanyonWorld extends Worldspace{
@@ -24,24 +25,8 @@ class CanyonWorld extends Worldspace{
     let terrainHeight = 0
     let heightMultiplier = 2.2
     let terrainInitPos = new Point(0, terrainHeight, 0)
-    this.objects["terrain"] = [
-      // new Terrain(
-      //   terrainInitPos, //location
-      //   this, //parent
-      //   "terrain", //name
-      //   24, //width
-      //   90, //height
-      //   5, //noise scale
-      //   4, //octaves
-      //   0.2, //persistance
-      //   1.87, //lacunarity
-      //   500, //seed
-      //   new Vector2D(0, 0), //offset
-      //   heightMultiplier, //height multiplier
-      //   terrainColor //terrain color
-      // )
-    ]
-    
+    this.objects["terrain"] = []
+    this.objects["player"] = [new Player(new Point(0, 0, 5), this)]
     this.scripts = [
       new TerrainGenerator(
         this,
@@ -53,7 +38,7 @@ class CanyonWorld extends Worldspace{
         heightMultiplier,
         terrainColor
       ),
-      new CameraController(this.camera, 0.5, -1)
+      new CameraController(this.camera, 0, -1)
     ]
 
     // this.camera.location = new Point(0, 10, 0);
