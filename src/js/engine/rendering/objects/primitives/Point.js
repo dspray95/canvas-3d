@@ -165,6 +165,10 @@ class Point {
     })
     return total / points.length
   }
+
+  toString(){
+    return `Point, x:${this.x}, y:${this.y}, z:${this.z}, w:${this.w}`
+  }
 }
 
 export const averageDimension = Point.averageDimension;

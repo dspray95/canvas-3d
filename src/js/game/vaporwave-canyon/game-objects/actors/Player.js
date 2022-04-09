@@ -1,5 +1,6 @@
 import { Logger } from "../../../../engine/logging/logger"
 import WorldObject from "../../../../engine/objects/WorldObject"
+import LightSource from "../../../../engine/rendering/objects/light/LightSource"
 import Mesh from "../../../../engine/rendering/objects/mesh/Mesh"
 import Point from "../../../../engine/rendering/objects/primitives/Point"
 import { FlatShading } from "../../../../engine/rendering/shader/FlatShading"
@@ -19,12 +20,43 @@ class Player extends WorldObject{
             false, 
             false,
             FlatShading,
-            Color.YELLOW
+            Color.YELLOW.copy(),
+            Color.PINK.copy()
         )
-        
+        this.mesh.bakeLighting(
+            new LightSource(new Point(10, 10, 10), Color.WHITE.copy(), 1, "point"),
+            parent.camera.location    
+        )
     }
 
     static genPlayerMesh(){
+        let points = [
+            //Left side
+            //wing top
+            new Point(-0.25, 0.3, 0),
+            new Point(0, 0.3, 0.15),
+            new Point(0, 0.29, 0),
+            //wing back
+            new Point(-0.25, 0.3, 0),
+            new Point(0, 0.3, -0.02),
+            new Point(0, 0.29, 0),
+            //Right side
+            //wing top
+            new Point(0.25, 0.3, 0),
+            new Point(0, 0.3, 0.15),
+            new Point(0, 0.29, 0)
+        ]
+
+        let triangles = [   
+            [2, 1, 0],
+            [3, 4, 5],
+            [6, 7, 8]
+        ]
+
+        return [points, triangles]
+    }
+
+    static genPlayerCubeMesh(){
         let xOffset = 1 * 0.5
         let yOffset = 1 * 0.5
         let zOffset = 1 * 0.5

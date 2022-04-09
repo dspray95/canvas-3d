@@ -42,10 +42,7 @@ class Worldspace {
   }
 
   handleKeyPress(event){
-    // console.log(`${event.key} pressed`)
-    // if(event.key in ['w', 'a', 's', 'd']){
-      
-    // }
+    return
   }
   
   tick(ctx) {

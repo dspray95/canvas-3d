@@ -21,10 +21,9 @@ class FlatShading{
   }
 
   static drawVetices(canvas, vertices, color=Color.YELLOW){
-    canvas.fillColor = color.toHtmlRgba()
+    canvas.fillStyle = 'rgba(255, 255, 255)'
     vertices.forEach(vert => {
-      Logger.logOnce(`Drawing vertice at ${vert.screenSpaceX}, ${vert.screenSpaceY}`, "player")
-      canvas.fillRect(vert.screenSpaceX, vert.screenSpaceY, 2, 2)
+      canvas.fillRect(vert.screenSpaceX, vert.screenSpaceY, 10, 10)
     });
   }
 
@@ -63,16 +62,61 @@ class FlatShading{
             canvas.lineTo(triA.C.screenSpaceX, triA.C.screenSpaceY)
           }
           canvas.closePath()
-
           canvas.fillStyle = triA.fillColor
           canvas.fill()    
 
-          canvas.strokeStyle = triA.wireframeColor
+          canvas.strokeStyle = Color.BLACK.toHtmlRgba()
           canvas.stroke()
         }
       }
     }
     doOnce = false
+  }
+
+  static CalculateLighting(
+    baseColor, 
+    normalVector, 
+    planeToCameraVector, 
+    planeToLightSourceVector,
+    diffuse=0.1,
+    specularity=0.1,
+    globalIllumination=MeshDefaults.globalIllumination
+  ){
+    let litColorValues = []
+    let baseColorValues = baseColor.asList()
+    for(let i = 0; i < 3; i++){
+      litColorValues.push(
+        FlatShading._calculateLightingForSingleChannel(
+          baseColorValues[i],
+          normalVector,
+          planeToCameraVector,
+          planeToLightSourceVector,
+          diffuse,
+          specularity,
+          globalIllumination
+        )
+      )
+    }
+    return new Color(
+      litColorValues[0], 
+      litColorValues[1], 
+      litColorValues[2],
+      baseColorValues[3]
+    )
+  }
+  
+  static _calculateLightingForSingleChannel(
+    baseColorChannel, 
+    normalVector, 
+    planeToCameraVector, 
+    planeToLightSourceVector,
+    diffuse,
+    specularity,
+    globalIllumination
+  ){
+    const diffuseCalculation = (globalIllumination + diffuse * normalVector.dotProduct(planeToLightSourceVector))
+    const specularityCalculation = (specularity * planeToLightSourceVector.dotProduct(planeToCameraVector))
+    return baseColorChannel * diffuseCalculation + baseColorChannel * specularityCalculation
   }
 }
 

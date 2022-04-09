@@ -22,7 +22,6 @@ class Logger{
     static logOnce(message, logGroup="default"){
         const logger = Logger._getLogger()
         logger._checkLogGroup(logGroup)
-        // console.log(logger.logGroups)
         if(!logger.logGroups[logGroup].called){
             console.log(`[${logGroup.toUpperCase()}] ${message}`)
         }
