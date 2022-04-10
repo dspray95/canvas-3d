@@ -97,12 +97,15 @@ class FlatShading{
         )
       )
     }
-    return new Color(
+    let litColor = new Color(
       litColorValues[0], 
       litColorValues[1], 
       litColorValues[2],
       baseColorValues[3]
     )
+    Logger.logOnce(`color ${baseColor.toHtmlRgba()} lit as ${litColor.toHtmlRgba()}`, "FLAT_SHADING")
+    return litColor
+    
   }
   
   static _calculateLightingForSingleChannel(

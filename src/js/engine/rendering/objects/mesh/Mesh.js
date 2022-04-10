@@ -140,9 +140,7 @@ export default class Mesh{
      *  will need to do this for every triangle
      *  currently set up for a single light source
      */
-
     this.triangles.forEach(triangle => {
-      Logger.logOnce(triangle.toString(), 'MESH')
       let planeToLightSourceVector = triangle.planeCentre.getVectorTo(lightSource.location).unitLengthVector()
       let planeToCameraVector = triangle.planeCentre.getVectorTo(cameraLocation).unitLengthVector()
       
