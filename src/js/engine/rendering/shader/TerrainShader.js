@@ -1,28 +1,6 @@
-import { Color } from "../../../tools/Colors"
-import { MeshDefaults } from "../objects/mesh/MeshDefaults"
+import { Shader } from "./Shader";
 
-let doOnce = true
-class TerrainShader{
-
-  static drawVertLabels(canvas, vertices, mapWidth, terrainName, terrainColor){
-    canvas.fillStyle = "white"
-    canvas.font = "10px Arial"
-    for(let i = 0; i < mapWidth; i++){
-        canvas.fillText(i, vertices[i].screenSpaceX, vertices[i].screenSpaceY)
-    }
-    for(let i = vertices.length - mapWidth; i < vertices.length; i++){
-      canvas.fillText(i, vertices[i].screenSpaceX, vertices[i].screenSpaceY)
-    }
-    canvas.fillStyle = terrainColor
-    canvas.font = "40px Arial"
-    let centerVert = vertices[Math.floor(vertices.length/2)]
-    canvas.fillText(terrainName, centerVert.screenSpaceX, centerVert.screenSpaceY)
-  }
-
-  static showTerrainObjectLabels(canvas, terrain){
-
-    canvas.fillText()
-  } 
+class TerrainShader extends Shader{
 
   static draw(camera, canvas, triangles, lightSources, drawFaces, drawWireframe, opacityModifier, drawCalls, mapWidth, mapHeight){
     canvas.lineWidth = 1;
@@ -65,18 +43,9 @@ class TerrainShader{
 
           canvas.strokeStyle = triA.wireframeColor
           canvas.stroke()
-          // if (i == triangles.length - 20){
-          //   canvas.fillStyle = "white"
-          //   canvas.font = "30px Arial"
-          //   canvas.fillText("A", triA.A.screenSpaceX, triA.A.screenSpaceY)
-          //   canvas.fillText("B", triA.B.screenSpaceX, triA.B.screenSpaceY)
-          //   canvas.fillText("C", triA.C.screenSpaceX, triA.C.screenSpaceY)
-
-          // }
         }
       }
     }
-    doOnce = false
   }
 }
 
