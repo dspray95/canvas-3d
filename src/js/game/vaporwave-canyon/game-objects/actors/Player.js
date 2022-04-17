@@ -3,7 +3,7 @@ import WorldObject from "../../../../engine/objects/WorldObject"
 import LightSource from "../../../../engine/rendering/objects/light/LightSource"
 import Mesh from "../../../../engine/rendering/objects/mesh/Mesh"
 import Point from "../../../../engine/rendering/objects/primitives/Point"
-import { FlatShading } from "../../../../engine/rendering/shader/FlatShading"
+import { FlatShader } from "../../../../engine/rendering/shader/FlatShader"
 import { Color } from "../../../../tools/Colors"
 
 class Player extends WorldObject{
@@ -19,7 +19,7 @@ class Player extends WorldObject{
             true,
             false, 
             false,
-            FlatShading,
+            FlatShader,
             Color.WHITE.copy(),
             Color.PINK.copy()
         )
@@ -108,6 +108,7 @@ class Player extends WorldObject{
 
     drawPerspective(ctx, camera){
         this.mesh.draw(ctx, camera)
+        FlatShader.drawVetices(ctx, this.mesh.points, Color.RED, 10)
         this.done = true;
     }
 }

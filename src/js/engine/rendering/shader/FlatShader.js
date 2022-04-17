@@ -1,31 +1,9 @@
 import { Color } from "../../../tools/Colors"
 import { Logger } from "../../logging/logger"
 import { MeshDefaults } from "../objects/mesh/MeshDefaults"
+import { Shader } from "./Shader";
 
-let doOnce = true
-class FlatShading{
-
-  static drawVertLabels(canvas, vertices, mapWidth, terrainName, terrainColor){
-    canvas.fillStyle = "white"
-    canvas.font = "10px Arial"
-    for(let i = 0; i < mapWidth; i++){
-        canvas.fillText(i, vertices[i].screenSpaceX, vertices[i].screenSpaceY)
-    }
-    for(let i = vertices.length - mapWidth; i < vertices.length; i++){
-      canvas.fillText(i, vertices[i].screenSpaceX, vertices[i].screenSpaceY)
-    }
-    canvas.fillStyle = terrainColor
-    canvas.font = "40px Arial"
-    let centerVert = vertices[Math.floor(vertices.length/2)]
-    canvas.fillText(terrainName, centerVert.screenSpaceX, centerVert.screenSpaceY)
-  }
-
-  static drawVetices(canvas, vertices, color=Color.YELLOW){
-    canvas.fillStyle = 'rgba(255, 255, 255)'
-    vertices.forEach(vert => {
-      canvas.fillRect(vert.screenSpaceX, vert.screenSpaceY, 10, 10)
-    });
-  }
+class FlatShader extends Shader{
 
   static draw(camera, canvas, triangles, lightSources, drawFaces, drawWireframe, opacityModifier, drawCalls, mapWidth, mapHeight){
     canvas.lineWidth = 1;
@@ -68,7 +46,6 @@ class FlatShading{
         }
       }
     }
-    doOnce = false
   }
 
   static CalculateLighting(
@@ -84,7 +61,7 @@ class FlatShading{
     let baseColorValues = baseColor.asList()
     for(let i = 0; i < 3; i++){
       litColorValues.push(
-        FlatShading._calculateLightingForSingleChannel(
+        FlatShader._calculateLightingForSingleChannel(
           baseColorValues[i],
           normalVector,
           planeToCameraVector,
@@ -101,7 +78,6 @@ class FlatShading{
       litColorValues[2],
       baseColorValues[3]
     )
-    Logger.logOnce(`color ${baseColor.toHtmlRgba()} lit as ${litColor.toHtmlRgba()}`, "FLAT_SHADING")
     return litColor
     
   }
@@ -122,4 +98,4 @@ class FlatShading{
 }
 
 
-export { FlatShading }
+export { FlatShader }

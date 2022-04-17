@@ -5,7 +5,7 @@ import { MeshDefaults } from "./MeshDefaults";
 import Point, { averagePoint } from "../primitives/Point";
 import { Color } from "../../../../tools/Colors"
 import { randomRange } from "../../../../tools/Random";
-import { FlatShading } from "../../shader/FlatShading";
+import { FlatShader } from "../../shader/FlatShader";
 import { Logger } from "../../../logging/logger";
 
 export default class Mesh{
@@ -23,7 +23,7 @@ export default class Mesh{
               doDrawCall=true, 
               drawVertices=false, 
               drawWireframe=false,
-              shader=FlatShading,
+              shader=FlatShader,
               color=MeshDefaults.planeColor,
               wireframeColor=MeshDefaults.wireframeColor
               ){
@@ -146,7 +146,7 @@ export default class Mesh{
       
 
       triangle.setColor(
-        FlatShading.CalculateLighting(
+        FlatShader.CalculateLighting(
           triangle.color,
           triangle.normal,
           planeToCameraVector,
