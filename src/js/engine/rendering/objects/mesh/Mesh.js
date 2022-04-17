@@ -156,6 +156,17 @@ export default class Mesh{
     })
   }
 
+  mirrorXAxis(){
+    /** Will recreate the given mesh flipped over the x axis, so point (-1, 1, 1) will turn into (1, 1, 1)  
+    */
+    //TODO We've got to recreate the tris on the opposite side as well, could be a bit tricky
+    this.points.forEach( point => {
+      if(point.x > 0 || point.x < 0 ){
+        point.x = -point.x
+      } 
+    })
+  }
+
   draw(canvas, camera, opacity=1){
 
     if(!this.doDrawCall){

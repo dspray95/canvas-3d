@@ -8,8 +8,8 @@ import { Color } from "../../../../tools/Colors"
 
 class Player extends WorldObject{
     
-    constructor(ocation, parent){
-        super(ocation, parent, "Player")
+    constructor(location, parent){
+        super(location, parent, "Player")
         let [points, tris] = Player.genPlayerMesh()
         this.mesh = new Mesh(
             this, 
@@ -20,11 +20,12 @@ class Player extends WorldObject{
             false, 
             false,
             FlatShading,
-            Color.YELLOW.copy(),
+            Color.WHITE.copy(),
             Color.PINK.copy()
         )
+        Logger.logOnce(this.location.toString(), "PLAYER CONSTRUCTOR")
         this.mesh.bakeLighting(
-            new LightSource(new Point(10, 10, 10), Color.WHITE.copy(), 1, "point"),
+            new LightSource(new Point(-2, -1, 2), Color.WHITE.copy(), 1, "point"),
             parent.camera.location    
         )
     }
@@ -107,7 +108,6 @@ class Player extends WorldObject{
 
     drawPerspective(ctx, camera){
         this.mesh.draw(ctx, camera)
-        FlatShading.drawVetices(ctx, this.mesh.points)
         this.done = true;
     }
 }

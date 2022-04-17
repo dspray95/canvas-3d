@@ -65,8 +65,6 @@ class FlatShading{
           canvas.fillStyle = triA.fillColor
           canvas.fill()    
 
-          canvas.strokeStyle = Color.BLACK.toHtmlRgba()
-          canvas.stroke()
         }
       }
     }
@@ -78,9 +76,9 @@ class FlatShading{
     normalVector, 
     planeToCameraVector, 
     planeToLightSourceVector,
-    diffuse=0.1,
-    specularity=0.1,
-    globalIllumination=MeshDefaults.globalIllumination
+    diffuse=0.8,
+    specularity=0.2,
+    globalIllumination=0.5
   ){
     let litColorValues = []
     let baseColorValues = baseColor.asList()
