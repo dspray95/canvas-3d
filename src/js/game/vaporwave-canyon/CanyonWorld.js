@@ -23,11 +23,11 @@
       let terrainSizeY = 30
       let terrainColor = new Color(60, 66, 98)
       let terrainHeight = 0
-      let heightMultiplier = 2.2
+      let heightMultiplier = 3
       let terrainInitPos = new Point(0, terrainHeight, 0)
       this.objects["terrain"] = []
-      this.objects["player"] = [new Player(new Point(0, 0, 1), this)]
-      this.cameraController = new CameraController(this.camera, 0, -1)
+      this.objects["player"] = [new Player(new Point(0, 0.2, 1), this)]
+      this.cameraController = new CameraController(this.camera, 0.4, 0)
       this.scripts = [
         new TerrainGenerator(
           this,
@@ -58,12 +58,17 @@
       }
     }
 
-    handleKeyPress(event){
-      if(['w', 'a', 's', 'd', 'q', 'e'].includes(event.key)){
-        this.cameraController.move(event.key)
+    handleKeyDown(event){
+      if(['w', 'a', 's', 'd', 'q', 'e'].includes(event.key.toLowerCase())){
+        this.cameraController.move(event.key, "startMovement")
       }
     }
     
+    handleKeyUp(event){
+      if(['w', 'a', 's', 'd', 'q', 'e'].includes(event.key.toLowerCase())){
+        this.cameraController.move(event.key, "stopMovement")
+      }
+    }
     
 
   }

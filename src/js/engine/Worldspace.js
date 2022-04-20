@@ -3,8 +3,6 @@ import { Logger } from "./logging/logger";
 import { Camera } from "./rendering/Camera";
 import Point from "./rendering/objects/primitives/Point";
 
-const Stats = require('stats.js')
-const stats = new Stats()
 
 class Worldspace {
   constructor(xLim, yLim, zLim, viewportWidth, viewportHeight, projectionMode) {
@@ -28,23 +26,27 @@ class Worldspace {
     this.lightSources = []
     this.scripts = []
     this.ui = []
+    //stats + logging
     const Stats = require('stats.js')
-
     this.stats = new Stats()
     this.stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-    this.logger = Logger.logger
-
     document.body.appendChild( this.stats.dom );
+    
+    this.logger = Logger.logger
   }
 
   createMainCamera() {
     return new Camera();
   }
 
-  handleKeyPress(event){
+  handleKeyUp(event){
     return
   }
   
+  handleKeyDown(event){
+    return
+  }
+
   tick(ctx) {
     this.scripts.forEach(script => {
       script.execute()

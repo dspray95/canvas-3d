@@ -5,11 +5,11 @@ import Vector from "./objects/primitives/Vector";
 class CameraConfig{
 
   static CAMERA_START_LOCATION = new Point(0, 0, 0) 
-  static CAMERA_START_VIEWING_DIRECTION = new Vector(0, 0, -1)
+  static CAMERA_START_VIEWING_DIRECTION = new Vector(0, 0, 1)
   static CAMERA_START_UP_DIRECTION = new Vector(0, 1, 0)
   static DEFAULT_VIEWPORT_WIDTH = 1920
   static DEFAULT_VIEWPORT_HEIGHT = 1080
-  static DEFAULT_FOV = 1.4 //Radians (default 90Deg)
+  static DEFAULT_FOV = 1.0472 //Radians (default 90Deg)
   static NEAR = 1
   static FAR = 1000
 

@@ -12,12 +12,6 @@ export default class BasicRenderer extends Component {
     this.state = {
       width: window.innerWidth,
       height: window.innerHeight,
-      // particleHandler: new ParticleHandler(
-      //   20,
-      //   window.innerWidth,
-      //   window.innerHeight
-      // ),
-      noise: new NoiseToCanvas(),
       worldspace: new CanyonWorld(
         window.innerWidth,
         window.innerHeight,
@@ -49,12 +43,14 @@ export default class BasicRenderer extends Component {
   }
 
   render() {
-    const boundKeyPressHandler = this.state.worldspace.handleKeyPress.bind(this.state.worldspace)
+    const boundKeyDownHandler = this.state.worldspace.handleKeyDown.bind(this.state.worldspace)
+    const boundKeyUpHandler = this.state.worldspace.handleKeyUp.bind(this.state.worldspace)
     return (
       <div 
-      width={this.state.width}
+        width={this.state.width}
         height={this.state.height}
-        onKeyPress={boundKeyPressHandler}
+        onKeyDown={boundKeyDownHandler}
+        onKeyUp={boundKeyUpHandler}
         tabIndex="0" 
       >
       <CanvasAnimationInterface

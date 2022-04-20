@@ -1,3 +1,4 @@
+import { toHaveStyle } from "@testing-library/jest-dom"
 import { Logger } from "../../../../engine/logging/logger"
 import WorldObject from "../../../../engine/objects/WorldObject"
 import LightSource from "../../../../engine/rendering/objects/light/LightSource"
@@ -11,6 +12,8 @@ class Player extends WorldObject{
     constructor(location, parent){
         super(location, parent, "Player")
         let [points, tris] = Player.genPlayerMesh()
+        let color = Color.ELECTRIC_BLUE.copy()
+        // color.opacity = 0.8
         this.mesh = new Mesh(
             this, 
             parent.camera,
@@ -20,95 +23,63 @@ class Player extends WorldObject{
             false, 
             false,
             FlatShader,
-            Color.WHITE.copy(),
-            Color.PINK.copy()
+            color,
+            Color.PINK.copy(),
         )
-        Logger.logOnce(this.location.toString(), "PLAYER CONSTRUCTOR")
+        
+        this.colorOverride(new Color(55, 55, 55))
         this.mesh.bakeLighting(
             new LightSource(new Point(-2, -1, 2), Color.WHITE.copy(), 1, "point"),
             parent.camera.location    
         )
     }
 
+    colorOverride(windowColor){
+        /**Get some cool tinted windows bro B) 
+        *   tri index 7 and 2
+        **/
+        this.mesh.triangles[7].color = windowColor
+        this.mesh.triangles[2].color = windowColor      
+    }
+
     static genPlayerMesh(){
         let points = [
-            //Left side
-            //wing top
-            new Point(-0.25, 0.3, 0),
-            new Point(0, 0.3, 0.15),
-            new Point(0, 0.29, 0),
-            //wing back
-            new Point(-0.25, 0.3, 0),
-            new Point(0, 0.3, -0.02),
-            new Point(0, 0.29, 0),
-            //Right side
-            //wing top
-            new Point(0.25, 0.3, 0),
-            new Point(0, 0.3, 0.15),
-            new Point(0, 0.29, 0)
+            new Point(0, 0, 0.4),
+            new Point(-0.05, 0, 0.3),
+            new Point(0, -0.02, 0.3),
+            new Point(-0.04, -0.02, 0.1),
+            new Point(0, -0.05, 0.15),
+            new Point(0, 0, 0.05),
+            new Point(-0.15, 0, 0),
+            new Point(0.05, 0, 0.3),
+            new Point(0.15, 0, 0),
+            new Point(0.04, -0.02, 0.1),
+
         ]
 
         let triangles = [   
-            [2, 1, 0],
-            [3, 4, 5],
-            [6, 7, 8]
+            [0, 1, 2],
+            [2, 1, 3],
+            [2, 3, 4],
+            [4, 3, 5],
+            [1, 6, 3],
+            [7, 0, 2],
+            [7, 2, 9],
+            [2, 4, 9],
+            [5, 3, 6],
+            [9, 4, 5],
+            [8, 9, 5],
+            [8, 7, 9]
         ]
-
-        return [points, triangles]
-    }
-
-    static genPlayerCubeMesh(){
-        let xOffset = 1 * 0.5
-        let yOffset = 1 * 0.5
-        let zOffset = 1 * 0.5
-    
-        let botLeft = new Point(-xOffset, -yOffset, -zOffset)
-        let botRight = new Point(xOffset, -yOffset, -zOffset)
-        let botLeftBack = new Point(-xOffset, -yOffset, zOffset)
-        let botRightBack = new Point(xOffset, -yOffset, zOffset)
-        let topLeft = new Point(-xOffset, yOffset, -zOffset)
-        let topRight = new Point(xOffset, yOffset, -zOffset)
-        let topLeftBack = new Point(-xOffset, yOffset, zOffset)
-        let topRightBack = new Point(xOffset, yOffset, zOffset)
-    
-        let points = [
-          topLeft,
-          topRight,
-          topRightBack,
-          topLeftBack,
-          botLeft,
-          botRight,
-          botRightBack,
-          botLeftBack,
-        ]
-
-        let triangles = [
-            //Bottom
-            [1, 0, 2],
-            [0, 3, 2],
-            //Front
-            [0, 1, 4],
-            [1, 5, 4],
-            //Right
-            [1, 2, 6],
-            [1, 6, 5],
-            //Left
-            [0, 7, 3],
-            [0, 4, 7],
-            //Top
-            [4, 5, 6],
-            [4, 6, 7],
-            //Back
-            [2, 3, 7],
-            [2, 7, 6]
-          ]
 
         return [points, triangles]
     }
 
     drawPerspective(ctx, camera){
         this.mesh.draw(ctx, camera)
-        FlatShader.drawVetices(ctx, this.mesh.points, Color.RED, 10)
+        // this.mesh.points.forEach(point => {
+        //     camera.perspectivePointProjectionPipeline(point)
+        // })
         this.done = true;
     }
 }
