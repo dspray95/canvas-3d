@@ -168,6 +168,12 @@ class Camera extends WorldObject{
   }
 
   rotate(axis, radians){
+    //TODO there's something wrong here
+    //The viewing direction updates correctly, the cam to origin is as expected,
+    //but the viewport doesn't match the rotation amount
+    //eg we can rotate 90 degrees, but the display seems to be rotated some arbitrary amount
+    //rotating 180 degress inverts the view direction, but the display is still in the original position
+    //BUT if we rotate by small amounts (~0.0001rad) the display *looks* normal :s
     this.viewingDirection = this.viewingDirection.rotate(axis, radians)
     this.cameraToOriginMatrix = Camera.getCameraToOriginMatrix(this.location, 
       this.viewingDirection);

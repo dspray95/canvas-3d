@@ -26,8 +26,8 @@
       let heightMultiplier = 3
       let terrainInitPos = new Point(0, terrainHeight, 0)
       this.objects["terrain"] = []
-      this.objects["player"] = [new Player(new Point(0, 0.2, 1), this)]
-      this.cameraController = new CameraController(this.camera, 0.4, 0)
+      this.objects["player"] = [new Player(new Point(0, 1, 3), this)]
+      this.cameraController = new CameraController(this.camera, 0.1, 0)
       this.scripts = [
         new TerrainGenerator(
           this,

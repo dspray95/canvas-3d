@@ -62,15 +62,21 @@ export default class Mesh{
     }
   }
 
+  scale(x, y, z){
+    this.points.forEach((point) => {
+      point.subtract(new Vector(this.parent.location.x, this.parent.location.y, this.parent.location.z))
+      point.scale(x, y, z)
+      point.add(new Vector(this.parent.location.x, this.parent.location.y, this.parent.location.z))
+    })
+  }
+
   translate(vector){
     this.points.forEach((point) => {
       point.add(vector)
     })
   }
 
-  scale(x, y, z){
 
-  }
 
   movePointsToLocation(parent){
     this.points.forEach(point => {

@@ -4,6 +4,7 @@ import WorldObject from "../../../../engine/objects/WorldObject"
 import LightSource from "../../../../engine/rendering/objects/light/LightSource"
 import Mesh from "../../../../engine/rendering/objects/mesh/Mesh"
 import Point from "../../../../engine/rendering/objects/primitives/Point"
+import Vector from "../../../../engine/rendering/objects/primitives/Vector"
 import { FlatShader } from "../../../../engine/rendering/shader/FlatShader"
 import { Color } from "../../../../tools/Colors"
 
@@ -32,6 +33,7 @@ class Player extends WorldObject{
             new LightSource(new Point(-2, -1, 2), Color.WHITE.copy(), 1, "point"),
             parent.camera.location    
         )
+        this.mesh.scale(2, 4, 2)
     }
 
     colorOverride(windowColor){
@@ -56,7 +58,6 @@ class Player extends WorldObject{
             new Point(0.04, -0.02, 0.1),
 
         ]
-
         let triangles = [   
             [0, 1, 2],
             [2, 1, 3],

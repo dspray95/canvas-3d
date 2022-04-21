@@ -1,5 +1,5 @@
 import { Shader } from "./Shader";
-
+import { Color } from "../../../tools/Colors"
 class TerrainShader extends Shader{
 
   static draw(camera, canvas, triangles, lightSources, drawFaces, drawWireframe, opacityModifier, drawCalls, mapWidth, mapHeight){
@@ -42,6 +42,7 @@ class TerrainShader extends Shader{
           canvas.fill()    
 
           canvas.strokeStyle = triA.wireframeColor
+          // canvas.strokeStyle = Color.WHITE.toHtmlRgba()
           canvas.stroke()
         }
       }
