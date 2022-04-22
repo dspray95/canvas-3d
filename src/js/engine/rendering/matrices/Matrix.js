@@ -1,4 +1,4 @@
-function dot(A, B) {
+function dot(A, B){
   var result = new Array(A.length)
     .fill(0)
     .map((row) => new Array(B[0].length).fill(0));

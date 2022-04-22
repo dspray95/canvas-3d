@@ -68,6 +68,11 @@ class Point {
     this.updateValues()
   }
 
+  setMatrixFromList(matrixAsList){
+    this.matrix = matrixAsList
+    this.updateValues()
+  }
+
   asList(){
     return [this.x, this.y, this.z, this.w]
   }

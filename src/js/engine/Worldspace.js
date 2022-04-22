@@ -53,14 +53,16 @@ class Worldspace {
     })
 
     this.stats.begin()
+
     for(var objectGroup in this.objects){
       this.objects[objectGroup].forEach(object => {
         object.tick();
+        // vertexMatrices = vertexMatrices.concat(object.mesh.points.map(point => point.matrix))
         object.drawPerspective(ctx, this.camera);
       })
     }
     this.stats.end()
-
+    
     this.camera.tick()
     this.ui.forEach((element) => {
       element.draw(ctx)

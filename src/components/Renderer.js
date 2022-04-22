@@ -76,8 +76,8 @@ class CanvasAnimationInterface extends React.Component {
       aspectRatio: this.props.width / this.props.height,
       fillStyle: this.props.worldspace.backgroundColor.toHtmlRgba()
     };
-    // this.state.stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-    // document.body.appendChild( this.state.stats.dom );
+    this.state.stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+    document.body.appendChild( this.state.stats.dom );
   }
 
   // Run in the 'base canvas' component to pass the context up

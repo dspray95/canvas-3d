@@ -171,6 +171,7 @@ export default class Mesh{
         point.x = -point.x
       } 
     })
+
   }
 
   draw(canvas, camera, opacity=1){
@@ -193,7 +194,7 @@ export default class Mesh{
     )
       
     this.drawCalls += 1
-   
+
     if(MeshDefaults.drawSurfaceNormals){
       canvas.lineWidth = 1;
       canvas.strokeStyle = Color.DEFAULTS.white.toHtmlRgba()

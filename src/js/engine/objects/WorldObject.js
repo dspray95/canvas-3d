@@ -8,7 +8,6 @@ export default class WorldObject {
     this.parent = parent;
     this.points = [];
     this.perspectivePoints = [];
-    // this.edges = [];
     this.edges = []
     this.faces = []
     this.scripts = []

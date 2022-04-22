@@ -70,7 +70,6 @@ class TerrainGenerator extends BehaviourScript {
   }
   
   execute(){
-
     if(this.cameraPos.z > this.terrainObjects[this.terrainObjects.length - 1].centrePos.z && this.canCreateNextTerrain){
       this.loadNextChunk()
       this.canCreateNextTerrain = false
@@ -80,6 +79,7 @@ class TerrainGenerator extends BehaviourScript {
       this.terrainObjects.pop()
       this.canCreateNextTerrain = true
     }
+
   }
 }
 
