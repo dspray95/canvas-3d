@@ -73,14 +73,11 @@ class TerrainGenerator extends BehaviourScript {
 
     if(this.cameraPos.z > this.terrainObjects[this.terrainObjects.length - 1].centrePos.z && this.canCreateNextTerrain){
       this.loadNextChunk()
-      console.log(`spawn at distance at  ${this.cameraPos.z - this.terrainObjects[this.terrainObjects.length - 1].centrePos.z}`)
       this.canCreateNextTerrain = false
     } 
     // this.chunkSizeY - 1
     if(this.cameraPos.z > this.terrainObjects[this.terrainObjects.length - 1].centrePos.z + this.chunkSizeY * 0.5 && !this.canCreateNextTerrain){
-      console.log(`despawn at distance at  ${this.cameraPos.z - this.terrainObjects[this.terrainObjects.length - 1].centrePos.z}`)
       this.terrainObjects.pop()
-      console.log(`new terrain length: ${this.terrainObjects.length}`)
       this.canCreateNextTerrain = true
     }
   }

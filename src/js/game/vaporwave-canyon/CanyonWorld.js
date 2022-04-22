@@ -12,6 +12,7 @@
   import { Fretboard } from "./gui/Fretboard";
   import { CameraController } from "./scripts/CameraController";
   import { Player } from "./game-objects/actors/Player";
+import { PlayerControler } from "./scripts/movement/PlayerController";
 
 
   class CanyonWorld extends Worldspace{
@@ -25,9 +26,12 @@
       let terrainHeight = 0
       let heightMultiplier = 3
       let terrainInitPos = new Point(0, terrainHeight, 0)
+
+      this.player = new Player(new Point(0, 1, 3), this)
+      this.playerControler = new PlayerControler(this.player, this.camera)
+
       this.objects["terrain"] = []
-      this.objects["player"] = [new Player(new Point(0, 1, 3), this)]
-      this.cameraController = new CameraController(this.camera, 0.1, 0)
+      this.objects["player"] = [this.player]
       this.scripts = [
         new TerrainGenerator(
           this,
@@ -39,7 +43,7 @@
           heightMultiplier,
           terrainColor
         ),
-        this.cameraController
+        this.playerControler
       ]
       
       if(this.viewportHeight > this.viewportWidth){
@@ -59,15 +63,11 @@
     }
 
     handleKeyDown(event){
-      if(['w', 'a', 's', 'd', 'q', 'e'].includes(event.key.toLowerCase())){
-        this.cameraController.move(event.key, "startMovement")
-      }
+      this.playerControler.parseInput(event.keyCode || event.which, "keyDown")
     }
     
     handleKeyUp(event){
-      if(['w', 'a', 's', 'd', 'q', 'e'].includes(event.key.toLowerCase())){
-        this.cameraController.move(event.key, "stopMovement")
-      }
+      this.playerControler.parseInput(event.keyCode || event.which, "keyUp")
     }
     
 
