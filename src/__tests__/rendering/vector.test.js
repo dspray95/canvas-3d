@@ -67,20 +67,26 @@ test("create unit length vector", () => {
   expect(unitLengthVector.z).toEqual(1)
 })
 
-test("rotateVector", () => {
+test("rotateVectorX", () => {
   let vector = new Vector(10, 10, 10)
-  vector.rotate("x", 90)
-  expect(vector.x).toEqual(10)
-  expect(vector.y).toBeCloseTo(-13.42)
-  expect(vector.z).toBeCloseTo(4.459)
-  vector = new Vector(10, 10, 10)
-  vector.rotate("y", 90)
-  expect(vector.x).toBeCloseTo(4.459)
-  expect(vector.y).toEqual(10)
-  expect(vector.z).toBeCloseTo(-13.42)
-  vector = new Vector(10, 10, 10)
-  vector.rotate("z", 90)
-  expect(vector.x).toBeCloseTo(-13.42)
-  expect(vector.y).toBeCloseTo(4.459)
-  expect(vector.z).toEqual(10)
+  vector.rotate("x", 1.5708)
+  expect(vector.x).toBeCloseTo(10)
+  expect(vector.y).toBeCloseTo(-10)
+  expect(vector.z).toBeCloseTo(9.999)
+})
+
+test("rotateVectorY", () => {
+  let vector = new Vector(10, 10, 10)
+  vector.rotate("y", 1.5708)
+  expect(vector.x).toBeCloseTo(9.999963)
+  expect(vector.y).toBeCloseTo(10)
+  expect(vector.z).toBeCloseTo(-10)
+})
+
+test("rotateVectorZ", () => {
+  let vector = new Vector(10, 10, 10)
+  vector.rotate("z", 1.5708)
+  expect(vector.x).toBeCloseTo(-10.00003)
+  expect(vector.y).toBeCloseTo(9.999963)
+  expect(vector.z).toBeCloseTo(10)
 })

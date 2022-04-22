@@ -5,7 +5,8 @@ import { MeshDefaults } from "./MeshDefaults";
 import Point, { averagePoint } from "../primitives/Point";
 import { Color } from "../../../../tools/Colors"
 import { randomRange } from "../../../../tools/Random";
-import { FlatShading } from "../../shader/FlatShading";
+import { FlatShader } from "../../shader/FlatShader";
+import { Logger } from "../../../logging/logger";
 
 export default class Mesh{
 
@@ -22,8 +23,9 @@ export default class Mesh{
               doDrawCall=true, 
               drawVertices=false, 
               drawWireframe=false,
-              shader=FlatShading,
-              color=MeshDefaults.planeColor
+              shader=FlatShader,
+              color=MeshDefaults.planeColor,
+              wireframeColor=MeshDefaults.wireframeColor
               ){
     this.parent = parent
     this.points = points
@@ -39,7 +41,7 @@ export default class Mesh{
     // Defautls for color values
     this.verticeColor = MeshDefaults.verticeColor
     this.faceCentrePointColor = MeshDefaults.faceCentrePointColor
-    this.wireframeColor = MeshDefaults.wireframeColor
+    this.wireframeColor = wireframeColor
     
     this.drawFaces = true;
     this.done = false;
@@ -60,15 +62,21 @@ export default class Mesh{
     }
   }
 
+  scale(x, y, z){
+    this.points.forEach((point) => {
+      point.subtract(new Vector(this.parent.location.x, this.parent.location.y, this.parent.location.z))
+      point.scale(x, y, z)
+      point.add(new Vector(this.parent.location.x, this.parent.location.y, this.parent.location.z))
+    })
+  }
+
   translate(vector){
     this.points.forEach((point) => {
       point.add(vector)
     })
   }
 
-  scale(x, y, z){
 
-  }
 
   movePointsToLocation(parent){
     this.points.forEach(point => {
@@ -83,16 +91,18 @@ export default class Mesh{
     let triangleObjects = []
     trianlgesArray.forEach(triangleArray => {
       try{
-        let triangle = new Triangle(this.points[triangleArray[0]],
-                                    this.points[triangleArray[1]],
-                                    this.points[triangleArray[2]],
-                                    this.color)
+        let triangle = new Triangle(
+          this.points[triangleArray[0]],
+          this.points[triangleArray[1]],
+          this.points[triangleArray[2]],
+          this.color
+        )
         triangle.calculateNormal(this.parent.location)                        
         triangleObjects.push(triangle)
       } catch (e){
         console.log("triangle error D:")
         console.log(triangleArray)
-      }
+      } 
 
     })
     return triangleObjects
@@ -122,17 +132,46 @@ export default class Mesh{
     })
   }
 
-  drawPerspective(canvas, camera, opacity=1){
-    this.shader.draw(
-      camera, 
-      canvas,
-      this.triangles,
-      this.parent.parent.lightSources,
-      this.drawFaces, 
-      this.drawWireframe,
-      opacity,
-      this.drawCalls
-    )
+  bakeLighting(lightSource, cameraLocation){
+    /**
+     *  Lighting!
+     *  for blue channel: 
+     *    bLit = b(ambient.b + diffuse.b * (n dot l)) + lightSource.b * specular.b(n dot c)^m
+     *    Where 
+     *     n = plane normal vector
+     *     l = vector from plane centre point and light source location
+     *     c = vector from plane centre point to camera location
+     *     m = falloff for specularity (constant)
+     *  repeat for green and red channels
+     *  will need to do this for every triangle
+     *  currently set up for a single light source
+     */
+    this.triangles.forEach(triangle => {
+      let planeToLightSourceVector = triangle.planeCentre.getVectorTo(lightSource.location).unitLengthVector()
+      let planeToCameraVector = triangle.planeCentre.getVectorTo(cameraLocation).unitLengthVector()
+      
+
+      triangle.setColor(
+        FlatShader.CalculateLighting(
+          triangle.color,
+          triangle.normal,
+          planeToCameraVector,
+          planeToLightSourceVector,
+        )
+      )
+    })
+  }
+
+  mirrorXAxis(){
+    /** Will recreate the given mesh flipped over the x axis, so point (-1, 1, 1) will turn into (1, 1, 1)  
+    */
+    //TODO We've got to recreate the tris on the opposite side as well, could be a bit tricky
+    this.points.forEach( point => {
+      if(point.x > 0 || point.x < 0 ){
+        point.x = -point.x
+      } 
+    })
+
   }
 
   draw(canvas, camera, opacity=1){
@@ -141,19 +180,6 @@ export default class Mesh{
       return
     }
 
-    // let newPoints = []
-    // for(let i = 0; i < this.points.length; i++){
-    //   camera.perspectivePointProjectionPipeline(this.points[i])
-    //   if(this.points[i].inPerspectiveSpace.w > 0){
-    //     newPoints.push(this.points[i])
-    //   }
-    // }
-    // this.points = newPoints
-    // this.points.forEach(point => {
-    //   camera.perspectivePointProjectionPipeline(point);
-    // })
-
-    // this.sortTrianglesByDepth()
     this.shader.draw(
       camera, 
       canvas,
@@ -162,103 +188,12 @@ export default class Mesh{
       this.drawFaces, 
       this.drawWireframe,
       opacity,
-      this.drawCalls
+      this.drawCalls,
+      this.parent.width,
+      this.parent.height
     )
       
-    // this.triangles.forEach(triangle => {
-
-    //   let faceCull = triangle.normal.dotProduct(triangle.calculatePlaneCenter().getVectorTo(camera.location)) <= 0 ? true : false
-    //   if(!faceCull){
-        
-    //     let clipResultsAB = camera.clipLine(triangle.A.inPerspectiveSpace, triangle.B.inPerspectiveSpace)
-    //     let clipResultsBC = camera.clipLine(triangle.B.inPerspectiveSpace, triangle.C.inPerspectiveSpace)
-
-    //     canvas.beginPath()
-    //     if(clipResultsAB.showLine){
-    //       canvas.moveTo(triangle.A.screenSpaceX, triangle.A.screenSpaceY)
-    //       canvas.lineTo(triangle.B.screenSpaceX, triangle.B.screenSpaceY)
-    //     }
-    //     else{
-    //       canvas.moveTo(triangle.B.screenSpaceX, triangle.B.screenSpaceY)
-    //     }
-    //     if(clipResultsBC.showLine){
-    //       canvas.lineTo(triangle.C.screenSpaceX, triangle.C.screenSpaceY)
-    //     }
-    //     canvas.closePath()
-        
-    //     //Color!
-    //     // for B val 
-    //     // bLit = b(ambient.b + diffuse.b * (n dot l)) + lightSource.b * specular.b(n dot c)^m
-    //     // Where 
-    //     //  n = plane normal vector
-    //     //  l = vector from plane centre point and light source location
-    //     //  c = vector from plane centre point to camera location
-    //     //  m = falloff for specularity (constant)
-    //     if(clipResultsAB.showLine || clipResultsBC.showLine){
-    //       if (this.drawFaces){
-    //         let lightSource = this.parent.parent.lightSources[0]
-    //         let diffuse = 0.1
-    //         let specularity = 0.01
-    //         let planeToLightSourceVector = triangle.planeCentre.getVectorTo(lightSource.location).unitLengthVector()
-    //         let planeToCameraVector = triangle.planeCentre.getVectorTo(this.parent.parent.camera.location).unitLengthVector()
-            
-    //         let rLit = triangle.color.R * (MeshDefaults.globalIllumination + diffuse * triangle.normal.dotProduct(planeToLightSourceVector)) + lightSource.color.R * (specularity * planeToLightSourceVector.dotProduct(planeToCameraVector))
-    //         let gLit = triangle.color.G * (MeshDefaults.globalIllumination + diffuse * triangle.normal.dotProduct(planeToLightSourceVector)) + lightSource.color.G * (specularity * planeToLightSourceVector.dotProduct(planeToCameraVector))
-    //         let bLit = triangle.color.B * (MeshDefaults.globalIllumination + diffuse * triangle.normal.dotProduct(planeToLightSourceVector)) + lightSource.color.B * (specularity * planeToLightSourceVector.dotProduct(planeToCameraVector))
-    //         let colorLit = new Color(rLit, gLit, bLit, 1).toHtmlRgba()
-    //         canvas.fillStyle = colorLit
-    //         canvas.fill()
-    //         canvas.strokeStyle = colorLit
-    //         canvas.lineWidth = 1;
-    //         canvas.stroke()
-    //       }
-    //       if(this.drawWireframe){
-    //         canvas.strokeStyle = Color.PINK.toHtmlRgba();
-    //         canvas.lineWidth = 1;
-    //         canvas.stroke()
-    //       }
-    //     }
-    //   }
-    // })
-
-    // These calls aren't inside the triangle loop above, since we wan them to always be drawn on top,
-    // and painters algorithm is limited
-    if (this.drawVertices){
-      let idxHigh = 0
-      this.points.forEach(point => {
-        canvas.fillStyle = this.verticeColor.toHtmlRgba()
-        canvas.fillRect(point.screenSpaceX - 2, point.screenSpaceY - 2, 4, 4);
-        
-        if(MeshDefaults.drawVerticeNumbers){
-          let idx = this.points.indexOf(point)
-          
-          canvas.fillStyle = Color.WHITE.toHtmlRgba();
-          canvas.font = "20px monospace"
-          canvas.fillText(`${idx}`, point.screenSpaceX, point.screenSpaceY);
-          idxHigh = idx
-        }
-
-      })
-      if(this.done === false){
-        this.done = true
-      }
-    }
-
-    // if(this.drawWireframe){
-    //   canvas.strokeStyle = Color.PINK.toHtmlRgba()
-    //   canvas.lineWidth = 1;
-
-    //   this.triangles.forEach(triangle => {
-    //     canvas.beginPath()
-    //     canvas.moveTo(triangle.A.screenSpaceX, triangle.A.screenSpaceY)
-    //     canvas.lineTo(triangle.B.screenSpaceX, triangle.B.screenSpaceY)
-    //     canvas.lineTo(triangle.C.screenSpaceX, triangle.C.screenSpaceY)
-    //     canvas.lineTo(triangle.A.screenSpaceX, triangle.A.screenSpaceY)
-    //     canvas.closePath()
-    //     canvas.stroke();
-
-    //   })
-    // }
+    this.drawCalls += 1
 
     if(MeshDefaults.drawSurfaceNormals){
       canvas.lineWidth = 1;

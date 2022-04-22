@@ -1,6 +1,9 @@
-import { Shader } from "./Shader";
 import { Color } from "../../../tools/Colors"
-class TerrainShader extends Shader{
+import { Logger } from "../../logging/logger"
+import { MeshDefaults } from "../objects/mesh/MeshDefaults"
+import { Shader } from "./Shader";
+
+class FlatShader extends Shader{
 
   static draw(camera, canvas, triangles, lightSources, drawFaces, drawWireframe, opacityModifier, drawCalls, mapWidth, mapHeight){
     canvas.lineWidth = 1;
@@ -18,7 +21,6 @@ class TerrainShader extends Shader{
         camera.perspectivePointProjectionPipeline(triA.C)
         triA.C.drawCalls++
       }
-
 
       let faceCullA = triA.normal.dotProduct(triA.calculatePlaneCenter().getVectorTo(camera.location)) <= 0 ? true : false
       let clipResultsAB = camera.clipLine(triA.A.inPerspectiveSpace, triA.B.inPerspectiveSpace)
@@ -38,18 +40,62 @@ class TerrainShader extends Shader{
             canvas.lineTo(triA.C.screenSpaceX, triA.C.screenSpaceY)
           }
           canvas.closePath()
-
           canvas.fillStyle = triA.fillColor
           canvas.fill()    
 
-          canvas.strokeStyle = triA.wireframeColor
-          // canvas.strokeStyle = Color.WHITE.toHtmlRgba()
-          canvas.stroke()
         }
       }
     }
   }
+
+  static CalculateLighting(
+    baseColor, 
+    normalVector, 
+    planeToCameraVector, 
+    planeToLightSourceVector,
+    diffuse=0.8,
+    specularity=0.2,
+    globalIllumination=0.5
+  ){
+    let litColorValues = []
+    let baseColorValues = baseColor.asList()
+    for(let i = 0; i < 3; i++){
+      litColorValues.push(
+        FlatShader._calculateLightingForSingleChannel(
+          baseColorValues[i],
+          normalVector,
+          planeToCameraVector,
+          planeToLightSourceVector,
+          diffuse,
+          specularity,
+          globalIllumination
+        )
+      )
+    }
+    let litColor = new Color(
+      litColorValues[0], 
+      litColorValues[1], 
+      litColorValues[2],
+      baseColorValues[3]
+    )
+    return litColor
+    
+  }
+  
+  static _calculateLightingForSingleChannel(
+    baseColorChannel, 
+    normalVector, 
+    planeToCameraVector, 
+    planeToLightSourceVector,
+    diffuse,
+    specularity,
+    globalIllumination
+  ){
+    const diffuseCalculation = (globalIllumination + diffuse * normalVector.dotProduct(planeToLightSourceVector))
+    const specularityCalculation = (specularity * planeToLightSourceVector.dotProduct(planeToCameraVector))
+    return baseColorChannel * diffuseCalculation + baseColorChannel * specularityCalculation
+  }
 }
 
 
-export { TerrainShader }
+export { FlatShader }

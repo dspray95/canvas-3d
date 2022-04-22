@@ -40,16 +40,16 @@ class Camera extends WorldObject{
     //clipping and perspective variables
     this.fov = fov;
     this.near = near;
-    this.far = far;
+    this.far = far
     this.perspectiveMatrix = Camera.getPerspeciveMatrix(
                                       this.fov,
                                       this.far,
                                       this.near
-                                    );
+                                    )
     this.cameraToOriginMatrix = Camera.getCameraToOriginMatrix(this.location, 
-                                                              this.viewingDirection);
+                                                              this.viewingDirection)
     //s 
-    this.viewportWidth = viewportWidth;
+    this.viewportWidth = viewportWidth
     this.viewportHeight = viewportHeight
     this.previousPespectivePipelineSize = -1;
     // this.translate(new Vector(0, 0, 10))
@@ -90,7 +90,7 @@ class Camera extends WorldObject{
       projectedPoint.inPerspectiveSpace.x * this.viewportWidth 
         + this.viewportWidth * 0.5;
     projectedPoint.screenSpaceY =
-      projectedPoint.inPerspectiveSpace.y * this.viewportWidth
+      projectedPoint.inPerspectiveSpace.y * this.viewportHeight
         + this.viewportHeight * 0.5
   }
 
@@ -153,26 +153,6 @@ class Camera extends WorldObject{
     return dot(dot(rotateToZ, rotateToYZ), translateToOrigin);
   }
 
-  originToCamera(origin) {
-    let theta =
-      Math.atan(this.viewingDirection.x, this.viewingDirection.z) *
-      (180 / Math.PI);
-    let phi = Math.atan(
-      this.viewingDirection.y /
-        Math.sqrt(
-          Math.pow(this.viewingDirection.x, 2) +
-            Math.pow(this.viewingDirection.z, 2)
-        )
-    );
-    let rotateFromZ = dot(origin, new RotationMatrix3D("x", -phi));
-    let rotateFromYZ = dot(rotateFromZ, new RotationMatrix3D("y", theta));
-    let moveToCamera = dot(
-      rotateFromYZ,
-      new TranslationMatrix3D(this.location.x, this.location.y, this.location.z)
-    );
-    return moveToCamera;
-  }
-
   static getPerspeciveMatrix(alpha, far, near) {
     return [
       [cot(alpha / 2), 0, 0, 0],
@@ -193,21 +173,20 @@ class Camera extends WorldObject{
                                   this.viewingDirection);
   }
 
-  rotate(axis, degree){
-    this.viewingDirection = this.viewingDirection.rotate(axis, degree).unitLengthVector()
-    this.perspectiveMatrix = Camera.getPerspeciveMatrix(
-      this.fov,
-      this.far,
-      this.near
-    )
+  rotate(axis, radians){
+    //TODO there's something wrong here
+    //The viewing direction updates correctly, the cam to origin is as expected,
+    //but the viewport doesn't match the rotation amount
+    //eg we can rotate 90 degrees, but the display seems to be rotated some arbitrary amount
+    //rotating 180 degress inverts the view direction, but the display is still in the original position
+    //BUT if we rotate by small amounts (~0.0001rad) the display *looks* normal :s
+    this.viewingDirection = this.viewingDirection.rotate(axis, radians)
     this.cameraToOriginMatrix = Camera.getCameraToOriginMatrix(this.location, 
       this.viewingDirection);
   }
 
   tick(){
-    // if (this.location.z < 30){
-      this.translate(new Vector(0, 0, 0.4))
-    // }
+
   }
 }
 

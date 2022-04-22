@@ -13,17 +13,24 @@ export default class Triangle{
    * @param {Point} C 
    * @param {Color} color 
    */
-  constructor(A, B, C, color){
+  constructor(A, B, C, color=null, strokeSyle=null){
     this.A = A
     this.B = B
     this.C = C
 
     this.planeCentre = this.calculatePlaneCenter()
     if(color === null){
-      this.color = Color.random()
+      this.setColor(Color.WHITE.copy())
     }
     else{
-      this.color = color
+      this.setColor(color)
+    }
+    
+    if(strokeSyle === null){
+      this.wireframeColor = this.fillColor
+    }
+    else {
+      this.wireframeColor = strokeSyle
     }
   }
 
@@ -90,4 +97,19 @@ export default class Triangle{
     this.normal = this.normal.unitLengthVector()
   }
 
+  setColor(color){
+    this.color = color
+    this.fillColor = this.color.toHtmlRgba()
+  }
+  
+  toString(){
+    return `Triangle, 
+      \tPoints\t${this.A.toString()}, \n\t\t${this.B.toString()}, \n\t\t${this.C.toString()}
+      \tplane centre at: ${this.planeCentre.toString()}
+      \tnormal vector of: ${this.normal.toString()}
+      \tcolor: ${this.color.toHtmlRgba()}
+    `
+
+            
+  }
 }

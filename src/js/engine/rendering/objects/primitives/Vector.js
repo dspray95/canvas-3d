@@ -42,8 +42,8 @@ export default class Vector {
     );
   }
 
-  rotate(axis, degree){
-    let rotationMatrix = VectorRotationMatrix3D(axis, degree)
+  rotate(axis, radians){
+    let rotationMatrix = VectorRotationMatrix3D(axis, radians)
     let outputMatrix = dot(rotationMatrix, this.columnMatrix())
     this.matrix = outputMatrix
     this.updateValues()
@@ -64,10 +64,6 @@ export default class Vector {
     );
   }
 
-  viewingDirectionVector() {
-    return new Vector(this.x, this.y, 1);
-  }
-
   dotProduct(otherVector) {
     return (
       this.x * otherVector.x + this.y * otherVector.y + this.z * otherVector.z
@@ -82,11 +78,8 @@ export default class Vector {
     ]
   }
 
-  invert() {
-    this.x = -this.x
-    this.y = -this.y
-    this.z = -this.z
-    this.updateMatrix()
+  inverse() {
+    return new Vector(-this.x, -this.y, -this.z)
   }
 }
 

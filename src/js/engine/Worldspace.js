@@ -1,6 +1,8 @@
 import { Color } from "../tools/Colors";
+import { Logger } from "./logging/logger";
 import { Camera } from "./rendering/Camera";
 import Point from "./rendering/objects/primitives/Point";
+
 
 class Worldspace {
   constructor(xLim, yLim, zLim, viewportWidth, viewportHeight, projectionMode) {
@@ -24,19 +26,33 @@ class Worldspace {
     this.lightSources = []
     this.scripts = []
     this.ui = []
+    //stats + logging
+    const Stats = require('stats.js')
+    this.stats = new Stats()
+    this.stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+    document.body.appendChild( this.stats.dom );
+    
+    this.logger = Logger.logger
   }
 
   createMainCamera() {
     return new Camera();
   }
 
+  handleKeyUp(event){
+    return
+  }
+  
+  handleKeyDown(event){
+    return
+  }
 
   tick(ctx) {
     this.scripts.forEach(script => {
       script.execute()
     })
-    
-    let vertexMatrices = []
+
+    this.stats.begin()
 
     for(var objectGroup in this.objects){
       this.objects[objectGroup].forEach(object => {
@@ -45,40 +61,13 @@ class Worldspace {
         object.drawPerspective(ctx, this.camera);
       })
     }
-
-    // let transformedMatrices = this.camera.doMatrixPerspectivePointProjection(vertexMatrices)
-
-    // let nPointsTraversed = 0
-    // for(var objectGroup in this.objects){
-    //   this.objects[objectGroup].forEach(object => {
-    //     object.mesh.points.forEach(point => {
-    //       point.inPerspectiveSpace.setMatrixFromList(transformedMatrices[nPointsTraversed])
-    //       nPointsTraversed++
-    //     })
-    //     object.mesh.drawPerspective(ctx, this.camera)
-    //   })
-    // }
-
+    this.stats.end()
+    
     this.camera.tick()
-
-    this.lightSources.forEach((lightSource) => {
-      lightSource.tick();
-    })
-
     this.ui.forEach((element) => {
       element.draw(ctx)
     })
-    // ctx.beginPath()
-    // ctx.moveTo(this.viewportWidth, this.viewportHeight * 0.26)
-    // ctx.lineTo(this.viewportWidth * 0.995, this.viewportHeight * 0.24)
-    // ctx.lineTo(this.viewportWidth * 0.99, this.viewportHeight * 0.26)
-    // ctx.lineTo(this.viewportWidth * 0.985, this.viewportHeight * 0.24)
-    // ctx.lineTo(this.viewportWidth * 0.98, this.viewportHeight * 0.26)
-
-    // ctx.strokeStyle = Color.WHITE.toHtmlRgba()
-    // ctx.lineWidth = 3
-    // ctx.stroke()
-
+    this.logger.tick()
   }
 }
 
