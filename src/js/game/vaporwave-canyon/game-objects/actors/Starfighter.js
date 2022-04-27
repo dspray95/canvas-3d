@@ -12,7 +12,7 @@ class Starfighter extends WorldObject{
     
     constructor(location, parent, color=Color.GREY, name="starfighter"){
         super(location, parent, name)
-        let [points, tris] = Starfighter.genStarfighterMesh()
+        let [points, tris] = Starfighter.genMesh()
         // color.opacity = 0.8
         this.mesh = new Mesh(
             this, 
@@ -43,7 +43,7 @@ class Starfighter extends WorldObject{
         this.mesh.triangles[2].color = windowColor      
     }
 
-    static genStarfighterMesh(){
+    static genMesh(){
         let points = [
             new Point(0, 0, 0.4),
             new Point(-0.05, 0, 0.3),
