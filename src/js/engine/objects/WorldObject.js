@@ -28,51 +28,6 @@ export default class WorldObject {
     }
   }
 
-  drawOrtho(ctx) {
-    ctx.fillStyle = Color.YELLOW.asHtmlRgba();
-    this.points.forEach((point) => {
-      point.orthographicSpace();
-      ctx.fillRect(
-        point.screenSpaceX + this.location.x,
-        point.screenSpaceY + this.location.y,
-        2,
-        2
-      );
-    });
-  }
-
-  sortFacesByDepth(){
-    this.faces.sort((a, b) => {
-      let aPoints = this.getPointsFromFace(a)
-      let bPoints = this.getPointsFromFace(b)
-
-
-      let aAvgDistanceFromCamera = averagePoint(aPoints, true).w
-      let bAvgDistanceFromCamera = averagePoint(bPoints, true).w
-
-      if (aAvgDistanceFromCamera < bAvgDistanceFromCamera){
-        return 1
-      }
-      else if (aAvgDistanceFromCamera == bAvgDistanceFromCamera){
-        return 0
-      }
-      else {
-        return -1
-      }
-    })
-  }
-
-  getPointsFromEdge(edge){
-    return [this.points[edge.startPoint], this.points[edge.endPoint]]
-  }
-
-  getPointsFromFace(face){
-    return [this.points[face[0]], 
-            this.points[face[1]], 
-            this.points[face[2]], 
-            this.points[face[3]]]
-  }
-
   drawPerspective(ctx, camera) {
     this.mesh.draw(ctx, camera)
     this.done = true;

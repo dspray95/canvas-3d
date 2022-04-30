@@ -2,58 +2,49 @@ import Triangle from "../primitives/Triangle";
 import WorldObject from "../../../objects/WorldObject"
 import { Vector } from "../primitives/Vector"
 import { MeshDefaults } from "./MeshDefaults";
-import Point, { averagePoint } from "../primitives/Point";
-import { Color } from "../../../../tools/Colors"
-import { randomRange } from "../../../../tools/Random";
+import { averagePoint } from "../primitives/Point";
 import { FlatShader } from "../../shader/FlatShader";
-import { Logger } from "../../../logging/logger";
 
-export default class Mesh{
+class Mesh{
 
   /**
    * @param {WorldObject} parent 
-   * @param {Array} points 
-   * @param {Array} triangles 
+   * @param {Camera} camers
+   * @param {MeshData} meshData
    */
 
-  constructor(parent,
-              camera, 
-              points=[], 
-              triangles=[], 
-              doDrawCall=true, 
-              drawVertices=false, 
-              drawWireframe=false,
-              shader=FlatShader,
-              color=MeshDefaults.planeColor,
-              wireframeColor=MeshDefaults.wireframeColor
-              ){
+  constructor(
+    parent,
+    camera, 
+    meshData,
+    {
+      doDrawCall=true, 
+      shader=FlatShader,
+      color=MeshDefaults.planeColor,
+    }
+  ){
     this.parent = parent
-    this.points = points
+    this.vertices = meshData.vertices
     this.shader = shader
     this.color = color
     this.movePointsToLocation(parent)
-    this.triangles = this.makeTriangles(triangles, camera)
-    
-    this.drawVertices = drawVertices
-    this.drawWireframe = drawWireframe
+    this.triangles = this.makeTriangles(meshData.triangles, camera)
+
     this.doDrawCall = doDrawCall 
     this.drawCalls = 0
-    // Defautls for color values
-    this.verticeColor = MeshDefaults.verticeColor
-    this.faceCentrePointColor = MeshDefaults.faceCentrePointColor
-    this.wireframeColor = wireframeColor
-    
-    this.drawFaces = true;
-    this.done = false;
   }
 
-  rotate(axis, angle, pointsOnly=false){
-    this.points.forEach((point) => {
-      point.subtract(new Vector(this.parent.location.x, this.parent.location.y, this.parent.location.z))
-      point.rotate(axis, angle * (Math.PI / 180))
-      point.add(new Vector(this.parent.location.x, this.parent.location.y, this.parent.location.z))
+  setMeshData(meshData){
+    this.triangles = this.makeTriangles(meshData.triangles)
+  }
+
+  rotate(axis, angle, verticesOnly=false){
+    this.vertices.forEach((vertex) => {
+      vertex.subtract(new Vector(this.parent.location.x, this.parent.location.y, this.parent.location.z))
+      vertex.rotate(axis, angle * (Math.PI / 180))
+      vertex.add(new Vector(this.parent.location.x, this.parent.location.y, this.parent.location.z))
     })
-    if(!pointsOnly){
+    if(!verticesOnly){
       this.sortTrianglesByDepth()
       this.triangles.forEach(triangle => {
         triangle.normal.rotate(axis, angle)
@@ -63,38 +54,36 @@ export default class Mesh{
   }
 
   scale(x, y, z){
-    this.points.forEach((point) => {
-      point.subtract(new Vector(this.parent.location.x, this.parent.location.y, this.parent.location.z))
-      point.scale(x, y, z)
-      point.add(new Vector(this.parent.location.x, this.parent.location.y, this.parent.location.z))
+    this.vertices.forEach((vertex) => {
+      vertex.subtract(new Vector(this.parent.location.x, this.parent.location.y, this.parent.location.z))
+      vertex.scale(x, y, z)
+      vertex.add(new Vector(this.parent.location.x, this.parent.location.y, this.parent.location.z))
     })
   }
 
   translate(vector){
-    this.points.forEach((point) => {
-      point.add(vector)
+    this.vertices.forEach((vertex) => {
+      vertex.add(vector)
     })
   }
 
-
-
   movePointsToLocation(parent){
-    this.points.forEach(point => {
-      point.add(new Vector(parent.location.x, parent.location.y, parent.location.z))
+    this.vertices.forEach(vertex => {
+      vertex.add(new Vector(parent.location.x, parent.location.y, parent.location.z))
     })
   }
 
   makeTriangles(trianlgesArray, camera){
-    this.points.forEach(point => {
-      camera.perspectivePointProjectionPipeline(point);
+    this.vertices.forEach(vertex => {
+      camera.perspectivePointProjectionPipeline(vertex);
     })
     let triangleObjects = []
     trianlgesArray.forEach(triangleArray => {
       try{
         let triangle = new Triangle(
-          this.points[triangleArray[0]],
-          this.points[triangleArray[1]],
-          this.points[triangleArray[2]],
+          this.vertices[triangleArray[0]],
+          this.vertices[triangleArray[1]],
+          this.vertices[triangleArray[2]],
           this.color
         )
         triangle.calculateNormal(this.parent.location)                        
@@ -108,10 +97,10 @@ export default class Mesh{
     return triangleObjects
   }
   
-  getPointsFromTriangle(triangle){
-    return [this.points[triangle[0]], 
-            this.points[triangle[1]], 
-            this.points[triangle[2]]]
+  getVerticesFromTriangle(triangle){
+    return [this.vertices[triangle[0]], 
+            this.vertices[triangle[1]], 
+            this.vertices[triangle[2]]]
   }
 
   sortTrianglesByDepth(){
@@ -166,15 +155,15 @@ export default class Mesh{
     /** Will recreate the given mesh flipped over the x axis, so point (-1, 1, 1) will turn into (1, 1, 1)  
     */
     //TODO We've got to recreate the tris on the opposite side as well, could be a bit tricky
-    this.points.forEach( point => {
-      if(point.x > 0 || point.x < 0 ){
-        point.x = -point.x
+    this.vertices.forEach( vertex => {
+      if(vertex.x > 0 || vertex.x < 0 ){
+        vertex.x = -vertex.x
       } 
     })
 
   }
 
-  draw(canvas, camera, opacity=1){
+  draw(canvas, camera){
 
     if(!this.doDrawCall){
       return
@@ -184,45 +173,12 @@ export default class Mesh{
       camera, 
       canvas,
       this.triangles,
-      this.parent.parent.lightSources,
-      this.drawFaces, 
-      this.drawWireframe,
-      opacity,
-      this.drawCalls,
-      this.parent.width,
-      this.parent.height
+      this.drawCalls
     )
       
     this.drawCalls += 1
-
-    if(MeshDefaults.drawSurfaceNormals){
-      canvas.lineWidth = 1;
-      canvas.strokeStyle = Color.DEFAULTS.white.toHtmlRgba()
-      this.triangles.forEach(triangle => {
-        let faceCull = triangle.normal.dotProduct(triangle.planeCentre.getVectorTo(camera.location)) <= 0 ? true : false
-        if(!faceCull){
-          canvas.strokeStyle = Color.DEFAULTS.white.toHtmlRgba()
-        }
-        else{
-          canvas.strokeStyle = Color.DEFAULTS.red.toHtmlRgba()
-        }
-        canvas.fillStyle = Color.DEFAULTS.white.toHtmlRgba()
-        let screenSpaceCentre = averagePoint(triangle.pointsAsList())
-        let normalEndPoint = screenSpaceCentre.copy()
-        normalEndPoint.add(triangle.normal)
-        
-        camera.perspectivePointProjectionPipeline(normalEndPoint)
-        canvas.beginPath()
-        canvas.fillRect(screenSpaceCentre.screenSpaceX - 3, screenSpaceCentre.screenSpaceY - 3, 6, 6)
-        canvas.moveTo(screenSpaceCentre.screenSpaceX, screenSpaceCentre.screenSpaceY)
-        canvas.lineTo(normalEndPoint.screenSpaceX, normalEndPoint.screenSpaceY)
-        canvas.closePath()
-        canvas.stroke()
-
-      })
-    }
   }
 }
 
-
+export { Mesh }
 

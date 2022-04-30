@@ -1,32 +1,24 @@
-import { toHaveStyle } from "@testing-library/jest-dom"
-import { Logger } from "../../../../engine/logging/logger"
 import WorldObject from "../../../../engine/objects/WorldObject"
 import LightSource from "../../../../engine/rendering/objects/light/LightSource"
-import Mesh from "../../../../engine/rendering/objects/mesh/Mesh"
+import { Mesh } from "../../../../engine/rendering/objects/mesh/Mesh"
+import { MeshData } from "../../../../engine/rendering/objects/mesh/MeshData"
 import Point from "../../../../engine/rendering/objects/primitives/Point"
-import Vector from "../../../../engine/rendering/objects/primitives/Vector"
-import { FlatShader } from "../../../../engine/rendering/shader/FlatShader"
 import { Color } from "../../../../tools/Colors"
 
 class Starfighter extends WorldObject{
     
     constructor(location, parent, color=Color.GREY, name="starfighter"){
         super(location, parent, name)
-        let [points, tris] = Starfighter.genMesh()
+        let meshData = Starfighter.genMeshData()
         // color.opacity = 0.8
         this.mesh = new Mesh(
             this, 
             parent.camera,
-            points,
-            tris,
-            true,
-            false, 
-            false,
-            FlatShader,
-            color.copy(),
-            Color.PINK.copy(),
+            meshData,
+            {
+                color: color.copy()
+            }
         )
-        
         this.colorOverride(new Color(55, 55, 55))
         this.mesh.bakeLighting(
             new LightSource(new Point(-2, -1, 2), Color.WHITE.copy(), 1, "point"),
@@ -43,7 +35,7 @@ class Starfighter extends WorldObject{
         this.mesh.triangles[2].color = windowColor      
     }
 
-    static genMesh(){
+    static genMeshData(){
         let points = [
             new Point(0, 0, 0.4),
             new Point(-0.05, 0, 0.3),
@@ -72,10 +64,11 @@ class Starfighter extends WorldObject{
             [8, 7, 9]
         ]
 
-        return [points, triangles]
+        return new MeshData(points, triangles)
     }
 
     drawPerspective(ctx, camera){
+        this.mesh.sortTrianglesByDepth()
         this.mesh.draw(ctx, camera)
         this.done = true;
     }

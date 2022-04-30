@@ -1,8 +1,8 @@
-import { Shader } from "./Shader";
+import { Shader } from "../../../engine/rendering/shader/Shader";
 import { Color } from "../../../tools/Colors"
 class TerrainShader extends Shader{
 
-  static draw(camera, canvas, triangles, lightSources, drawFaces, drawWireframe, opacityModifier, drawCalls, mapWidth, mapHeight){
+  static draw(camera, canvas, triangles, drawCalls){
     canvas.lineWidth = 1;
     for(let i = 0; i < triangles.length; i++){
       let triA = triangles[i]

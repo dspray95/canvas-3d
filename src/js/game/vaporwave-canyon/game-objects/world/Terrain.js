@@ -1,8 +1,9 @@
 import WorldObject from "../../../../engine/objects/WorldObject"
-import Mesh from "../../../../engine/rendering/objects/mesh/Mesh";
+import { Mesh } from "../../../../engine/rendering/objects/mesh/Mesh";
+import { MeshData } from "../../../../engine/rendering/objects/mesh/MeshData";
 import Point from "../../../../engine/rendering/objects/primitives/Point";
 import Vector from "../../../../engine/rendering/objects/primitives/Vector";
-import { TerrainShader } from "../../../../engine/rendering/shader/TerrainShader";
+import { TerrainShader } from "../../shader/TerrainShader";
 import { Color } from "../../../../tools/Colors";
 import { TerrainNoise } from "../../scripts/noise/TerrainNoise";
 
@@ -38,7 +39,7 @@ class Terrain extends WorldObject{
       heightMultiplier,
     )
     
-    let terrainMesh = this.genTerrainMesh(
+    let terrainMeshData = this.genTerrainMeshData(
       mapWidth, 
       mapHeight, 
       heightMap,
@@ -49,13 +50,11 @@ class Terrain extends WorldObject{
     this.mesh = new Mesh(
       this,
       parent.camera, 
-      terrainMesh['vertices'], 
-      terrainMesh['triangles'], 
-      true, false, false,
-      TerrainShader,
-      terrainColor,
-      mapWidth,
-      mapHeight
+      terrainMeshData,
+      {
+        shader: TerrainShader,
+        color: terrainColor
+      }
     )
 
     this.width = mapWidth
@@ -66,7 +65,7 @@ class Terrain extends WorldObject{
     this.centrePos.add(new Vector(this.width, 0, this.height))
   }
 
-  genTerrainMesh(width, height, heightmap, heightMultiplier, adjacentTerrain){
+  genTerrainMeshData(width, height, heightmap, heightMultiplier, adjacentTerrain){
     let triangles = []
     let vertices = []
     const topLeftX = (width-1) / -2
@@ -104,13 +103,13 @@ class Terrain extends WorldObject{
       this.setStartHeightsToAdjacent(adjacentTerrain, vertices, width, height)
     }
 
-    return {vertices: vertices, triangles: triangles}
+    return new MeshData(vertices, triangles)
   }
 
   setStartHeightsToAdjacent(adjacentTerrain, vertices, width, height){
     let iAdjacent = vertices.length - width
     for(let i = 0; i < width - 1; i++){
-        vertices[i].y = adjacentTerrain.mesh.points[iAdjacent].y
+        vertices[i].y = adjacentTerrain.mesh.vertices[iAdjacent].y
         vertices[i].updateMatrix()
         iAdjacent += 1
     }
@@ -156,7 +155,6 @@ class Terrain extends WorldObject{
 
   drawPerspective(ctx, camera) {
     this.mesh.draw(ctx, camera, this.opacity, this.adjacentTerrain)
-    // TerrainShader.drawVertLabels(ctx, this.mesh.points, this.width, this.name, this.terrainColor)
   }
 
   tick(){

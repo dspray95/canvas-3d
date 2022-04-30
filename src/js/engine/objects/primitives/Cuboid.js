@@ -1,98 +1,63 @@
-import { Color } from "../../../../tools/Colors"
-import WorldObject from "../WorldObject";
-import Point from "../../../rendering/objects/primitives/Point";
-import { randomIntRange } from "../../../../tools/Random";
-import Line from "../../../rendering/objects/primitives/Line";
-import Vector from "../../../rendering/objects/primitives/Vector";
-import Mesh from "../../../rendering/objects/mesh/Mesh";
+import Point from "../../rendering/objects/primitives/Point";
+import { MeshDefaults } from "../../rendering/objects/mesh/MeshDefaults";
+import { MeshData } from "../../rendering/objects/mesh/MeshData";
+import { Mesh } from "../../rendering/objects/mesh/Mesh";
+import { Vector } from "../../rendering/objects/primitives/Vector";
 
-class Cuboid extends WorldObject {
-  constructor(location, parent, name="Cuboid") {
-    super(location, parent, name=name);
-    let cube = this.createCube(10, 10, 10);
-    this.mesh = new Mesh(this, parent.camera, cube['vertices'], cube['triangles'], true, false, false)
-    this.mesh.triangles.forEach(triangle => {
-      triangle.color = Color.DEFAULTS.blue;
-    })
+class CuboidMesh extends Mesh {
+
+  constructor(
+    parent, 
+    camera, {
+      scale=new Vector(1, 1, 1),
+      color=MeshDefaults.planeColor
+    }
+  ) {
+    let meshData = CuboidMesh.createCuboidMeshData(scale)
+    super(
+      parent,
+      camera, 
+      meshData,
+      {
+        color: color
+      }
+    );  
   }
 
-  createCube(cuboidWidth, cuboidHeight, cuboidLength) {
-    let xOffset = cuboidWidth * 0.5;
-    let yOffset = cuboidHeight * 0.5;
-    let zOffset = cuboidLength * 0.5;
-
-    let botLeft = new Point(-xOffset, -yOffset, -zOffset);
-    let botRight = new Point(xOffset, -yOffset, -zOffset);
-    let botLeftBack = new Point(-xOffset, -yOffset, zOffset);
-    let botRightBack = new Point(xOffset, -yOffset, zOffset);
-    let topLeft = new Point(-xOffset, yOffset, -zOffset);
-    let topRight = new Point(xOffset, yOffset, -zOffset);
-    let topLeftBack = new Point(-xOffset, yOffset, zOffset);
-    let topRightBack = new Point(xOffset, yOffset, zOffset);
-
-    let cuboid = [
-      topLeft,
-      topRight,
-      topRightBack,
-      topLeftBack,
-      botLeft,
-      botRight,
-      botRightBack,
-      botLeftBack,
-    ];
-
-    let faces = [
-      [0, 1, 2, 3],
-      [0, 1, 5, 4],
-      [4, 5, 6, 7],
-      [7, 6, 2, 3],
-      [0, 3, 7, 4],
-      [1, 2, 6, 5]
+  static createCuboidMeshData(cuboidScale){
+    let xOffset = cuboidScale.x * 0.5;
+    let yOffset = cuboidScale.y * 0.5;
+    let zOffset = cuboidScale.z * 0.5;
+    
+    let vertices = [
+        new Point(-xOffset, -yOffset, -zOffset),
+        new Point(xOffset, -yOffset, -zOffset),
+        new Point(-xOffset, -yOffset, zOffset),
+        new Point(xOffset, -yOffset, zOffset),
+        new Point(-xOffset, yOffset, -zOffset),
+        new Point(xOffset, yOffset, -zOffset),
+        new Point(-xOffset, yOffset, zOffset),
+        new Point(xOffset, yOffset, zOffset)
     ]
 
     let triangles = [
-      //Bottom
-      [1, 0, 2],
-      [0, 3, 2],
-      //Front
-      [0, 1, 4],
-      [1, 5, 4],
-      //Right
-      [1, 2, 6],
-      [1, 6, 5],
-      //Left
-      [0, 7, 3],
-      [0, 4, 7],
-      //Top
-      [4, 5, 6],
-      [4, 6, 7],
-      //Back
-      [2, 3, 7],
-      [2, 7, 6]
-    ]
-    
-    let color = Color.DEFAULTS[Object.keys(Color.DEFAULTS)[randomIntRange(0, 9)]]
-    let faceColors = []
-    for(let i = 0; i < 6; i++){
-      faceColors.push(color)
-    }
-    this.faceColors = faceColors
-    return { vertices: cuboid, faces: faces, triangles: triangles };
+        [0, 4, 1],
+        [1, 4, 5],
+        [0, 2, 4],
+        [4, 2, 6],
+        [2, 3, 7],
+        [2, 7, 6],
+        [3, 1, 7],
+        [7, 1, 5],
+        [1, 2, 0],
+        [3, 2, 1],
+        [5, 7, 6],
+        [5, 6, 4]
+      ]
+
+      return new MeshData(vertices, triangles)
   }
+
 }
 
-class RotatingCuboid extends Cuboid {
-  constructor(location, parent, rotations, speed) {
-    super(location, parent);
-    this.speed = speed
-    this.rotations = rotations
-  }
-
-  tick(){
-    this.rotations.forEach(rotation => {
-      this.rotate(rotation, 1 * this.speed)
-    })
-  }
-}
-
-export { Cuboid, RotatingCuboid };
+export { CuboidMesh };

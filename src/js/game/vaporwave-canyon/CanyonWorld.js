@@ -13,6 +13,8 @@ import { Fretboard } from "./gui/Fretboard";
 import { CameraController } from "./scripts/CameraController";
 import { Player } from "./game-objects/actors/Player";
 import { PlayerControler } from "./scripts/movement/PlayerController";
+import { MobSpawner } from "./scripts/MobSpawner";
+import { Blocker } from "./game-objects/world/Blocker";
 
 
   class CanyonWorld extends Worldspace{
@@ -28,9 +30,15 @@ import { PlayerControler } from "./scripts/movement/PlayerController";
       let terrainInitPos = new Point(0, terrainHeight, 0)
 
       this.player = new Player(new Point(0, 1, 3), this)
-      this.playerControler = new PlayerControler(this.player, this.camera)
-
+      this.playerControler = new PlayerControler(this.player, this.camera, 0.3, 0.2, true)
+      this.cameraController = new CameraController(this.camera, 0.4, 0)
       this.objects["terrain"] = []
+      this.objects["mobs"] = [
+        // new Blocker(new Point(0, 1, 10), this),
+        new Blocker(new Point(-1, 1, 20), this),
+        new Blocker(new Point(1, 1, 20), this)
+      ]
+      
       this.objects["player"] = [this.player]
       this.scripts = [
         new TerrainGenerator(
@@ -43,7 +51,9 @@ import { PlayerControler } from "./scripts/movement/PlayerController";
           heightMultiplier,
           terrainColor
         ),
-        this.playerControler
+        this.playerControler,
+        // this.cameraController,
+        new MobSpawner()
       ]
       
       if(this.viewportHeight > this.viewportWidth){
@@ -64,10 +74,13 @@ import { PlayerControler } from "./scripts/movement/PlayerController";
 
     handleKeyDown(event){
       this.playerControler.parseInput(event.keyCode || event.which, "keyDown")
+      this.cameraController.move(event.key, "startMovement")
     }
     
     handleKeyUp(event){
       this.playerControler.parseInput(event.keyCode || event.which, "keyUp")
+      this.cameraController.move(event.key, "stopMovement")
+
     }
     
 
