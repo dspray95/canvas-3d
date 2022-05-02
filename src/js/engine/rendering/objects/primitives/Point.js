@@ -5,7 +5,6 @@ import {
   ScaleMatrix3D,
 } from "../../matrices/Transform";
 import { dot } from "../../matrices/Matrix";
-import { randomRange } from "../../../../tools/Random";
 
 class Point {
   constructor(x, y, z, w=1, parent=null) {

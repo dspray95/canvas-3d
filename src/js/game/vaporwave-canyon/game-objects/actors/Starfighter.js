@@ -21,7 +21,7 @@ class Starfighter extends WorldObject{
         )
         this.colorOverride(new Color(55, 55, 55))
         this.mesh.bakeLighting(
-            new LightSource(new Point(-2, -1, 2), Color.WHITE.copy(), 1, "point"),
+            new LightSource(new Point(-2, -1, 2), Color.WHITE.copy()),
             parent.camera.location    
         )
         this.mesh.scale(2, 4, 2)

@@ -4,9 +4,7 @@ import { dot } from "./matrices/Matrix";
 import { cot } from "../../tools/Trig";
 import Point from "./objects/primitives/Point";
 import WorldObject from "../objects/WorldObject";
-import Vector from "./objects/primitives/Vector";
-import { Vector2D } from "../physics/vector/Vector2D";
-import { superKernelPerspectivePipeline, projectionPipelineSetOutputShape } from "./gpu/ProjectionPipelineKernels";
+// import Vector from "./objects/primitives/Vector";
 
 
 class Camera extends WorldObject{
@@ -48,16 +46,10 @@ class Camera extends WorldObject{
                                     )
     this.cameraToOriginMatrix = Camera.getCameraToOriginMatrix(this.location, 
                                                               this.viewingDirection)
-    //s 
     this.viewportWidth = viewportWidth
     this.viewportHeight = viewportHeight
-    this.previousPespectivePipelineSize = -1;
     // this.translate(new Vector(0, 0, 10))
     
-  }
-
-  doMatrixPerspectivePointProjection(matrices){
-    return superKernelPerspectivePipeline(this.cameraToOriginMatrix, this.perspectiveMatrix, matrices)
   }
 
   perspectivePointProjectionPipeline(point){

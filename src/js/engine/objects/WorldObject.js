@@ -1,5 +1,4 @@
 import { Color } from "../../tools/Colors";
-import { Point, averageDimension, averagePoint } from "../rendering/objects/primitives/Point";
 import { Worldspace } from "../Worldspace";
 
 export default class WorldObject {
