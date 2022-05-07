@@ -1,13 +1,10 @@
 import { CameraConfig } from "./CameraConfig"
-import { RotationMatrix3D, TranslationMatrix3D } from "./matrices/Transform";
-import { dot } from "./matrices/Matrix";
-import { cot } from "../../tools/Trig";
-import Point from "./objects/primitives/Point";
-import WorldObject from "../objects/WorldObject";
-// import Vector from "./objects/primitives/Vector";
+import { RotationMatrix3D, TranslationMatrix3D } from "./matrices/Transform"
+import { dot } from "./matrices/Matrix"
+import { cot } from "../../tools/Trig"
+import Point from "./objects/primitives/Point"
 
-
-class Camera extends WorldObject{
+class Camera{
   /**Camera's origin is always (0, 0, 0) in its worldspace
    * 
    * @param {Point} location 
@@ -30,7 +27,9 @@ class Camera extends WorldObject{
     near = CameraConfig.NEAR,
     far = CameraConfig.FAR
   ) {
-    super(location, parent, "camera")
+    this.locaiton = location
+    this.parent = parent
+    this.name = CameraConfig.NAME
     //positioning variables
     this.location = location;
     this.viewingDirection = viewingDirection;

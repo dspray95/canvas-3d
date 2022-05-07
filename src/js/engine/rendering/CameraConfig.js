@@ -12,6 +12,7 @@ class CameraConfig{
   static DEFAULT_FOV = 1.0472 //Radians (default 90Deg)
   static NEAR = 1
   static FAR = 1000
+  static NAME = "mainCamera"
 
 }
 

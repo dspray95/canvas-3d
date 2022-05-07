@@ -1,3 +1,5 @@
+import { Color } from "../../../tools/Colors";
+import Vector from "../../rendering/objects/primitives/Vector";
 import { CuboidMesh } from "./Cuboid";
 
 class CollisionBox extends CuboidMesh{
@@ -21,21 +23,21 @@ class CollisionBox extends CuboidMesh{
     intersectCollisionBox(otherBox){
         return (
             (this.min('x') <= otherBox.max('x') && this.max('x') >= otherBox.min('x')) &&
-            (this.min('x') <= otherBox.max('x') && this.max('x') >= otherBox.min('x')) &&
-            (this.min('x') <= otherBox.max('x') && this.max('x') >= otherBox.min('x'))
+            (this.min('y') <= otherBox.max('y') && this.max('y') >= otherBox.min('y')) &&
+            (this.min('z') <= otherBox.max('z') && this.max('z') >= otherBox.min('z'))
         )
     }
 
     min(dimension){
-        this.vertices.reduce((previous, current) => {
-          return previous[dimension] < current[dimension] ? previous[dimension] : current[dimension]
-        })
+        return this.vertices.reduce((previous, current) => {
+            return previous[dimension] < current[dimension] ? previous : current
+        })[dimension]
     }
 
     max(dimension){
-        this.vertices.reduce((previous, current) => {
-          return previous[dimension] > current[dimension] ? previous[dimension] : current[dimension]
-        })
+        return this.vertices.reduce((previous, current) => {
+            return previous[dimension] > current[dimension] ? previous : current
+        })[dimension]
     }
 }
 
