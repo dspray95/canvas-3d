@@ -1,10 +1,6 @@
 import Point from "../../engine/rendering/objects/primitives/Point";
 import { Worldspace } from "../../engine/Worldspace";
 import { Color } from "../../tools/Colors";
-import { Terrain } from "./game-objects/world/Terrain";
-import LightSource from "../../engine/rendering/objects/light/LightSource"
-import { Vector2D } from "../../engine/physics/vector/Vector2D";
-import Vector from "../../engine/rendering/objects/primitives/Vector";
 import { TerrainGenerator } from "./scripts/terrain/ProceduralTerrainGenerator";
 import { ZigZag } from "./gui/ZigZag";
 import { Morse } from "./gui/Morse";

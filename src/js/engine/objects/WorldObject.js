@@ -2,6 +2,7 @@ import { Color } from "../../tools/Colors";
 import { Worldspace } from "../Worldspace";
 
 export default class WorldObject {
+  
   constructor(location, parent, name="WorldObject") {
     this.location = location;
     this.parent = parent;

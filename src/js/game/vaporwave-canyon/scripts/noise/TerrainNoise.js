@@ -3,8 +3,10 @@ import { PerlinNoise } from "./PerlinNoise";
 import { clamp, inverseLerp } from "../../../../tools/Numbers";
 import { PRNG } from "../../../../tools/Random";
 import { vectorCrossProduct } from "../../../../engine/rendering/objects/primitives/Vector";
-import { Vector2D } from "../../../../engine/physics/vector/Vector2D";
+import { Vector2D } from "../../../../engine/rendering/objects/primitives/Vector2D";
 import { Noise } from '../../../../../../node_modules/noisejs'
+
+
 
 class TerrainNoise{
 

@@ -1,5 +1,5 @@
 import { createContext } from "react"
-import { Vector2D } from "../../../engine/physics/vector/Vector2D"
+import { Vector2D } from "../../../engine/rendering/objects/primitives/Vector2D"
 import { Color } from "../../../tools/Colors"
 
 class NeuralNet{

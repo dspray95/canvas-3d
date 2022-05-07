@@ -1,5 +1,5 @@
 import { Shuffler } from "../../../../tools/List";
-import { Vector2D } from "../../../../engine/physics/vector/Vector2D"
+import { Vector2D } from "../../../../engine/rendering/objects/primitives/Vector2D";
 
 class PerlinNoise{
 

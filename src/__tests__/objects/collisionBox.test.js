@@ -34,7 +34,6 @@ describe("collision box min for", () => {
 })
 
 describe("intersectCollisionBox", () => {
-
     test("does intersect", () => {
         const boxIntersects = new CollisionBox(
             {location: new Point(0, 0, -0.25)},
