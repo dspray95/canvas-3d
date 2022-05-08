@@ -20,11 +20,11 @@ class CollisionBox extends CuboidMesh{
         this.visible = visible
     }
 
-    intersectCollisionBox(otherBox){
+    static checkBoxesCollide(boxA, boxB){
         return (
-            (this.min('x') <= otherBox.max('x') && this.max('x') >= otherBox.min('x')) &&
-            (this.min('y') <= otherBox.max('y') && this.max('y') >= otherBox.min('y')) &&
-            (this.min('z') <= otherBox.max('z') && this.max('z') >= otherBox.min('z'))
+            (boxA.min('y') <= boxB.max('y') && boxA.max('y') >= boxB.min('y')) &&
+            (boxA.min('x') <= boxB.max('x') && boxA.max('x') >= boxB.min('x')) &&
+            (boxA.min('z') <= boxB.max('z') && boxA.max('z') >= boxB.min('z'))
         )
     }
 

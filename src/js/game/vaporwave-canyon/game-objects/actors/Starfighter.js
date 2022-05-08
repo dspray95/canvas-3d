@@ -4,6 +4,7 @@ import { Mesh } from "../../../../engine/rendering/objects/mesh/Mesh"
 import { MeshData } from "../../../../engine/rendering/objects/mesh/MeshData"
 import Point from "../../../../engine/rendering/objects/primitives/Point"
 import { Color } from "../../../../tools/Colors"
+import { CollisionBox } from "../../../../engine/objects/primitives/CollisionBox"
 
 class Starfighter extends WorldObject{
     
@@ -25,6 +26,7 @@ class Starfighter extends WorldObject{
             parent.camera.location    
         )
         this.mesh.scale(2, 4, 2)
+        this.collisionBox = new CollisionBox(this, parent.camera, { visible: true })
     }
 
     colorOverride(windowColor){
