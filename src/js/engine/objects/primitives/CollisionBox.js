@@ -2,22 +2,24 @@ import { Color } from "../../../tools/Colors";
 import Vector from "../../rendering/objects/primitives/Vector";
 import { CuboidMesh } from "./Cuboid";
 
+const COLLISION_BOX_COLOR = new Color(200, 10, 50, 0.8)
+
 class CollisionBox extends CuboidMesh{
 
     constructor( 
         parent, 
         camera, {
           scale=new Vector(1, 1, 1),
-          visible=false
+          isVisible=false
         })
     {
         super( 
             parent, 
             camera, {
               scale: scale,
-              color: new Color(200, 10, 50, 0.8)
+              color: new Color(COLLISION_BOX_COLOR)
         })
-        this.visible = visible
+        this.doDrawCall = isVisible
     }
 
     static checkBoxesCollide(boxA, boxB){
@@ -39,6 +41,7 @@ class CollisionBox extends CuboidMesh{
             return previous[dimension] > current[dimension] ? previous : current
         })[dimension]
     }
+
 }
 
 export { CollisionBox }

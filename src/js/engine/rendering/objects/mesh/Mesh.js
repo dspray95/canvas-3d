@@ -4,12 +4,13 @@ import { Vector } from "../primitives/Vector"
 import { MeshDefaults } from "./MeshDefaults";
 import { averagePoint } from "../primitives/Point";
 import { FlatShader } from "../../shader/FlatShader";
+import { Logger } from "../../../logging/logger";
 
 class Mesh{
 
   /**
    * @param {WorldObject} parent 
-   * @param {Camera} camers
+   * @param {Camera} camera
    * @param {MeshData} meshData
    */
 
@@ -164,8 +165,10 @@ class Mesh{
   }
 
   draw(canvas, camera){
-
+    Logger.logOnce(this.doDrawCall)
+    Logger.logOnce(this.parent.name)
     if(!this.doDrawCall){
+      Logger.logOnce("Dont Draw")
       return
     }
 

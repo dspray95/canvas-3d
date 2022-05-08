@@ -1,20 +1,16 @@
-import { toHaveStyle } from "@testing-library/jest-dom"
-import { Time } from "../../../../engine/time"
+import { Time } from "../../../../engine/Time"
 import { BehaviourScript } from "../BehaviourScript"
 
 class PlayerDamageAnimation extends BehaviourScript{
 
     constructor(playerMesh, durationSeconds, flashDurationSeconds){
+        super()
         this.doAnimation = false
         this.playerMesh = playerMesh
         this.duration = durationSeconds / 1000
         this.flashDuration = flashDurationSeconds / 1000
         this.timeAnimated = 0
-        this.timeInState = 0
-    }
-
-    start(){
-
+        this.timeInState = this.flashDuration + 1
     }
 
     execute(){
@@ -32,7 +28,7 @@ class PlayerDamageAnimation extends BehaviourScript{
         if(this.timeAnimated >= this.duration){
             this.doAnimation = false
             this.timeAnimated = 0
-            this.timeInState = 0
+            this.timeInState = this.flashDuration + 1
             this.playerMesh.doDrawCall = true
         }
     }
