@@ -4,7 +4,6 @@ import { Vector } from "../primitives/Vector"
 import { MeshDefaults } from "./MeshDefaults";
 import { averagePoint } from "../primitives/Point";
 import { FlatShader } from "../../shader/FlatShader";
-import { Logger } from "../../../logging/logger";
 
 class Mesh{
 
@@ -164,11 +163,14 @@ class Mesh{
 
   }
 
+  setOpacity(opacity){
+    this.triangles.forEach(triangle => {
+      triangle.setOpacity(opacity)
+    })
+  }
+
   draw(canvas, camera){
-    Logger.logOnce(this.doDrawCall)
-    Logger.logOnce(this.parent.name)
     if(!this.doDrawCall){
-      Logger.logOnce("Dont Draw")
       return
     }
 

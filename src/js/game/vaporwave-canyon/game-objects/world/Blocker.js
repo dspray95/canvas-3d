@@ -5,7 +5,7 @@ import WorldObject from "../../../../engine/objects/WorldObject";
 import Vector from "../../../../engine/rendering/objects/primitives/Vector";
 import { Color } from "../../../../tools/Colors";
 
-const BLOCKER_COLOR = new Color(10, 200, 50, 0)
+const BLOCKER_COLOR = new Color(200, 10, 50, 0.8)
 const BLOCKER_SCALE = new Vector(1, 1, 0.25)
 
 class Blocker extends WorldObject{
@@ -25,7 +25,6 @@ class Blocker extends WorldObject{
     drawPerspective(ctx, camera){
         this.mesh.sortTrianglesByDepth()
         this.mesh.draw(ctx, camera)
-        this.collisionBox.draw(ctx, camera)
         this.done = true;
     }
     

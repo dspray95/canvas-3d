@@ -102,6 +102,11 @@ export default class Triangle{
     this.fillColor = this.color.toHtmlRgba()
   }
   
+  setOpacity(opacity){
+    this.color.opacity = opacity
+    this.fillColor = this.color.toHtmlRgba()
+  }
+  
   toString(){
     return `Triangle, 
       \tPoints\t${this.A.toString()}, \n\t\t${this.B.toString()}, \n\t\t${this.C.toString()}

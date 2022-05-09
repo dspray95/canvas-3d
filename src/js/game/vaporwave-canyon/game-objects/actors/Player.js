@@ -9,7 +9,7 @@ class Player extends Starfighter {
     constructor(location, parent){
         super(location, parent, Color.ELECTRIC_BLUE, "player")
         this.health = 3
-        this.damageAnimation = new PlayerDamageAnimation(this.mesh, 3, 1)
+        this.damageAnimation = new PlayerDamageAnimation(this.mesh, 2, 0.2)
     }
 
     collisionCheck(){
@@ -22,10 +22,12 @@ class Player extends Starfighter {
     }
 
     takeDamage(){
-        this.health -= 1
-        //Move back to centre
-        this.translate(new Vector(-this.location.x, 0, 0))
-        this.damageAnimation.doAnimation = true
+        if(this.damageAnimation.doAnimation === false){
+            this.health -= 1
+            //move back to the centre and kick of the damage animation 
+            this.translate(new Vector(-this.location.x, 0, 0))
+            this.damageAnimation.start()
+        }
     }
 
     tick(){
