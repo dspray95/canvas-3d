@@ -1,4 +1,3 @@
-import { Logger } from "../../../../engine/logging/logger";
 import { CollisionBox } from "../../../../engine/objects/primitives/CollisionBox";
 import { CuboidMesh } from "../../../../engine/objects/primitives/Cuboid";
 import WorldObject from "../../../../engine/objects/WorldObject";
@@ -8,8 +7,10 @@ import { Color } from "../../../../tools/Colors";
 const BLOCKER_COLOR = new Color(200, 10, 50, 0.8)
 const BLOCKER_SCALE = new Vector(1, 1, 0.25)
 
+
 class Blocker extends WorldObject{
-    constructor(location, parent, ctx, camera){
+
+    constructor(location, parent){
         super(location, parent, "blocker")
         this.mesh = new CuboidMesh(
             this, 
@@ -21,7 +22,7 @@ class Blocker extends WorldObject{
         )
         this.collisionBox = new CollisionBox(this, parent.camera, { scale: BLOCKER_SCALE, isVisible: true})
     }
-   
+
     drawPerspective(ctx, camera){
         this.mesh.sortTrianglesByDepth()
         this.mesh.draw(ctx, camera)
