@@ -2,7 +2,7 @@ import { Logger } from "../../../../engine/logging/logger";
 import Vector from "../../../../engine/rendering/objects/primitives/Vector";
 import { BehaviourScript } from "../BehaviourScript";
 
-class PlayerControler extends BehaviourScript{
+class PlayerController extends BehaviourScript{
 
     constructor(playerObject, cameraObject, playerHorizonalSpeed=0.1, cameraSpeed=0.4, moveCamera=true){
         super()
@@ -79,4 +79,4 @@ class PlayerControler extends BehaviourScript{
 
 }
 
-export { PlayerControler }
+export { PlayerController }

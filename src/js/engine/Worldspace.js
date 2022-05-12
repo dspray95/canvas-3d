@@ -1,3 +1,4 @@
+import { CONFIG } from "../../config/config";
 import { Color } from "../tools/Colors";
 import { Logger } from "./logging/logger";
 import { Camera } from "./rendering/Camera";
@@ -13,10 +14,12 @@ class Worldspace {
     this.viewportHeight = viewportHeight
     this.rootLocation = new Point(0, 0, 0);
     this.centre = new Point(xLim * 0.5, yLim * 0.5, zLim * 0, 5);
-    this.camera = this.createMainCamera(
-      this.centre,
+
+    this.camera = new Camera(
+      this,
       viewportWidth,
-      viewportHeight
+      viewportHeight,
+      CONFIG.CAMERA_CONFIG
     );
     this.backgroundColor = Color.SPACEBLUE;
     this.projectionMode = projectionMode;
@@ -26,6 +29,7 @@ class Worldspace {
     this.lightSources = []
     this.scripts = []
     this.ui = []
+    this.objects = []
     //stats + logging
     const Stats = require('stats.js')
     this.stats = new Stats()
@@ -33,10 +37,6 @@ class Worldspace {
     document.body.appendChild( this.stats.dom );
     
     this.logger = Logger.logger
-  }
-
-  createMainCamera() {
-    return new Camera();
   }
 
   handleKeyUp(event){
@@ -57,7 +57,6 @@ class Worldspace {
     for(var objectGroup in this.objects){
       this.objects[objectGroup].forEach(object => {
         object.tick();
-        // vertexMatrices = vertexMatrices.concat(object.mesh.points.map(point => point.matrix))
         object.drawPerspective(ctx, this.camera);
       })
     }

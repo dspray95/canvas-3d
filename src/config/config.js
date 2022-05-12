@@ -3,7 +3,7 @@ import { DevConfig } from "./env/devConfig"
 import { ProdConfig } from "./env/prodConfig"
 
 const ENVIRONMENT = "dev"
-const CONFIG = DefaultConfig
+let CONFIG = DefaultConfig
 
 if(ENVIRONMENT === "dev"){
     CONFIG = DevConfig

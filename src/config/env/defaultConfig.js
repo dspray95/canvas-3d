@@ -1,21 +1,21 @@
+import { CameraConfig } from "../CameraConfig"
+
 class DefaultConfig{
 
     static ENV = "dev"
     static SHOW_FPS = false
     static SPAWN_MOBS = false
+    static ENABLE_CAMERA_CONTROLLER = false
+    static CAMERA_CONFIG = CameraConfig
 
     static PLAYER_CONFIG = {
         "showPlayer": false,
-        "playerMovementSpeed": 0,
+        "playerXMovementSpeed": 0,
+        "playerZMovementSpeed": 0,
         "playerStartPosXYZ": [0, 0, 0],
-        "enableXAxisControl": false
+        "enablePlayerController": false,
     }
 
-    static MOVEMENT_CONFIG = {
-        "enableCameraController": false,
-        "moveDownCanyon": false,
-        "canyonRunSpeed": 0,
-    }
 
     static TERRAIN_CONFIG = {
         "sizeX": 22,

@@ -1,4 +1,5 @@
 import { DefaultConfig } from "./defaultConfig"
+import { CameraConfig } from "../CameraConfig"
 
 class ProdConfig extends DefaultConfig{
 
@@ -8,9 +9,10 @@ class ProdConfig extends DefaultConfig{
 
     static PLAYER_CONFIG = {
         "showPlayer": true,
-        "playerMovementSpeed": 0.1,
-        "playerStartPosXYZ": [0, 0, 0],
-        "enableXAxisControl": true
+        "playerXMovementSpeed": 0.1,
+        "playerZMovementSpeed": 0.4,
+        "playerStartPosXYZ": [0, 1, 3],
+        "enablePlayerController": true
     }
 
     static MOVEMENT_CONFIG = {

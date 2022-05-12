@@ -1,4 +1,3 @@
-import { CameraConfig } from "./CameraConfig"
 import { RotationMatrix3D, TranslationMatrix3D } from "./matrices/Transform"
 import { dot } from "./matrices/Matrix"
 import { cot } from "../../tools/Trig"
@@ -17,37 +16,39 @@ class Camera{
    * @param {int} far 
    */
   constructor(
-    parent=null,
-    location=CameraConfig.CAMERA_START_LOCATION,
-    viewingDirection=CameraConfig.CAMERA_START_VIEWING_DIRECTION,
-    upDirection=CameraConfig.CAMERA_START_UP_DIRECTION,
-    viewportWidth = CameraConfig.DEFAULT_VIEWPORT_WIDTH,
-    viewportHeight = CameraConfig.DEFAULT_VIEWPORT_HEIGHT,
-    fov = CameraConfig.DEFAULT_FOV,
-    near = CameraConfig.NEAR,
-    far = CameraConfig.FAR
+    parent,
+    viewportWidth,
+    viewportHeight,
+    cameraConfig
   ) {
-    this.locaiton = location
+
     this.parent = parent
-    this.name = CameraConfig.NAME
+    this.location = cameraConfig.CAMERA_START_LOCATION
+
+    this.viewportWidth = viewportWidth
+    this.viewportHeight = viewportHeight
+
+    this.name = cameraConfig.NAME
+
     //positioning variables
-    this.location = location;
-    this.viewingDirection = viewingDirection;
-    this.upDirection = upDirection;
+    this.viewingDirection = cameraConfig.CAMERA_START_VIEWING_DIRECTION;
+    this.upDirection = cameraConfig.CAMERA_START_UP_DIRECTION;
+
     //clipping and perspective variables
-    this.fov = fov;
-    this.near = near;
-    this.far = far
+    this.fov = cameraConfig.DEFAULT_FOV;
+    this.near = cameraConfig.NEAR;
+    this.far = cameraConfig.FAR
+
+    //matrix setup
     this.perspectiveMatrix = Camera.getPerspeciveMatrix(
                                       this.fov,
                                       this.far,
                                       this.near
                                     )
-    this.cameraToOriginMatrix = Camera.getCameraToOriginMatrix(this.location, 
-                                                              this.viewingDirection)
-    this.viewportWidth = viewportWidth
-    this.viewportHeight = viewportHeight
-    // this.translate(new Vector(0, 0, 10))
+    this.cameraToOriginMatrix = Camera.getCameraToOriginMatrix(
+      this.location, 
+      this.viewingDirection
+    )
     
   }
 
@@ -116,7 +117,6 @@ class Camera{
   }
 
   static getCameraToOriginMatrix(location, viewingDirection) {
-
     let translateToOrigin = new TranslationMatrix3D(
       -location.x,
       -location.y,
