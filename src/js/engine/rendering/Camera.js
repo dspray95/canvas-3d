@@ -4,17 +4,7 @@ import { cot } from "../../tools/Trig"
 import Point from "./objects/primitives/Point"
 
 class Camera{
-  /**Camera's origin is always (0, 0, 0) in its worldspace
-   * 
-   * @param {Point} location 
-   * @param {Vector} viewingDirection 
-   * @param {Vector} upDirection 
-   * @param {int} viewportWidth 
-   * @param {int} viewportHeight 
-   * @param {float} fov 
-   * @param {int} near 
-   * @param {int} far 
-   */
+  
   constructor(
     parent,
     viewportWidth,

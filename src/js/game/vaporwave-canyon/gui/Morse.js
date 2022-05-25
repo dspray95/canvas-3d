@@ -2,7 +2,7 @@ import { Vector2D } from "../../../engine/rendering/objects/primitives/Vector2D"
 
 class Morse{
 
-  constructor(ditDahList, spacing, leadLength, trailLength, xPos, yPos){
+  constructor({ditDahList, spacing, leadLength, trailLength, xPos, yPos}){
     this.pointPairs = []
     this.pointPairs.push(
       [
@@ -54,10 +54,25 @@ class Morse{
         new Vector2D(xPos + spacing * 0.8, yPos - totalDistance - spacing)
       ]
     )
+    
   }
 
-  draw(canvas){
+  generateMorse({canvasWidth, leadLength}){
+    let centre = canvasWidth * 0.5
+    let totalDistance = 0
+    this.pointPairs = []
+    this.pointPairs.push([
+      new Vector2D(centre, 0),
+      new Vector2D(centre, leadLength)
+    ])
+
+    totalDistance += leadLength
+  }
+
+  draw(canvas, lineWidth=2){
     canvas.lineCap = "round"
+    canvas.strokeStyle = "rgba(255, 255, 255, 1)"
+    canvas.lineWidth = lineWidth
     this.pointPairs.forEach(pair =>{
       canvas.beginPath()
       canvas.moveTo(pair[0].x, pair[0].y)

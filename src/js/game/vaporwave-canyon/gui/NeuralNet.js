@@ -4,7 +4,7 @@ import { Color } from "../../../tools/Colors"
 
 class NeuralNet{
 
-  constructor(nCols, nRows, spacing, xPos, yPos){
+  constructor({nCols, nRows, spacing, xPos, yPos}){
     this.dots = []
 
     for(let y = 0; y < nCols; y++){

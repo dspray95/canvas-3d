@@ -23,7 +23,7 @@ import { CONFIG } from "../../../config/config";
 
       this.initWorldObjectContainers()
       this.initPlayer(playerConfig, movementConfig)
-      this.initUI()
+      // this.initUI()
 
       this.scripts.push(
         new TerrainGenerator(
