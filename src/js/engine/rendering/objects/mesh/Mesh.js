@@ -9,7 +9,7 @@ class Mesh{
 
   /**
    * @param {WorldObject} parent 
-   * @param {Camera} camers
+   * @param {Camera} camera
    * @param {MeshData} meshData
    */
 
@@ -163,8 +163,13 @@ class Mesh{
 
   }
 
-  draw(canvas, camera){
+  setOpacity(opacity){
+    this.triangles.forEach(triangle => {
+      triangle.setOpacity(opacity)
+    })
+  }
 
+  draw(canvas, camera){
     if(!this.doDrawCall){
       return
     }

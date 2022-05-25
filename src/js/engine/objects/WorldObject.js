@@ -30,6 +30,9 @@ export default class WorldObject {
 
   drawPerspective(ctx, camera) {
     this.mesh.draw(ctx, camera)
+    if(this.collisionBox.doDrawCall){
+      this.collisionBox.draw(ctx, camera)
+    }
     this.done = true;
   }
   
@@ -44,6 +47,7 @@ export default class WorldObject {
     this.location.add(vector)
     if(this.mesh){
       this.mesh.translate(vector)
+      if(this.collisionBox) this.collisionBox.translate(vector)
     }
   }
 

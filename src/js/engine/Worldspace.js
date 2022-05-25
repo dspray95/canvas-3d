@@ -3,6 +3,7 @@ import { Color } from "../tools/Colors";
 import { Logger } from "./logging/logger";
 import { Camera } from "./rendering/Camera";
 import Point from "./rendering/objects/primitives/Point";
+import { Time } from "./Time";
 
 
 class Worldspace {
@@ -48,25 +49,25 @@ class Worldspace {
   }
 
   tick(ctx) {
+    this.stats.begin()
+
     this.scripts.forEach(script => {
       script.execute()
     })
-
-    this.stats.begin()
-
     for(var objectGroup in this.objects){
       this.objects[objectGroup].forEach(object => {
         object.tick();
         object.drawPerspective(ctx, this.camera);
       })
     }
-    this.stats.end()
     
     this.camera.tick()
     this.ui.forEach((element) => {
       element.draw(ctx)
     })
     this.logger.tick()
+    Time.tick()
+    this.stats.end()
   }
 }
 
