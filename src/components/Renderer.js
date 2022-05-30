@@ -1,125 +1,101 @@
-import React, { Component } from "react";
-import { Color } from "../js/tools/Colors";
-import { Worldspace } from "../js/engine/Worldspace";
-import { CanyonWorld} from "../js/game/vaporwave-canyon/CanyonWorld"
-import { NoiseToCanvas } from "../js/game/vaporwave-canyon/scripts/NoiseToCanvas";
+import React, { Component, createRef } from "react";
+import { CanyonWorld } from "../js/game/vaporwave-canyon/CanyonWorld";
 
+class EngineRenderer extends Component{
 
-export default class BasicRenderer extends Component {
-  constructor(props) {
-    super(props);
+    constructor(props) {
+        super(props);
+        
+        const canyonWorldspace = new CanyonWorld(window.innerWidth, window.innerHeight)
+        this.state = {
+          width: window.innerWidth,
+          height: window.innerHeight,
+          canvasRef: createRef(),
+          animRequestIdRef: createRef(),
+          worldspace: canyonWorldspace,
+          fillStyle: canyonWorldspace.backgroundColor.toHtmlRgba(),
+          keyDownListener: null,
+          keyUpListener: null
+        }
+        this.canvasContext = null
+    }
 
-    this.state = {
-      width: window.innerWidth,
-      height: window.innerHeight,
-      worldspace: new CanyonWorld(
-        window.innerWidth,
-        window.innerHeight,
-        window.innerWidth,
-        window.innerWidth,
-        window.innerHeight,
-        "perspective"
-      )
-    };
-    this.updateAnimationState = this.updateAnimationState.bind(this);
-  }
+    componentDidMount() {
+        window.addEventListener("resize", this.onResize.bind(this))
+        this.setupInputListeners()
+        document.addEventListener("keydown", this.state.worldspace.handleKeyDown.bind(this.state.worldspace))
+        document.addEventListener("keyup", this.state.worldspace.handleKeyUp.bind(this.state.worldspace) )
+        this.state.animRequestIdRef.current = requestAnimationFrame(this.tick.bind(this))
+        return () => {
+            cancelAnimationFrame(this.state.animRequestIdRef.current)
+        }
+    }
 
-  componentDidMount() {
-    this.animationFrameRequest = requestAnimationFrame(
-      this.updateAnimationState
-    );
-  }
+    setupInputListeners(){
+        const keyDownListener = this.state.worldspace.handleKeyDown.bind(this.state.worldspace)
+        const keyUpListener = this.state.worldspace.handleKeyUp.bind(this.state.worldspace)
 
-  // This triggers the change in frame inside the canvas animation interface
-  updateAnimationState() {
-    this.setState((prevState) => ({ vertices: prevState.vertices + 1 }));
-    this.animationFrameRequest = requestAnimationFrame(
-      this.updateAnimationState
-    );
-  }
+        document.addEventListener("keydown", keyDownListener)
+        document.addEventListener("keyup", keyUpListener)
 
-  componentWillUnmount() {
-    cancelAnimationFrame(this.animationFrameRequest);
-  }
+        this.setState({
+            keyDownListener: keyDownListener,
+            keyUpListener: keyUpListener
+        }) 
+    }
 
-  render() {
-    const boundKeyDownHandler = this.state.worldspace.handleKeyDown.bind(this.state.worldspace)
-    const boundKeyUpHandler = this.state.worldspace.handleKeyUp.bind(this.state.worldspace)
-    return (
-      <div 
-        width={this.state.width}
-        height={this.state.height}
-        onKeyDown={boundKeyDownHandler}
-        onKeyUp={boundKeyUpHandler}
-        tabIndex="0" 
-      >
-      <CanvasAnimationInterface
-        width={this.state.width}
-        height={this.state.height}
-        worldspace={this.state.worldspace}
-        noise={this.state.noise}
-      />
-      </div>
-    );
-  }
+    componentWillUnmount(){
+        cancelAnimationFrame(this.state.animRequestIdRef.current)
+        document.removeEventListener("keydown", this.state.keyDownListener)
+        document.removeEventListener("keyup", this.state.keyUpListener)
+        this.state.canvasRef.current = null
+    }
+
+    onResize(){
+        this.setState({width: window.innerWidth, height: window.innerHeight})
+        this.state.worldspace.handleScreenResize(window.innerWidth, window.innerHeight)
+    }
+
+    canvasDraw(ctx) {
+        ctx.clearRect(0, 0, this.state.width, this.state.height);
+        ctx.fillStyle = this.state.fillStyle
+        ctx.fillRect(0, 0, this.state.width, this.state.height);
+        this.state.worldspace.tick(ctx);
+    }
+
+    tick(){
+        if(!this.state.canvasRef.current) return
+        this.canvasDraw(this.canvasContext)
+        this.state.animRequestIdRef.current = requestAnimationFrame(this.tick.bind(this))
+    }
+
+    storeCanvas(canvasNode) {
+        this.canvasContext = canvasNode.getContext("2d")
+        this.state.canvasRef.current = canvasNode
+    }
+
+    render() {
+        return (
+            <div
+                id="gameEngineWrapper"            
+                width={this.state.width}
+                height={this.state.height}
+                // onKeyDown={ this.state.worldspace.handleKeyDown.bind(this.state.worldspace) }
+                // onKeyUp={   }
+                tabIndex="0"
+            >
+                <canvas
+                    className="gameEngineRenderer"
+                    width={this.state.width}
+                    height={this.state.height}
+                    ref={node => node ? this.storeCanvas(node): null}
+                   
+                />
+            </div>
+
+        );
+      }
+
 }
 
-class CanvasAnimationInterface extends React.Component {
-  constructor(props) {
-    super(props);
-    this.storeContext = this.storeContext.bind(this);
-    this.state = {
-      perspective: this.props.width * 0.8,
-      projectionCentreX: this.props.width * 0.5,
-      projectionCentreY: this.props.height * 0.5,
-      fov: 1.0 / Math.tan(90 / 2.0),
-      aspectRatio: this.props.width / this.props.height,
-      fillStyle: this.props.worldspace.backgroundColor.toHtmlRgba()
-    };
-  }
-
-  // Run in the 'base canvas' component to pass the context up
-  storeContext(canvasContext) {
-    this.ctx = canvasContext;
-  }
-
-  componentDidUpdate() {
-    this.canvasDraw(this.ctx, this.props.width, this.props.height);
-  }
-
-  canvasDraw(ctx, width, height) {
-    ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = this.state.fillStyle
-    ctx.fillRect(0, 0, width, height);
-    this.props.worldspace.tick(ctx);
-  }
-
-  render() {
-    return (
-      <NonUpdatingCanvas
-        width={this.props.width}
-        height={this.props.height}
-        parentCanvasRef={this.storeContext}
-      />
-    );
-  }
-}
-
-class NonUpdatingCanvas extends React.Component {
-  shouldComponentUpdate() {
-    return false;
-  }
-
-  render() {
-    return (
-        <canvas
-          className="terrainCanvas"
-          width={this.props.width}
-          height={this.props.height}
-          ref={(node) =>
-            node ? this.props.parentCanvasRef(node.getContext("2d")) : null
-          }
-        />
-    );
-  }
-}
+export { EngineRenderer }

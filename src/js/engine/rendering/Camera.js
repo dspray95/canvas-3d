@@ -11,7 +11,6 @@ class Camera{
     viewportHeight,
     cameraConfig
   ) {
-
     this.parent = parent
     this.location = cameraConfig.CAMERA_START_LOCATION
 
@@ -40,6 +39,23 @@ class Camera{
       this.viewingDirection
     )
     
+  }
+
+  resize(viewportWidth, viewportHeight, cameraConfig){
+    this.viewportWidth = viewportWidth
+    this.viewportHeight = viewportHeight
+
+    if(viewportWidth > viewportHeight){
+      this.fov = cameraConfig.DEFAULT_FOV
+    } else if(viewportWidth > viewportHeight){
+      this.fov = cameraConfig.VERTICAL_SCREEN_FOV
+    }
+
+    this.perspectiveMatrix = Camera.getPerspeciveMatrix(
+      this.fov,
+      this.far,
+      this.near
+    )
   }
 
   perspectivePointProjectionPipeline(point){

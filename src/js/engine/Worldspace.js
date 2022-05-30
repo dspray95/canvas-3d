@@ -7,14 +7,10 @@ import { Time } from "./Time";
 
 
 class Worldspace {
-  constructor(xLim, yLim, zLim, viewportWidth, viewportHeight, projectionMode) {
-    this.xLim = xLim;
-    this.yLim = yLim;
-    this.zLim = zLim;
+  constructor(viewportWidth, viewportHeight) {
     this.viewportWidth = viewportWidth
     this.viewportHeight = viewportHeight
     this.rootLocation = new Point(0, 0, 0);
-    this.centre = new Point(xLim * 0.5, yLim * 0.5, zLim * 0, 5);
 
     this.camera = new Camera(
       this,
@@ -23,7 +19,6 @@ class Worldspace {
       CONFIG.CAMERA_CONFIG
     );
     this.backgroundColor = Color.SPACEBLUE;
-    this.projectionMode = projectionMode;
     this.objects = {
       "default": []
     }; 
@@ -46,6 +41,10 @@ class Worldspace {
   
   handleKeyDown(event){
     return
+  }
+
+  handleScreenResize(viewportWidth, viewportHeight){
+    this.camera.resize(viewportWidth, viewportHeight, CONFIG.CAMERA_CONFIG)
   }
 
   tick(ctx) {

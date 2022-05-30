@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, Component } from 'react'
 import { Fretboard } from '../../js/game/vaporwave-canyon/gui/Fretboard'
 import { Morse } from '../../js/game/vaporwave-canyon/gui/Morse'
+import { Mountains } from '../../js/game/vaporwave-canyon/gui/Mountains'
 import { NeuralNet } from '../../js/game/vaporwave-canyon/gui/NeuralNet'
 
 class IdeogramCanvas extends Component{
@@ -42,9 +43,14 @@ class IdeogramCanvas extends Component{
                     })
             },
             'mountains': () => {
-                // return new Mountains({
-
-                // })
+                return new Mountains({
+                    nPeaks: 11,
+                    slopeDistance: width * 0.1,
+                    peakHeight: height,
+                    xPos: width,
+                    yPos: 0,
+                    alignment: "right"
+                })
             }
         }
         return ideograms[type]()
@@ -69,33 +75,5 @@ class IdeogramCanvas extends Component{
         /> 
     }
 }
-// const IdeogramCanvas = props => {
-
-//     const canvasRef = useRef(null)
-
-//     useEffect(() => {
-//         const canvas = canvasRef.current
-//         const ctx = canvas.getContext('2d')
-
-//         const ideogram = new Morse({
-//             "ditDahList": ".... .. .-. . / -- .",
-//             "spacing": 10, 
-//             "leadLength": 250, 
-//             "trailLength": 100, 
-//             "xPos": canvas.width * 0.2, 
-//             "yPos": canvas.height * 0.7
-//         })
-//         // ctx.fillRect(0, 0, canvas.width, canvas.height)
-//         ideogram.draw(ctx)
-//     })
-
-//     return <canvas ref={canvasRef} {...props} style={{
-//         position: "fixed",
-//         bottom: 0,
-//         left: 0,
-//         width: "20vw",
-//         height: "70vh"
-//     }}/> 
-// }
 
 export { IdeogramCanvas }

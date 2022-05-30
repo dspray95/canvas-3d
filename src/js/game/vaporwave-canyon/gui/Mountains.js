@@ -1,24 +1,24 @@
 import { Vector2D } from "../../../engine/rendering/objects/primitives/Vector2D"
 import { Color } from "../../../tools/Colors"
 
-class ZigZag{
+class Mountains{
 
-  constructor(nZigs, zigDistance, zagHeight, xPos, yPos, alignment){
+  constructor({nPeaks, slopeDistance, peakHeight, xPos, yPos, alignment}){
     let points = []
     let totalX = 0
   
-    for(let i = 0; i < nZigs; i++){
-      let zigXPos = 0
+    for(let i = 0; i < nPeaks; i++){
+      let peakXPos = 0
       if(alignment = "left"){
-        zigXPos = totalX + zigDistance + xPos
+        peakXPos = totalX + slopeDistance + xPos
       }
       else {
-        zigXPos = xPos - totalX - zigDistance
+        peakXPos = xPos - totalX - slopeDistance
       }
       
-      let zigYPos = i % 2 == 0 ? zagHeight + yPos : yPos
-      totalX -= zigDistance
-      points.push(new Vector2D(zigXPos, zigYPos))
+      let peakYPos = i % 2 == 0 ? peakHeight + yPos : yPos
+      totalX -= slopeDistance
+      points.push(new Vector2D(peakXPos, peakYPos))
     }
     
     this.points = points
@@ -38,4 +38,4 @@ class ZigZag{
 
 }
 
-export { ZigZag }
+export { Mountains }

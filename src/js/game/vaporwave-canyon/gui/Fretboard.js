@@ -1,6 +1,6 @@
 import { Vector2D } from "../../../engine/rendering/objects/primitives/Vector2D"
 
-class Fretboard{
+class Fretboard {
 
   constructor({height, xPos, yPos, fretSpacing=20}){
     this.pointPairs = []
