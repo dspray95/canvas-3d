@@ -25,13 +25,14 @@ class Worldspace {
     this.lightSources = []
     this.scripts = []
     this.ui = []
-    this.objects = []
+
     //stats + logging
-    const Stats = require('stats.js')
-    this.stats = new Stats()
-    this.stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-    document.body.appendChild( this.stats.dom );
-    
+    if(CONFIG.SHOW_FPS){
+      const Stats = require('stats.js')
+      this.stats = new Stats()
+      this.stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+      document.body.appendChild( this.stats.dom );
+    }
     this.logger = Logger.logger
   }
 
@@ -48,7 +49,7 @@ class Worldspace {
   }
 
   tick(ctx) {
-    this.stats.begin()
+    if (CONFIG.SHOW_FPS) this.stats.begin()
 
     this.scripts.forEach(script => {
       script.execute()
@@ -66,7 +67,8 @@ class Worldspace {
     })
     this.logger.tick()
     Time.tick()
-    this.stats.end()
+
+    if (CONFIG.SHOW_FPS) this.stats.end()
   }
 }
 

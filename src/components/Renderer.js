@@ -80,9 +80,6 @@ class EngineRenderer extends Component{
                 id="gameEngineWrapper"            
                 width={this.state.width}
                 height={this.state.height}
-                // onKeyDown={ this.state.worldspace.handleKeyDown.bind(this.state.worldspace) }
-                // onKeyUp={   }
-                tabIndex="0"
             >
                 <canvas
                     className="gameEngineRenderer"

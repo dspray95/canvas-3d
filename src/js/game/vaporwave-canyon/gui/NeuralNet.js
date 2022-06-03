@@ -4,9 +4,9 @@ import { Color } from "../../../tools/Colors"
 
 class NeuralNet{
 
-  constructor({nCols, nRows, spacing, xPos, yPos}){
+  constructor({nCols, nRows, spacing, xPos, yPos, neuronRadius=6}){
     this.dots = []
-
+    this.neuronRadius = neuronRadius
     for(let y = 0; y < nCols; y++){
       let row = []
       for(let x = 0; x < nRows; x++){
@@ -35,7 +35,7 @@ class NeuralNet{
           }
         }
         canvas.beginPath()
-        canvas.arc(this.dots[y][x].x, this.dots[y][x].y, 6, 0, 2*Math.PI)
+        canvas.arc(this.dots[y][x].x, this.dots[y][x].y, this.neuronRadius, 0, 2*Math.PI)
         canvas.fill()
         canvas.closePath()
         
