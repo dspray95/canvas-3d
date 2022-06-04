@@ -80,6 +80,11 @@ class EngineRenderer extends Component{
                 id="gameEngineWrapper"            
                 width={this.state.width}
                 height={this.state.height}
+                style={{
+                    position: "fixed",
+                    top: 0,
+                    left: 0
+                }}
             >
                 <canvas
                     className="gameEngineRenderer"

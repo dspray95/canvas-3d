@@ -13,8 +13,21 @@ function App() {
     <div className="App">
       <div className="wrapper">
         <EngineRenderer/>
-        <Title/>
-        <Icons/>
+        <div
+          id="centrepiece"
+          style={{
+            width: "100vw",
+            height: "100vh",
+            display: "flex",
+            flexDirection: "column",
+            flexWrap: "nowrap",
+            justifyContent: "flex-start"
+          }}
+        > 
+        
+          <Title/>
+          <Icons/>
+        </div>
         <Skills/>
         <IdeogramContainer/>
       </div>

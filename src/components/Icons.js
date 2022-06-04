@@ -6,7 +6,17 @@ class Icons extends Component{
 
   render(){
     return (
-      <div style={{display: "flex"}}>
+      <div 
+        id="socialIcons"
+        style={{
+          display: "flex",
+          position: "relative",
+          // width: "100vw",
+          height: "10vh",
+          top: "10vh",
+          justifyContent: "center"
+        }}
+      >
         <div className="icon" style={{position: "relative"}}>
           <LinkedIn iconClass='icoMain' doLink={true}></LinkedIn>
         </div>
