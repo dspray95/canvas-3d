@@ -7,7 +7,7 @@ class CameraConfig{
   static CAMERA_START_VIEWING_DIRECTION = new Vector(0, 0, 1)
   static CAMERA_START_UP_DIRECTION = new Vector(0, 1, 0)
   static DEFAULT_FOV = 1.0472 //Radians (default 90Deg)
-  static VERTICAL_SCREEN_FOV =  1.0472
+  static VERTICAL_SCREEN_FOV =  1.0472 
   static NEAR = 1
   static FAR = 1000
   static NAME = "mainCamera"

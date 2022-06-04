@@ -38,7 +38,6 @@ class Camera{
       this.location, 
       this.viewingDirection
     )
-    
   }
 
   resize(viewportWidth, viewportHeight, cameraConfig){
@@ -47,11 +46,9 @@ class Camera{
 
     if(viewportWidth > viewportHeight){
       this.fov = cameraConfig.DEFAULT_FOV
-      console.log(`new fov ${this.fov}`)
 
     } else if(viewportHeight > viewportWidth){
       this.fov = cameraConfig.VERTICAL_SCREEN_FOV
-      console.log(`new fov ${this.fov}`)
     }
 
     this.perspectiveMatrix = Camera.getPerspeciveMatrix(
