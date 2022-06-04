@@ -49,7 +49,6 @@ class IdeogramContainer extends Component{
     }
 
     render(){
-        console.log(this.state.configs)
         const {
             "morse-ogham": morseOghamConfig, 
             "neural-net": neurlNetConfig,
