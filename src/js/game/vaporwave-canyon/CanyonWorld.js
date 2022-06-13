@@ -34,11 +34,7 @@ import { MobSpawner } from "./scripts/MobSpawner";
           this,
           this.objects['terrain'],
           this.camera.location,
-          new Point(...CONFIG.TERRAIN_CONFIG.initPosXYZ),
-          CONFIG.TERRAIN_CONFIG.sizeX,
-          CONFIG.TERRAIN_CONFIG.sizeY,
-          CONFIG.TERRAIN_CONFIG.heightMultiplier,
-          new Color(...CONFIG.TERRAIN_CONFIG.colorRGB),
+          CONFIG.TERRAIN_CONFIG,
           chunkLoadEvent
         )
       )

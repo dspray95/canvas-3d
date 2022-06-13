@@ -24,7 +24,14 @@ class DefaultConfig{
         "height": 0,
         "heightMultiplier": 3,
         "initPosXYZ": [0, 0, 0],
-        "maxChunks": 5
+        "maxChunks": 5,
+        "noise": {
+            "scale": 5,
+            "octaves": 4,
+            "persistance": 0.2,
+            "lacunarity": 1.87,
+            "seed": 500
+        }
     }
 }
 
