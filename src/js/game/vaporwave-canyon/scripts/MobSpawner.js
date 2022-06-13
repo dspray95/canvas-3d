@@ -1,3 +1,4 @@
+import { Logger } from "../../../engine/logging/logger";
 import Vector from "../../../engine/rendering/objects/primitives/Vector";
 import { randomIntRange } from "../../../tools/Random";
 import { Blocker } from "../game-objects/world/Blocker";
@@ -8,8 +9,13 @@ import { SpawnerConfig } from "./SpawnerConfig";
 class MobSpawner extends BehaviourScript{
 
     constructor(worldspace, spawnerConfig){
+        super()
         this.worldspace = worldspace
         this.spawnerConfig = spawnerConfig
+    }
+
+    generateChunk(){
+        Logger.logOnce("SPAWNING MOBS", "MOB_SPAWNER")
     }
 
     static getRandomBlockerConfiguration(blockerZPos){

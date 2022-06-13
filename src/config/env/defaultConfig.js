@@ -23,7 +23,8 @@ class DefaultConfig{
         "colorRGB": [60, 66, 98],
         "height": 0,
         "heightMultiplier": 3,
-        "initPosXYZ": [0, 0, 0]
+        "initPosXYZ": [0, 0, 0],
+        "maxChunks": 5
     }
 }
 

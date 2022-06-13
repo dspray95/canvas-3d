@@ -25,7 +25,7 @@ class Worldspace {
     this.lightSources = []
     this.scripts = []
     this.ui = []
-
+    this.events = []
     //stats + logging
     if(CONFIG.SHOW_FPS){
       const Stats = require('stats.js')
@@ -54,6 +54,7 @@ class Worldspace {
     this.scripts.forEach(script => {
       script.execute()
     })
+    
     for(var objectGroup in this.objects){
       this.objects[objectGroup].forEach(object => {
         object.tick();
@@ -61,10 +62,15 @@ class Worldspace {
       })
     }
     
-    this.camera.tick()
     this.ui.forEach((element) => {
       element.draw(ctx)
     })
+
+    this.events.forEach(event => {
+      event.checkTrigger()
+    })
+    
+    this.camera.tick()
     this.logger.tick()
     Time.tick()
 

@@ -14,7 +14,8 @@ class TerrainGenerator extends BehaviourScript {
               terrainSizeX,
               terrainSizeY,
               heightMultiplier,
-              terrainColor){
+              terrainColor,
+              chunkLoadEvent){
     super()
     this.parent = parent
     this.terrainObjects = worldpsaceTerrainObjects
@@ -26,11 +27,13 @@ class TerrainGenerator extends BehaviourScript {
     this.chunkSizeY = terrainSizeY
     this.terrainHeightMultiplier = heightMultiplier
     this.terrainColor = terrainColor
+    this.chunkLoadEvent = chunkLoadEvent
     this.nTerrainObjectsCreated = 0
+    this.maxTerrainObjects = 5
     this.prevChunk = null
-
+    
     //init           
-    for(let i = 0; i < 5; i++){
+    for(let i = 0; i < this.maxTerrainObjects; i++){
       this.loadNextChunk()  
     }
     this.canCreateNextTerrain = true
@@ -66,15 +69,19 @@ class TerrainGenerator extends BehaviourScript {
 
     this.prevChunk = terrain  
 
+    // if (this.terrainObjects.length > this.maxTerrainObjects){
+    //   this.terrainObjects.pop()
+    // }
+
     return terrain
   }
   
   execute(){
     if(this.cameraPos.z > this.terrainObjects[this.terrainObjects.length - 1].centrePos.z && this.canCreateNextTerrain){
       this.loadNextChunk()
+      this.chunkLoadEvent.trigger()
       this.canCreateNextTerrain = false
     } 
-    // this.chunkSizeY - 1
     if(this.cameraPos.z > this.terrainObjects[this.terrainObjects.length - 1].centrePos.z + this.chunkSizeY * 0.5 && !this.canCreateNextTerrain){
       this.terrainObjects.pop()
       this.canCreateNextTerrain = true
