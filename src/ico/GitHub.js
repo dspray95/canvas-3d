@@ -4,7 +4,7 @@ class GitHub extends Component {
 
   render(){
     let out = 
-    <a target="_blank" href="https://github.com/dspray95/canvas-3d" className="icoMain">
+    <a target="_blank" href="https://github.com/dspray95/canvas-3d" className="icoMain" rel="noopener noreferrer">
       <svg
         className="icoPinkShift"
         xmlns="http://www.w3.org/2000/svg"

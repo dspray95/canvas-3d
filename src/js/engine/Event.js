@@ -1,6 +1,6 @@
 class Event {
 
-    constructor(callbacks=[]){
+    constructor(...callbacks){
         this.callbacks = callbacks
     }
 

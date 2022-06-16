@@ -112,7 +112,7 @@ class Mesh{
       if (aAvgDistanceFromCamera < bAvgDistanceFromCamera){
         return 1
       }
-      else if (aAvgDistanceFromCamera == bAvgDistanceFromCamera){
+      else if (aAvgDistanceFromCamera === bAvgDistanceFromCamera){
         return 0
       }
       else {

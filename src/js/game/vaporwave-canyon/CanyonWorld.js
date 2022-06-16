@@ -1,12 +1,11 @@
 import Point from "../../engine/rendering/objects/primitives/Point";
 import { Worldspace } from "../../engine/Worldspace";
-import { Color } from "../../tools/Colors";
 import { TerrainGenerator } from "./scripts/terrain/ProceduralTerrainGenerator";
 import { Player } from "./game-objects/actors/Player";
 import { PlayerController } from "./scripts/movement/PlayerController";
 import { CONFIG } from "../../../config/config";
-import { ChunkLoad } from "./events/ChunkLoadEvent";
 import { MobSpawner } from "./scripts/MobSpawner";
+import { Event } from "../../engine/Event";
 
 
   class CanyonWorld extends Worldspace{
@@ -23,10 +22,8 @@ import { MobSpawner } from "./scripts/MobSpawner";
       
       const mobSpawner = new MobSpawner(this.backgroundColor, null)
 
-      const chunkLoadEvent = new ChunkLoad(
-        this.camera.location,
-        CONFIG.TERRAIN_CONFIG.sizeY,
-        [mobSpawner.generateChunk.bind(mobSpawner)]
+      const chunkLoadEvent = new Event(
+        () => mobSpawner.generateChunk()
       )
 
       this.scripts.push(

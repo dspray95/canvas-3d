@@ -9,14 +9,14 @@ class Mountains{
   
     for(let i = 0; i < nPeaks; i++){
       let peakXPos = 0
-      if(alignment = "left"){
+      if(alignment === "left"){
         peakXPos = totalX + slopeDistance + xPos
       }
       else {
         peakXPos = xPos - totalX - slopeDistance
       }
       
-      let peakYPos = i % 2 == 0 ? peakHeight + yPos : yPos
+      let peakYPos = i % 2 === 0 ? peakHeight + yPos : yPos
       totalX -= slopeDistance
       points.push(new Vector2D(peakXPos, peakYPos))
     }

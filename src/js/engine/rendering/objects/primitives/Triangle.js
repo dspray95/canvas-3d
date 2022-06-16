@@ -1,6 +1,5 @@
 
 import { Color } from "../../../../tools/Colors";
-import { MeshDefaults } from "../mesh/MeshDefaults";
 import Point, { averagePoint } from "./Point";
 import Vector from "./Vector";
 
@@ -49,7 +48,7 @@ export default class Triangle{
 
     if (a.screenSpaceX - centre.screenSpaceX < 0 && b.screenSpaceX - centre.screenSpaceX >= 0) return false;
 
-    if (a.screenSpaceX - centre.screenSpaceX == 0 && b.screenSpaceX - centre.screenSpaceX == 0) {
+    if (a.screenSpaceX - centre.screenSpaceX === 0 && b.screenSpaceX - centre.screenSpaceX === 0) {
       if (a.screenSpaceY - centre.screenSpaceY >= 0 || b.screenSpaceY - centre.screenSpaceY >= 0)
           return a.screenSpaceY > b.screenSpaceY;
       return b.screenSpaceY > a.screenSpaceY;

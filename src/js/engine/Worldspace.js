@@ -2,7 +2,6 @@ import { CONFIG } from "../../config/config";
 import { Color } from "../tools/Colors";
 import { Logger } from "./logging/logger";
 import { Camera } from "./rendering/Camera";
-import Point from "./rendering/objects/primitives/Point";
 import { Time } from "./Time";
 
 
@@ -10,7 +9,6 @@ class Worldspace {
   constructor(viewportWidth, viewportHeight) {
     this.viewportWidth = viewportWidth
     this.viewportHeight = viewportHeight
-    this.rootLocation = new Point(0, 0, 0);
 
     this.camera = new Camera(
       this,
@@ -22,10 +20,12 @@ class Worldspace {
     this.objects = {
       "default": []
     }; 
+
     this.lightSources = []
     this.scripts = []
     this.ui = []
     this.events = []
+
     //stats + logging
     if(CONFIG.SHOW_FPS){
       const Stats = require('stats.js')

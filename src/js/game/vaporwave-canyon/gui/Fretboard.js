@@ -4,7 +4,6 @@ class Fretboard {
 
   constructor({height, xPos, yPos, fretSpacing=20}){
     this.pointPairs = []
-    let totalY = 0
     let totalX = 0
     for (let i = 0; i <= 5; i++){
       this.pointPairs.push(
@@ -14,7 +13,6 @@ class Fretboard {
         ]
       )
       totalX += fretSpacing
-      totalY += height
     }
     this.circlePoints = []
     this.circlePoints.push(new Vector2D(xPos + fretSpacing * 1.5, yPos + height * 0.5))

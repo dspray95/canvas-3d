@@ -1,5 +1,4 @@
 import Point from "../../../../engine/rendering/objects/primitives/Point";
-import Vector from "../../../../engine/rendering/objects/primitives/Vector";
 import { Vector2D } from "../../../../engine/rendering/objects/primitives/Vector2D";
 import { Color } from "../../../../tools/Colors";
 import { Terrain } from "../../game-objects/world/Terrain";
@@ -11,7 +10,8 @@ class TerrainGenerator extends BehaviourScript {
               worldpsaceTerrainObjects, 
               cameraPosition,
               terrainConfig,
-              chunkLoadEvent){
+              chunkLoadEvent
+  ){
     super()
     this.parent = parent
     this.terrainObjects = worldpsaceTerrainObjects    
@@ -54,7 +54,6 @@ class TerrainGenerator extends BehaviourScript {
       new Vector2D(0, this.config.sizeY * this.nTerrainObjectsCreated), //octave offset
       this.config.heightMultiplier, //height multiplier
       this.terrainColor, 
-      // Color.random(),
       this.terrainObjects[0]
     )
     this.terrainObjects.unshift(terrain)

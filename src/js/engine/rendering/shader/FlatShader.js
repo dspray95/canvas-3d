@@ -1,6 +1,4 @@
 import { Color } from "../../../tools/Colors"
-import { Logger } from "../../logging/logger"
-import { MeshDefaults } from "../objects/mesh/MeshDefaults"
 import { Shader } from "./Shader";
 
 class FlatShader extends Shader{

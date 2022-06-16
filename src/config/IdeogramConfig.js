@@ -77,7 +77,7 @@ const MountainsConfig = {
         PEAK_HEIGHT: 1,
         X_POS: 1,
         Y_POS: 1,
-        ALIGNMENT: "right",
+        ALIGNMENT: "left",
         UPPER: {
             BOTTOM: 0.4,
             RIGHT: 0
@@ -96,7 +96,7 @@ const MountainsConfig = {
         PEAK_HEIGHT: 1,
         X_POS: 1,
         Y_POS: 1,
-        ALIGNMENT: "right",
+        ALIGNMENT: "left",
         UPPER: {
             BOTTOM: 0.2,
             RIGHT: 0

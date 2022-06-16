@@ -4,7 +4,7 @@ class LinkedIn extends Component {
 
   render(){
     let out = 
-    <a target="_blank" href="https://www.linkedin.com/in/davidspray95/" className="icoMain">
+    <a target="_blank" href="https://www.linkedin.com/in/davidspray95/" className="icoMain" rel="noopener noreferrer">
       <svg
         className="icoPinkShift"
         xmlns="http://www.w3.org/2000/svg"

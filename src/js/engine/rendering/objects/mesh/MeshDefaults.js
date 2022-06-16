@@ -1,6 +1,5 @@
 
 import { Color } from "../../../../tools/Colors"
-import Mesh from "./Mesh"
 
 class MeshDefaults{
   //Rendering
