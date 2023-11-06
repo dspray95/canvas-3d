@@ -6,6 +6,7 @@ import { PlayerController } from "./scripts/movement/PlayerController";
 import { CONFIG } from "../../../config/config";
 import { MobSpawner } from "./scripts/MobSpawner";
 import { Event } from "../../engine/Event";
+import { LaserBeam } from "./game-objects/actors/LaserBeam";
 
 
   class CanyonWorld extends Worldspace{
@@ -52,6 +53,7 @@ import { Event } from "../../engine/Event";
     initWorldObjectContainers(){
       this.objects["terrain"] = []
       this.objects["mobs"] = []
+      this.objects["other"] = []
       this.objects["player"] = []
 
     }

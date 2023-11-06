@@ -1,5 +1,7 @@
 import { Logger } from "../../../../engine/logging/logger";
+import Point from "../../../../engine/rendering/objects/primitives/Point";
 import Vector from "../../../../engine/rendering/objects/primitives/Vector";
+import { LaserBeam } from "../../game-objects/actors/LaserBeam";
 import { BehaviourScript } from "../BehaviourScript";
 
 class PlayerController extends BehaviourScript{
@@ -36,6 +38,8 @@ class PlayerController extends BehaviourScript{
     }
 
     parseInput(keyCode, action){
+        //This method of key input doesn't allow for multiple simultanious key presses
+        //rethink required
         if(keyCode === 65){
             if(action === "keyDown" && this.player.location.x > -1){
                 this.playerMovementVector.x = -this.playerHorizonalSpeed
@@ -53,7 +57,16 @@ class PlayerController extends BehaviourScript{
             }
         } 
         else if(keyCode === 32){
-            //fire the cannon
+            if (action == "keyDown"){
+                let beamStartLocation = new Point(
+                    this.player.location.x,
+                    this.player.location.y,
+                    this.player.location.z + 0.5
+                )
+                let beam = new LaserBeam(beamStartLocation, this.player, this.playerMovementVector.y)
+                this.player.getWorldspace().objects.other.push(beam)
+            }
+
         }
     }
 
