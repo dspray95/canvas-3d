@@ -11,7 +11,7 @@ class DevConfig extends DefaultConfig {
     static PLAYER_CONFIG = {
         "showPlayer": true,
         "playerXMovementSpeed": 0.1,
-        "playerZMovementSpeed": 0.4,
+        "playerZMovementSpeed": 0,
         "playerStartPosXYZ": [0, 1, 3],
         "enablePlayerController": true
     }

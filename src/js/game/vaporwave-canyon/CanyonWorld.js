@@ -7,6 +7,10 @@ import { CONFIG } from "../../../config/config";
 import { MobSpawner } from "./scripts/MobSpawner";
 import { Event } from "../../engine/Event";
 import { LaserBeam } from "./game-objects/actors/LaserBeam";
+import { CollisionBox } from "../../engine/objects/primitives/CollisionBox";
+import WorldObject from "../../engine/objects/WorldObject";
+import Vector from "../../engine/rendering/objects/primitives/Vector";
+import { Blocker } from "./game-objects/world/Blocker";
 
 
   class CanyonWorld extends Worldspace{
@@ -36,7 +40,10 @@ import { LaserBeam } from "./game-objects/actors/LaserBeam";
           chunkLoadEvent
         )
       )
-
+      const boxLocation = new Point(...CONFIG.PLAYER_CONFIG.playerStartPosXYZ)
+      boxLocation.add(new Vector(0, 0, 10))
+      var testBox = new Blocker(boxLocation, this)
+      this.objects.mobs.push(testBox)
       this.events.push(
         chunkLoadEvent
       )

@@ -4,7 +4,7 @@ import WorldObject from "../../../../engine/objects/WorldObject";
 import Vector from "../../../../engine/rendering/objects/primitives/Vector";
 import { Color } from "../../../../tools/Colors";
 
-const BLOCKER_COLOR = new Color(200, 10, 50, 0.8)
+const BLOCKER_COLOR = Color.WHITE;
 const BLOCKER_SCALE = new Vector(1, 1, 0.25)
 
 

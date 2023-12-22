@@ -22,6 +22,16 @@ class Point {
     this.updateValues()
   }
 
+  multiply(vector) {
+    this.setMatrix(this.x * vector.x, this.y * vector.y, this.z * vector.z, 1)
+    this.updateValues()
+  }
+
+  divide(vector) {
+    this.setMatrix(this.x / vector.x, this.y / vector.y, this.z / vector.z, 1)
+    this.updateValues()
+  }
+
   subtract(vector) {
     this.setMatrix(this.x - vector.x, this.y - vector.y, this.z - vector.z, 1)
     this.updateValues()

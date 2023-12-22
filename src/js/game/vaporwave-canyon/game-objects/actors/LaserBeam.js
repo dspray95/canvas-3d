@@ -17,22 +17,24 @@ class LaserBeam extends Line {
         this.beamSpeed = 0.75
         //Lifecyle, beam should be destroyed after n seconds so it isn't firing off into
         //infinity
-        this.lifespanSeconds = 1
+        this.lifespanSeconds = 2
         this.creationTime = new Date()
     }   
 
     tick(){
+        //Check to see if the beams lifecycle time is up
         let now = new Date()
         let lifecycleInSeconds = (now.getTime() - this.creationTime.getTime()) / 1000
         if (lifecycleInSeconds > this.lifespanSeconds){
             this.destroy()
         }
+        //move forward if not destroyed
         this.translate(new Vector(0, 0, this.initialVelocity + this.beamSpeed))
-        
+        //check collision
+        this.parent.getWorldspace().objects.mobs.forEach(mob => {})
     }
 
     destroy(){
-        console.log("destroying beam")
         let container = this.parent.getWorldspace().objects.other
         const index = container.indexOf(this)
         container.splice(index, 1)
