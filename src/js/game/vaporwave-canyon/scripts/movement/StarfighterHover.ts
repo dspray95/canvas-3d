@@ -11,7 +11,7 @@ export class StarfighterHover extends BehaviourScript{
     starfighterStartY: number;
     hoverLimit: number = 0.025;
     starfighterMovementVector: Vector;
-    hoverSpeed: number = 0.0001;
+    hoverIncrement: number = 0.15;
     
     createdAt: number;
     animDelayMilliseconds: number;
@@ -21,7 +21,7 @@ export class StarfighterHover extends BehaviourScript{
         super()
         this.starfighter = starfighter
         this.starfighterStartY = starfighter.location.y;
-        this.starfighterMovementVector = new Vector(0, this.hoverSpeed, 0);
+        this.starfighterMovementVector = new Vector(0, this.hoverIncrement, 0);
         this.createdAt = Date.now();
         this.animDelayMilliseconds = Math.random() * 2 * 1000;
         this.animStarted = false;
@@ -40,10 +40,10 @@ export class StarfighterHover extends BehaviourScript{
     }
 
     private doHover(): void{
-        let newMovementVector = new Vector(0, this.hoverSpeed * Time.deltaTime, 0);
+        let newMovementVector = new Vector(0, this.hoverIncrement * Time.deltaTime, 0);
         if(this.currentHoverDirection === "down")
         {
-            newMovementVector.y = -this.hoverSpeed * Time.deltaTime;
+            newMovementVector.y = -this.hoverIncrement * Time.deltaTime;
         }
         this.starfighter.translate(newMovementVector);
     }
@@ -53,14 +53,14 @@ export class StarfighterHover extends BehaviourScript{
             this.currentHoverDirection === "up" &&
             this.starfighter.location.y >= this.starfighterStartY + this.hoverLimit
         ){
-            this.starfighterMovementVector.y = -this.hoverSpeed
+            this.starfighterMovementVector.y = -this.hoverIncrement
             this.currentHoverDirection = "down"
         } 
         else if(
             this.currentHoverDirection == "down" &&
             this.starfighter.location.y <= this.starfighterStartY - this.hoverLimit
         ){
-            this.starfighterMovementVector.y = this.hoverSpeed
+            this.starfighterMovementVector.y = this.hoverIncrement
             this.currentHoverDirection = "up"
         }
     }

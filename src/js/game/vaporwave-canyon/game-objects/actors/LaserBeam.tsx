@@ -1,3 +1,4 @@
+import { Time } from "../../../../engine/Time";
 import { Logger } from "../../../../engine/logging/logger";
 import Line from "../../../../engine/rendering/objects/primitives/Line";
 import Point from "../../../../engine/rendering/objects/primitives/Point";
@@ -10,9 +11,9 @@ const logger = Logger.logger;
 class LaserBeam extends Line {
 
     //Lifecyle, beam should be destroyed after n seconds so it isn't firing off into infinity
-    static beamLifespanSeconds: number = 2;
+    static beamLifespanSeconds: number = 3;
 
-    beamSpeed: number = 0.75;
+    beamSpeed: number = 10;
     parent: any;
     creationTime: number;
     previousPosition: Point;
@@ -38,7 +39,7 @@ class LaserBeam extends Line {
             this.destroy()
         }
         //move forward if not destroyed
-        this.translate(new Vector(0, 0, this.beamSpeed))
+        this.translate(new Vector(0, 0, this.beamSpeed * Time.deltaTime))
         //check collision, shootable objects decide how to handle getting shot
         //if we hit something we destroy the beam
         this.parent.getWorldspace().objects.mobs.forEach((object: any) => {
