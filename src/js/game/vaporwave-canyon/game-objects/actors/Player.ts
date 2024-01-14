@@ -49,7 +49,7 @@ class Player extends Starfighter {
         let beamStartLocation = new Point(
             this.location.x,
             this.location.y,
-            this.location.z + 0.5
+            this.location.z + 1
         )
         let beam = new LaserBeam(beamStartLocation, this, initialZVelocity)
         this.getWorldspace().objects.other.push(beam)
