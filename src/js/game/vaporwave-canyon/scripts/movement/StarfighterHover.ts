@@ -1,3 +1,4 @@
+import { Time } from "../../../../engine/Time";
 import { Logger } from "../../../../engine/logging/logger";
 import Vector from "../../../../engine/rendering/objects/primitives/Vector";
 import { Starfighter } from "../../game-objects/actors/Starfighter";
@@ -10,7 +11,7 @@ export class StarfighterHover extends BehaviourScript{
     starfighterStartY: number;
     hoverLimit: number = 0.025;
     starfighterMovementVector: Vector;
-    hoverIncrement: number = 0.004;
+    hoverSpeed: number = 0.0001;
     
     createdAt: number;
     animDelayMilliseconds: number;
@@ -20,7 +21,7 @@ export class StarfighterHover extends BehaviourScript{
         super()
         this.starfighter = starfighter
         this.starfighterStartY = starfighter.location.y;
-        this.starfighterMovementVector = new Vector(0, this.hoverIncrement, 0);
+        this.starfighterMovementVector = new Vector(0, this.hoverSpeed, 0);
         this.createdAt = Date.now();
         this.animDelayMilliseconds = Math.random() * 2 * 1000;
         this.animStarted = false;
@@ -39,7 +40,12 @@ export class StarfighterHover extends BehaviourScript{
     }
 
     private doHover(): void{
-        this.starfighter.translate(this.starfighterMovementVector);
+        let newMovementVector = new Vector(0, this.hoverSpeed * Time.deltaTime, 0);
+        if(this.currentHoverDirection === "down")
+        {
+            newMovementVector.y = -this.hoverSpeed * Time.deltaTime;
+        }
+        this.starfighter.translate(newMovementVector);
     }
 
     private updateFloatDirectionAndVector(): void{
@@ -47,14 +53,14 @@ export class StarfighterHover extends BehaviourScript{
             this.currentHoverDirection === "up" &&
             this.starfighter.location.y >= this.starfighterStartY + this.hoverLimit
         ){
-            this.starfighterMovementVector.y = -this.hoverIncrement
+            this.starfighterMovementVector.y = -this.hoverSpeed
             this.currentHoverDirection = "down"
         } 
         else if(
             this.currentHoverDirection == "down" &&
             this.starfighter.location.y <= this.starfighterStartY - this.hoverLimit
         ){
-            this.starfighterMovementVector.y = this.hoverIncrement
+            this.starfighterMovementVector.y = this.hoverSpeed
             this.currentHoverDirection = "up"
         }
     }
