@@ -1,10 +1,18 @@
-import { CollisionBox } from "../../js/engine/objects/primitives/CollisionBox"
-import { Camera } from "../../js/engine/rendering/Camera"
-import Point from "../../js/engine/rendering/objects/primitives/Point"
+import { CollisionBox } from "../../../js/engine/objects/primitives/CollisionBox"
+import { Camera } from "../../../js/engine/rendering/Camera"
+import Point from "../../../js/engine/rendering/objects/primitives/Point"
+import { CameraConfig } from "../../../config/CameraConfig"
+
+const camera = new Camera(
+    {},
+    1920,
+    1080,
+    CameraConfig
+)
 
 const box = new CollisionBox(
     {location: new Point(0, 0, 0)},
-    new Camera(),
+    camera,
     {}
 )
 
@@ -37,17 +45,17 @@ describe("intersectCollisionBox", () => {
     test("does intersect", () => {
         const boxIntersects = new CollisionBox(
             {location: new Point(0, 0, -0.25)},
-            new Camera(),
+            camera,
             {}
         )
-        expect(box.intersectCollisionBox(boxIntersects)).toEqual(true)
+        expect(CollisionBox.checkBoxesCollide(box, boxIntersects)).toEqual(true)
     })
     test("does not intersect", () => {
-        const boxIntersects = new CollisionBox(
+        const boxDoesNotIntersect = new CollisionBox(
             {location: new Point(20, 20, 20)},
-            new Camera(),
+            camera,
             {}
         )
-        expect(box.intersectCollisionBox(boxIntersects)).toEqual(false)
+        expect(CollisionBox.checkBoxesCollide(box, boxDoesNotIntersect)).toEqual(false)
     })
 })

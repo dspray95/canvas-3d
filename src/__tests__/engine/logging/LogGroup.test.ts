@@ -1,4 +1,4 @@
-import { LogGroup } from "../../js/engine/logging/LogGroup"
+import { LogGroup } from "../../../js/engine/logging/LogGroup"
 
 let logGroup = new LogGroup("test_log_group")
 
@@ -25,7 +25,6 @@ describe("log group", () => {
 
             expect(firstLog).toEqual("[TEST_LOG_GROUP] firstLog");
             expect(secondLog).toEqual("[TEST_LOG_GROUP] secondLog");
-
         })
     })
 })

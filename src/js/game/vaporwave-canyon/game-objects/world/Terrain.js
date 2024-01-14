@@ -52,7 +52,7 @@ class Terrain extends WorldObject{
       parent.camera, 
       terrainMeshData,
       {
-        shader: TerrainShader,
+        shader: new TerrainShader(),
         color: terrainColor
       }
     )
@@ -163,9 +163,9 @@ class Terrain extends WorldObject{
         this.opacity += 0.01
       }
     }
-    this.scripts.forEach(script => {
-      script.execute()
-    })
+    // this.scripts.forEach(script => {
+    //   script.execute()
+    // })
   }
 }
 

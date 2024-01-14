@@ -1,4 +1,4 @@
-import Point from "../../js/engine/rendering/objects/primitives/Point"
+import Point from "../../../js/engine/rendering/objects/primitives/Point";
 
 test("point add", () => {
   let pointA = new Point(10, 10, 10)

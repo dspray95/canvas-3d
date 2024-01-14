@@ -1,4 +1,4 @@
-import { dynamicKernel4x4dotNx1x4, kernel4x4dot1x4, kernel4x4dotListOf1x4 } from "../../js/engine/rendering/gpu/MatrixMultiplicationKernels"
+import { dynamicKernel4x4dotNx1x4, kernel4x4dot1x4, kernel4x4dotListOf1x4 } from "../../../js/engine/rendering/gpu/MatrixMultiplicationKernels";
 
 test("multiplyMatrices", () => {
     let matrixA = [

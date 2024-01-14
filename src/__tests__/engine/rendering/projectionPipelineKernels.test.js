@@ -1,4 +1,4 @@
-import { projectionPipelineSetOutputShape, superKernelPerspectivePipeline } from "../../js/engine/rendering/gpu/ProjectionPipelineKernels"
+import { projectionPipelineSetOutputShape, superKernelPerspectivePipeline } from "../../../js/engine/rendering/gpu/ProjectionPipelineKernels"
 
 test("testProjectionPipelineKernels", () => {
     let cameraTransformMatrix = [

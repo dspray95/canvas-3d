@@ -1,9 +1,9 @@
 import { DefaultConfig } from "./defaultConfig"
 import { CameraConfig } from "../CameraConfig"
 
-class DevConfig extends DefaultConfig {
+class TestConfig extends DefaultConfig {
 
-    static ENV = "dev"
+    static ENV = "test"
     static SHOW_FPS = false
     static SPAWN_MOBS = true
     static CAMERA_CONFIG = CameraConfig
@@ -24,4 +24,4 @@ class DevConfig extends DefaultConfig {
 
 }
 
-export { DevConfig }
+export { TestConfig }

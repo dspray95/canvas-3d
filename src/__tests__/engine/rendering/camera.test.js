@@ -1,9 +1,9 @@
-import { Camera } from "../../js/engine/rendering/Camera"
-import { TestingCameraConfig } from "../../js/engine/rendering/CameraConfig"
-import Point from "../../js/engine/rendering/objects/primitives/Point"
-import {dot} from "../../js/engine/rendering/matrices/Matrix"
-import Vector from "../../js/engine/rendering/objects/primitives/Vector";
-import { getIntersectPoint } from "../../js/tools/Trig";
+import { Camera } from "../../../js/engine/rendering/Camera";
+import { TestingCameraConfig } from "../../../config/CameraConfig";
+import Point from "../../../js/engine/rendering/objects/primitives/Point";
+import { dot } from "../../../js/engine/rendering/matrices/Matrix";
+import Vector from "../../../js/engine/rendering/objects/primitives/Vector";
+import { getIntersectPoint } from "../../../js/tools/Trig";
 
 test("camera getPerspectiveMatrix", () => {
   let near = 10

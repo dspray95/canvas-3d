@@ -2,9 +2,8 @@ import { createContext } from "react"
 import { Color } from "../../../tools/Colors"
 
 class Shader{
-
     
-    static draw(){
+    draw(camera, canvas, triangles, drawCalls){
         return
     }
 

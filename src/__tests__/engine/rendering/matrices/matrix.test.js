@@ -1,19 +1,19 @@
-  const Matrix = require("../../../js/engine/rendering/matrices/Matrix")
+const Matrix = require("../../../../js/engine/rendering/matrices/Matrix");
 
-  test('matrix dot(ROW*COL)', () =>{
-    let A = [[1, 2, 3]];
-    let B = [[1],[2],[3]];
-    expect(Matrix.dot(A, B)).toEqual([[14]])
-  });
+test('matrix dot(ROW*COL)', () =>{
+  let A = [[1, 2, 3]];
+  let B = [[1],[2],[3]];
+  expect(Matrix.dot(A, B)).toEqual([[14]])
+});
 
-  test('matrix dot(COL*ROW)', () => {
-    let A = [[1], [2], [3]];
-    let B = [[1, 2, 3]];
-    let result = [[1, 2, 3],
-                  [2, 4, 6],
-                  [3, 6, 9]];
-    expect(Matrix.dot(A, B)).toEqual(result)
-  })
+test('matrix dot(COL*ROW)', () => {
+  let A = [[1], [2], [3]];
+  let B = [[1, 2, 3]];
+  let result = [[1, 2, 3],
+                [2, 4, 6],
+                [3, 6, 9]];
+  expect(Matrix.dot(A, B)).toEqual(result)
+})
 
 test('matrix dot(3x3*3x3)', () => {
   let A = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]

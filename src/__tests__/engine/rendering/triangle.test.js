@@ -1,6 +1,6 @@
-import Point from "../../js/engine/rendering/objects/primitives/Point"
-import Triangle from "../../js/engine/rendering/objects/primitives/Triangle"
-import { Color } from "../../js/tools/Colors"
+import Point from "../../../js/engine/rendering/objects/primitives/Point";
+import Triangle from "../../../js/engine/rendering/objects/primitives/Triangle";
+import { Color } from "../../../js/tools/Colors";
 
 test("triangle surface normal", () => {
   let A = new Point(0, 0, 0)

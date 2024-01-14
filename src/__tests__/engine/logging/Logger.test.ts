@@ -1,5 +1,5 @@
-import { LogGroup } from "../../js/engine/logging/LogGroup"
-import { Logger } from "../../js/engine/logging/logger"
+import { LogGroup } from "../../../js/engine/logging/LogGroup"
+import { Logger } from "../../../js/engine/logging/logger"
 
 beforeEach(() => {
     Logger._logger = null;

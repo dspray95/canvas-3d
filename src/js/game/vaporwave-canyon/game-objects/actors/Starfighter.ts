@@ -4,33 +4,45 @@ import { Mesh } from "../../../../engine/rendering/objects/mesh/Mesh"
 import { MeshData } from "../../../../engine/rendering/objects/mesh/MeshData"
 import Point from "../../../../engine/rendering/objects/primitives/Point"
 import { Color } from "../../../../tools/Colors"
-import { CollisionBox } from "../../../../engine/objects/primitives/CollisionBox"
 import Vector from "../../../../engine/rendering/objects/primitives/Vector"
+import { Camera } from "../../../../engine/rendering/Camera"
+import { Worldspace } from "../../../../engine/Worldspace"
+import { FlatShader } from "../../../../engine/rendering/shader/FlatShader"
+import { StarfighterHover } from "../../scripts/movement/StarfighterHover"
 
 class Starfighter extends WorldObject{
     
-    constructor(location, parent, color=Color.GREY, name="starfighter"){
+    mesh: Mesh;
+
+    constructor(
+        location: Point,
+        parent: WorldObject | Worldspace, 
+        camera: Camera, //Used for creating the mesh
+        color: Color =Color.GREY, 
+        name: string="starfighter"
+    ){
         super(location, parent, name)
         let meshData = Starfighter.genMeshData()
-        // color.opacity = 0.8
         this.mesh = new Mesh(
             this, 
-            parent.camera,
+            camera,
             meshData,
             {
+                doDrawCall: true,
+                shader: new FlatShader(),
                 color: color.copy()
             }
         )
         this.colorOverride(new Color(55, 55, 55))
         this.mesh.bakeLighting(
             new LightSource(new Point(-2, -1, 2), Color.WHITE.copy()),
-            parent.camera.location    
+            camera.location
         )
-        this.mesh.scale(2, 4, 2)
-        this.collisionBox = new CollisionBox(this, parent.camera, { visible: true, scale: new Vector(0.9, 0.9, 0.9)})
+        this.mesh.scale(2, 4, 2);
+        this.scripts.push(new StarfighterHover(this))
     }
 
-    colorOverride(windowColor){
+    colorOverride(windowColor: Color){
         /**Get some cool tinted windows bro B) 
         *   tri index 7 and 2
         **/
@@ -70,11 +82,12 @@ class Starfighter extends WorldObject{
         return new MeshData(points, triangles)
     }
 
-    drawPerspective(ctx, camera){
+    drawPerspective(ctx: any, camera: Camera){
         this.mesh.sortTrianglesByDepth()
         this.mesh.draw(ctx, camera)
         this.done = true;
     }
+
 }
 
 export { Starfighter }

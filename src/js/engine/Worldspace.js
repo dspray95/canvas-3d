@@ -1,7 +1,8 @@
-import { CONFIG } from "../../config/config";
+import { CONFIG, ENVIRONMENT } from "../../config/config";
 import { Color } from "../tools/Colors";
 import { Logger } from "./logging/logger";
 import { Camera } from "./rendering/Camera";
+import Point from "./rendering/objects/primitives/Point";
 import { Time } from "./Time";
 
 
@@ -20,6 +21,7 @@ class Worldspace {
     this.objects = {
       "default": []
     }; 
+    this.origin = new Point(0, 0, 0);
 
     this.lightSources = []
     this.scripts = []

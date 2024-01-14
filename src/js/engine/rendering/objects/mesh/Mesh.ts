@@ -2,26 +2,37 @@ import Triangle from "../primitives/Triangle";
 import WorldObject from "../../../objects/WorldObject"
 import { Vector } from "../primitives/Vector"
 import { MeshDefaults } from "./MeshDefaults";
-import { averagePoint } from "../primitives/Point";
+import Point, { averagePoint } from "../primitives/Point";
 import { FlatShader } from "../../shader/FlatShader";
+import { TerrainShader } from "../../../../game/vaporwave-canyon/shader/TerrainShader";
+import { MeshData } from "./MeshData";
+import { Camera } from "../../Camera";
+import { Color } from "../../../../tools/Colors";
+import { Logger } from "../../../logging/logger";
+import LightSource from "../light/LightSource";
+import { Shader } from "../../shader/Shader";
+
+const logger = Logger.logger;
 
 class Mesh{
+  parent: any;
+  vertices: Array<Point>;
+  shader: Shader;
+  color: Color;
+  triangles: Array<Triangle>;
+  doDrawCall: boolean;
+  drawCalls: number;
 
-  /**
-   * @param {WorldObject} parent 
-   * @param {Camera} camera
-   * @param {MeshData} meshData
-   */
 
   constructor(
-    parent,
-    camera, 
-    meshData,
+    parent: any,
+    camera: Camera, 
+    meshData: MeshData,
     {
       doDrawCall=true, 
-      shader=FlatShader,
+      shader=new FlatShader(),
       color=MeshDefaults.planeColor,
-    }
+    }: { doDrawCall: boolean; shader?: Shader; color: any; }
   ){
     this.parent = parent
     this.vertices = meshData.vertices
@@ -34,11 +45,7 @@ class Mesh{
     this.drawCalls = 0
   }
 
-  setMeshData(meshData){
-    this.triangles = this.makeTriangles(meshData.triangles)
-  }
-
-  rotate(axis, angle, verticesOnly=false){
+  rotate(axis: string, angle: number, verticesOnly: boolean=false){
     this.vertices.forEach((vertex) => {
       vertex.subtract(new Vector(this.parent.location.x, this.parent.location.y, this.parent.location.z))
       vertex.rotate(axis, angle * (Math.PI / 180))
@@ -53,7 +60,7 @@ class Mesh{
     }
   }
 
-  scale(x, y, z){
+  scale(x: number, y: number, z: number){
     this.vertices.forEach((vertex) => {
       vertex.subtract(new Vector(this.parent.location.x, this.parent.location.y, this.parent.location.z))
       vertex.scale(x, y, z)
@@ -61,23 +68,23 @@ class Mesh{
     })
   }
 
-  translate(vector){
+  translate(vector: Vector){
     this.vertices.forEach((vertex) => {
       vertex.add(vector)
     })
   }
 
-  movePointsToLocation(parent){
+  movePointsToLocation(parent: any){
     this.vertices.forEach(vertex => {
       vertex.add(new Vector(parent.location.x, parent.location.y, parent.location.z))
     })
   }
 
-  makeTriangles(trianlgesArray, camera){
+  makeTriangles(trianlgesArray: Array<Array<number>>, camera: Camera): Array<Triangle>{
     this.vertices.forEach(vertex => {
       camera.perspectivePointProjectionPipeline(vertex);
     })
-    let triangleObjects = []
+    let triangleObjects: Array<Triangle> = []
     trianlgesArray.forEach(triangleArray => {
       try{
         let triangle = new Triangle(
@@ -86,18 +93,18 @@ class Mesh{
           this.vertices[triangleArray[2]],
           this.color
         )
-        triangle.calculateNormal(this.parent.location)                        
+        triangle.calculateNormal()                        
         triangleObjects.push(triangle)
       } catch (e){
-        console.log("triangle error D:")
-        console.log(triangleArray)
+        logger.log(`TRIANGLE ERROR FOR ${this.parent.name}`, "MESH GEN")
+        logger.log(`${triangleArray}`, "MESH GEN")
       } 
 
     })
     return triangleObjects
   }
   
-  getVerticesFromTriangle(triangle){
+  getVerticesFromTriangle(triangle: Array<number>){
     return [this.vertices[triangle[0]], 
             this.vertices[triangle[1]], 
             this.vertices[triangle[2]]]
@@ -121,7 +128,7 @@ class Mesh{
     })
   }
 
-  bakeLighting(lightSource, cameraLocation){
+  bakeLighting(lightSource: LightSource, cameraLocation: Point){
     /**
      *  Lighting!
      *  for blue channel: 
@@ -163,13 +170,13 @@ class Mesh{
 
   }
 
-  setOpacity(opacity){
+  setOpacity(opacity: number){
     this.triangles.forEach(triangle => {
       triangle.setOpacity(opacity)
     })
   }
 
-  draw(canvas, camera){
+  draw(canvas: any, camera: Camera){
     if(!this.doDrawCall){
       return
     }

@@ -81,6 +81,10 @@ export default class Vector {
   inverse() {
     return new Vector(-this.x, -this.y, -this.z)
   }
+
+  toString(){
+    return `Vector, x:${this.x}, y:${this.y}, z:${this.z}`
+  }
 }
 
 function vectorCrossProduct(A, B) {

@@ -11,9 +11,13 @@ import { CollisionBox } from "../../engine/objects/primitives/CollisionBox";
 import WorldObject from "../../engine/objects/WorldObject";
 import Vector from "../../engine/rendering/objects/primitives/Vector";
 import { Blocker } from "./game-objects/world/Blocker";
+import { EnemyStarfighter } from "./game-objects/actors/EnemyStartfighter";
+import { Starfighter } from "./game-objects/actors/Starfighter";
 
 
   class CanyonWorld extends Worldspace{
+
+    testEnemy;
 
     constructor(viewportWidth, viewportHeight){
       super(viewportWidth, viewportHeight);
@@ -40,13 +44,22 @@ import { Blocker } from "./game-objects/world/Blocker";
           chunkLoadEvent
         )
       )
-      const boxLocation = new Point(...CONFIG.PLAYER_CONFIG.playerStartPosXYZ)
-      boxLocation.add(new Vector(0, 0, 10))
-      var testBox = new Blocker(boxLocation, this)
-      this.objects.mobs.push(testBox)
+
+      // const boxLocation = new Point(...CONFIG.PLAYER_CONFIG.playerStartPosXYZ)
+      // boxLocation.add(new Vector(0, 0, 10))
+      // let testBox = new Blocker(boxLocation, this)
+      // this.objects.mobs.push(testBox)
+
+      this.testEnemy = new EnemyStarfighter(
+        new Point(0, 0.5, 10),
+        this
+      );
+      this.objects.mobs.push(this.testEnemy);
+
       this.events.push(
         chunkLoadEvent
       )
+
     }
 
     handleKeyDown(event){

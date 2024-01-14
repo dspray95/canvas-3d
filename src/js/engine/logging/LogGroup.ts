@@ -18,6 +18,7 @@ export class LogGroup{
     }
 
     logWithPause(message: string, pauseSeconds: number): string | null{
+        /**useful to avoid spamming the console */
         const timeSinceLastLog =  (Date.now() - this.lastLogTime) / 1000;
         if (timeSinceLastLog >= pauseSeconds){
             this.lastLogTime = Date.now();
