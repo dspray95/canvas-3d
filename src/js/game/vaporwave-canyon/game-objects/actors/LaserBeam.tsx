@@ -13,7 +13,7 @@ class LaserBeam extends Line {
     //Lifecyle, beam should be destroyed after n seconds so it isn't firing off into infinity
     static beamLifespanSeconds: number = 3;
 
-    beamSpeed: number = 10;
+    beamSpeed: number = 20;
     parent: any;
     creationTime: number;
     previousPosition: Point;

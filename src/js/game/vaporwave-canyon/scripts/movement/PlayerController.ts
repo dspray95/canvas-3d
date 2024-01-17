@@ -19,7 +19,7 @@ class PlayerController extends BehaviourScript{
         this.player = playerObject
         this.playerHorizonalSpeed = playerHorizonalSpeed
         this.camera = cameraObject
-        this.zMovementSpeed = 7.5
+        this.zMovementSpeed = zMovementSpeed
         this.moveCamera = moveCamera
 
         this.playerMovementVector = new Vector(0, 0, 0)

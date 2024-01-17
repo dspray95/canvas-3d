@@ -18,7 +18,7 @@ class Player extends Starfighter {
     health: number;
     damageAnimation: PlayerDamageAnimation;
     lastShotTime: number = 0;
-    laserShootDelaySeconds = 0.2;
+    laserShootDelaySeconds = 0.5;
 
     constructor(location: Point, parent: Worldspace){
         super(location, parent, parent.camera, Color.ELECTRIC_BLUE, "player")
