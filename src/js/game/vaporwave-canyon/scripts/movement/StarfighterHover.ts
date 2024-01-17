@@ -6,7 +6,7 @@ import { BehaviourScript } from "../BehaviourScript"
 
 export class StarfighterHover extends BehaviourScript{
 
-    currentHoverDirection: string = "up";
+    currentHoverDirection: HoverDirection = HoverDirection.UP;
     starfighter: Starfighter;
     starfighterStartY: number;
     hoverLimit: number = 0.025;
@@ -31,7 +31,7 @@ export class StarfighterHover extends BehaviourScript{
             this.doHover()
         } else if(Date.now() > this.createdAt + this.animDelayMilliseconds) {
             //TODO a delay isn't actually the best way to do this
-            //we should instead start part of the way through the animsation cycle
+            //we should instead start part of the way through the animation cycle
             //otherwise it can look like a freeze to the user
             this.animStarted = true;
         }
@@ -39,7 +39,7 @@ export class StarfighterHover extends BehaviourScript{
 
     private doHover(): void{
         let newMovementVector = new Vector(0, this.hoverSpeed * Time.deltaTime, 0);
-        if(this.currentHoverDirection === "down")
+        if(this.currentHoverDirection === HoverDirection.DOWN)
         {
             newMovementVector.y = -this.hoverSpeed * Time.deltaTime;
         }
@@ -48,16 +48,21 @@ export class StarfighterHover extends BehaviourScript{
 
     private updateFloatDirectionAndVector(): void{
         if(
-            this.currentHoverDirection === "up" &&
+            this.currentHoverDirection === HoverDirection.UP &&
             this.starfighter.location.y >= this.starfighterStartY + this.hoverLimit
         ){
-            this.currentHoverDirection = "down"
+            this.currentHoverDirection = HoverDirection.DOWN
         } 
         else if(
-            this.currentHoverDirection == "down" &&
+            this.currentHoverDirection == HoverDirection.DOWN &&
             this.starfighter.location.y <= this.starfighterStartY - this.hoverLimit
         ){
-            this.currentHoverDirection = "up"
+            this.currentHoverDirection = HoverDirection.UP
         }
     }
+}
+
+enum HoverDirection {
+    UP,
+    DOWN
 }

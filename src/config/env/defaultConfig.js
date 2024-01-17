@@ -10,7 +10,7 @@ class DefaultConfig{
 
     static PLAYER_CONFIG = {
         "showPlayer": false,
-        "playerXMovementSpeed": 0,
+        "playerXMovementSpeed": 2.5,
         "playerZMovementSpeed": 0,
         "playerStartPosXYZ": [0, 0, 0],
         "enablePlayerController": false,
