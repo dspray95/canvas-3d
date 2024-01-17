@@ -85,7 +85,6 @@ import { Logger } from "../../engine/logging/logger";
 
     initPlayer(){
       if(CONFIG.PLAYER_CONFIG.showPlayer){
-        Logger.logger.log(`${CONFIG.PLAYER_CONFIG.playerXMovementSpeed}`);
         this.player = new Player(new Point(...CONFIG.PLAYER_CONFIG.playerStartPosXYZ), this)
         this.objects.player.push(this.player)
         if(CONFIG.PLAYER_CONFIG.enablePlayerController ){

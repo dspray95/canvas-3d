@@ -15,7 +15,7 @@ class MobSpawner extends BehaviourScript{
     }
 
     generateChunk(){
-        Logger.logOnce("SPAWNING MOBS", "MOB_SPAWNER")
+        // Logger.logOnce("SPAWNING MOBS", "MOB_SPAWNER")
     }
 
     static getRandomBlockerConfiguration(blockerZPos){

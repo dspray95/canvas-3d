@@ -1,7 +1,7 @@
 class Time{ 
 
-    static deltaTime = 0
-    static timeAtLastFrame = 0
+    static deltaTime = 1
+    static timeAtLastFrame = Math.floor(Date.now()) / 1000
 
     static tick(){
         let currentTime = Math.floor(Date.now()) / 1000

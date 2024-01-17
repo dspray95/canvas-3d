@@ -1,4 +1,5 @@
 import { Time } from "../../../../engine/Time";
+import { Logger } from "../../../../engine/logging/logger";
 import { Camera } from "../../../../engine/rendering/Camera";
 import Vector from "../../../../engine/rendering/objects/primitives/Vector";
 import { Player } from "../../game-objects/actors/Player";
@@ -9,19 +10,19 @@ class PlayerController extends BehaviourScript{
     player: Player;
     playerHorizonalSpeed: number;
     camera: Camera;
-    cameraSpeed: number;
+    zMovementSpeed: number;
     moveCamera: boolean;
     playerMovementVector: Vector;
 
-    constructor(playerObject: Player, cameraObject: Camera, playerHorizonalSpeed: number=0.1, cameraSpeed: number=0.4, moveCamera: boolean=true){
+    constructor(playerObject: Player, cameraObject: Camera, playerHorizonalSpeed: number=0.1, zMovementSpeed: number=0.4, moveCamera: boolean=true){
         super()
         this.player = playerObject
         this.playerHorizonalSpeed = playerHorizonalSpeed
         this.camera = cameraObject
-        this.cameraSpeed = cameraSpeed
+        this.zMovementSpeed = 7.5
         this.moveCamera = moveCamera
 
-        this.playerMovementVector = new Vector(0, 0, this.cameraSpeed)
+        this.playerMovementVector = new Vector(0, 0, 0)
 
     }
 
@@ -32,9 +33,9 @@ class PlayerController extends BehaviourScript{
         if(this.player.location.x >= 1 && this.getMovementDirection() == HorizontalMovementDirection.RIGHT){
                 this.playerMovementVector.x = 0
         }
-        
-        this.camera.translate(new Vector(0, 0, this.cameraSpeed * Time.deltaTime))
-        this.playerMovementVector.y = this.cameraSpeed * Time.deltaTime;
+        let zMovementSpeed = this.zMovementSpeed * Time.deltaTime
+        this.camera.translate(new Vector(0, 0, zMovementSpeed))
+        this.playerMovementVector.z = zMovementSpeed;
         this.player.translate(this.playerMovementVector)
     }
 

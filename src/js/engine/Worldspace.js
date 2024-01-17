@@ -50,7 +50,9 @@ class Worldspace {
     this.camera.resize(viewportWidth, viewportHeight, CONFIG.CAMERA_CONFIG)
   }
 
-  tick(ctx) {
+  tick(ctx) {    
+    Time.tick()
+
     if (CONFIG.SHOW_FPS) this.stats.begin()
 
     this.scripts.forEach(script => {
@@ -74,8 +76,7 @@ class Worldspace {
     
     this.camera.tick()
     this.logger.tick()
-    Time.tick()
-
+    
     if (CONFIG.SHOW_FPS) this.stats.end()
   }
 }
