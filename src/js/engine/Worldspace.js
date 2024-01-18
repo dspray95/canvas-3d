@@ -46,6 +46,14 @@ class Worldspace {
     return
   }
 
+  handleVisibilityChange(){
+    if (document.visibilityState === "visible") {
+      // If we switch to visible from hidden, the time at last frame will still be the time when
+      // the tab was hidden, and so will likely be a large number, throwing off the deltaTime since
+      // the rest of the game will have paused
+      Time.updateTimeAtLastFrame()
+    }
+  }
   handleScreenResize(viewportWidth, viewportHeight){
     this.camera.resize(viewportWidth, viewportHeight, CONFIG.CAMERA_CONFIG)
   }

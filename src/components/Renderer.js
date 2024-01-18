@@ -17,6 +17,9 @@ class EngineRenderer extends Component{
           keyDownListener: null,
           keyUpListener: null
         }
+        const visibilityChangeListener = this.state.worldspace.handleVisibilityChange.bind(this.state.worldspace)
+        document.addEventListener("visibilitychange", visibilityChangeListener)
+
         this.canvasContext = null
     }
 
