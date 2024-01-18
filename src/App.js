@@ -27,7 +27,6 @@ function App() {
           <Title/>
           <Icons/>
         </div>
-        <Skills/>
         <IdeogramContainer/>
       </div>
     </div>

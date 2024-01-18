@@ -51,11 +51,11 @@ import { Logger } from "../../engine/logging/logger";
       // let testBox = new Blocker(boxLocation, this)
       // this.objects.mobs.push(testBox)
 
-      this.testEnemy = new EnemyStarfighter(
-        new Point(0, 0.5, 10),
-        this
-      );
-      this.objects.mobs.push(this.testEnemy);
+      // this.testEnemy = new EnemyStarfighter(
+      //   new Point(0, 0.5, 10),
+      //   this
+      // );
+      // this.objects.mobs.push(this.testEnemy);
 
       this.events.push(
         chunkLoadEvent
