@@ -21,6 +21,7 @@ class Worldspace {
   events: Event[]
   stats: any;
   logger: Logger;
+  paused: boolean = false;
 
   constructor(viewportWidth: number, viewportHeight: number) {
     this.viewportWidth = viewportWidth
@@ -65,7 +66,11 @@ class Worldspace {
       // If we switch to visible from hidden, the time at last frame will still be the time when
       // the tab was hidden, and so will likely be a large number, throwing off the deltaTime since
       // the rest of the game will have paused
-      Time.updateTimeAtLastFrame()
+      Time.updateTimeAtLastFrame();
+      this.paused = false;
+    }
+    if (document.visibilityState === "hidden"){
+      this.paused = true;
     }
   }
   
@@ -74,6 +79,8 @@ class Worldspace {
   }
 
   tick(ctx: any) {    
+    if (this.paused) return;
+    
     Time.tick()
 
     if (CONFIG.SHOW_FPS) this.stats.begin()
