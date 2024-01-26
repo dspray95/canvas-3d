@@ -1,13 +1,28 @@
 import { CONFIG, ENVIRONMENT } from "../../config/config";
+import { BehaviourScript } from "../game/vaporwave-canyon/scripts/BehaviourScript";
 import { Color } from "../tools/Colors";
 import { Logger } from "./logging/logger";
+import WorldObject from "./objects/WorldObject";
 import { Camera } from "./rendering/Camera";
 import Point from "./rendering/objects/primitives/Point";
 import { Time } from "./Time";
-
-
+import { Event } from "./Event";
+ 
 class Worldspace {
-  constructor(viewportWidth, viewportHeight) {
+
+  viewportWidth: number;
+  viewportHeight: number;
+  camera: Camera;
+  backgroundColor: Color;
+  objects: { "default": WorldObject[]; };
+  origin: Point;
+  lightSources: never[];
+  scripts: BehaviourScript[];
+  events: Event[]
+  stats: any;
+  logger: Logger;
+
+  constructor(viewportWidth: number, viewportHeight: number) {
     this.viewportWidth = viewportWidth
     this.viewportHeight = viewportHeight
 
@@ -25,7 +40,6 @@ class Worldspace {
 
     this.lightSources = []
     this.scripts = []
-    this.ui = []
     this.events = []
 
     //stats + logging
@@ -38,11 +52,11 @@ class Worldspace {
     this.logger = Logger.logger
   }
 
-  handleKeyUp(event){
+  handleKeyUp(event: any){
     return
   }
   
-  handleKeyDown(event){
+  handleKeyDown(event: any){
     return
   }
 
@@ -54,11 +68,12 @@ class Worldspace {
       Time.updateTimeAtLastFrame()
     }
   }
-  handleScreenResize(viewportWidth, viewportHeight){
+  
+  handleScreenResize(viewportWidth: number, viewportHeight: number){
     this.camera.resize(viewportWidth, viewportHeight, CONFIG.CAMERA_CONFIG)
   }
 
-  tick(ctx) {    
+  tick(ctx: any) {    
     Time.tick()
 
     if (CONFIG.SHOW_FPS) this.stats.begin()
@@ -68,16 +83,12 @@ class Worldspace {
     })
     
     for(var objectGroup in this.objects){
-      this.objects[objectGroup].forEach(object => {
+      this.objects[objectGroup as keyof typeof this.objects].forEach(object => {
         object.tick();
         object.drawPerspective(ctx, this.camera);
       })
     }
     
-    this.ui.forEach((element) => {
-      element.draw(ctx)
-    })
-
     this.events.forEach(event => {
       event.checkTrigger()
     })
