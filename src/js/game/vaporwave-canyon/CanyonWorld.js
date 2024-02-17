@@ -6,22 +6,13 @@ import { PlayerController } from "./scripts/movement/PlayerController";
 import { CONFIG } from "../../../config/config";
 import { MobSpawner } from "./scripts/MobSpawner";
 import { Event } from "../../engine/Event";
-import { LaserBeam } from "./game-objects/actors/LaserBeam";
-import { CollisionBox } from "../../engine/objects/primitives/CollisionBox";
-import WorldObject from "../../engine/objects/WorldObject";
-import Vector from "../../engine/rendering/objects/primitives/Vector";
-import { Blocker } from "./game-objects/world/Blocker";
-import { EnemyStarfighter } from "./game-objects/actors/EnemyStartfighter";
-import { Starfighter } from "./game-objects/actors/Starfighter";
-import { Logger } from "../../engine/logging/logger";
-
 
   class CanyonWorld extends Worldspace{
 
     testEnemy;
 
-    constructor(viewportWidth, viewportHeight){
-      super(viewportWidth, viewportHeight);
+    constructor(viewportWidth, viewportHeight, displayMode){
+      super(viewportWidth, viewportHeight, displayMode);
       this.name = "worldspace"
 
       const playerConfig = CONFIG.PLAYER_CONFIG
@@ -45,11 +36,6 @@ import { Logger } from "../../engine/logging/logger";
           chunkLoadEvent
         )
       )
-
-      // const boxLocation = new Point(...CONFIG.PLAYER_CONFIG.playerStartPosXYZ)
-      // boxLocation.add(new Vector(0, 0, 10))
-      // let testBox = new Blocker(boxLocation, this)
-      // this.objects.mobs.push(testBox)
 
       // this.testEnemy = new EnemyStarfighter(
       //   new Point(0, 0.5, 10),

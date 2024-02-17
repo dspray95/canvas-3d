@@ -1,12 +1,13 @@
 import React, { Component, createRef } from "react";
 import { CanyonWorld } from "../js/game/vaporwave-canyon/CanyonWorld";
+import { DisplayMode } from "../js/engine/rendering/DisplayMode";
 
 class EngineRenderer extends Component{
 
     constructor(props) {
         super(props);
         
-        const canyonWorldspace = new CanyonWorld(window.innerWidth, window.innerHeight)
+        const canyonWorldspace = new CanyonWorld(window.innerWidth, window.innerHeight, this.getDisplayMode())
         this.state = {
           width: window.innerWidth,
           height: window.innerHeight,
@@ -56,13 +57,10 @@ class EngineRenderer extends Component{
 
     onResize(){
         this.setState({width: window.innerWidth, height: window.innerHeight})
-        this.state.worldspace.handleScreenResize(window.innerWidth, window.innerHeight)
+        this.state.worldspace.handleScreenResize(window.innerWidth, window.innerHeight, this.getDisplayMode())
     }
 
     canvasDraw(ctx) {
-        ctx.clearRect(0, 0, this.state.width, this.state.height);
-        ctx.fillStyle = this.state.fillStyle
-        ctx.fillRect(0, 0, this.state.width, this.state.height);
         this.state.worldspace.tick(ctx);
     }
 
@@ -75,6 +73,14 @@ class EngineRenderer extends Component{
     storeCanvas(canvasNode) {
         this.canvasContext = canvasNode.getContext("2d")
         this.state.canvasRef.current = canvasNode
+    }
+
+    getDisplayMode(){
+        let displayMode = DisplayMode.STANDARD;
+        if (window.innerHeight > window.innerWidth){
+            displayMode = DisplayMode.VERTICAL;
+        }
+        return displayMode;
     }
 
     render() {
