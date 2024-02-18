@@ -5,7 +5,7 @@ This web app consists of a 3d rendering engine written from scratch following al
 
 As a fun aside, the canyon runner terrain is completely procedurally generated!
 
-The live version of the website can be found [here](david-spray.scot).
+The live version of the website can be found [here](https://david-spray.scot/).
 
 ## Game Controls
 

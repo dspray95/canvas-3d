@@ -1,6 +1,7 @@
 import React, { Component, createRef } from "react";
 import { CanyonWorld } from "../js/game/vaporwave-canyon/CanyonWorld";
 import { DisplayMode } from "../js/engine/rendering/DisplayMode";
+import { Color } from "../js/tools/Colors";
 
 class EngineRenderer extends Component{
 
@@ -72,6 +73,8 @@ class EngineRenderer extends Component{
 
     storeCanvas(canvasNode) {
         this.canvasContext = canvasNode.getContext("2d")
+        this.canvasContext.fillColor = Color.SPACEBLUE.toHtmlRgba();
+        this.canvasContext.fillRect(0, 0, window.innerWidth, window.innerHeight);
         this.state.canvasRef.current = canvasNode
     }
 
@@ -100,7 +103,6 @@ class EngineRenderer extends Component{
                     width={this.state.width}
                     height={this.state.height}
                     ref={node => node ? this.storeCanvas(node): null}
-                   
                 />
             </div>
 

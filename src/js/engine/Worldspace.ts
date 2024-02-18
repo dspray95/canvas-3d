@@ -125,7 +125,6 @@ class Worldspace {
       script.execute()
     })
     
-    // this.offscreenCanvasContext.clearRect(0, 0, this.viewportHeight, this.viewportHeight);
     if (this.offscreenCanvasContext !== null){
     
       this.offscreenCanvasContext.fillStyle = this.backgroundColorHtmlRgba;
