@@ -1,6 +1,6 @@
 import { DisplayMode } from "./DisplayMode";
 
-const ultrawide_ratio = 2.333;
+const ULTRAWIDE_RATIO = 2.333;
 
 class DisplayDimensions{
 
@@ -13,9 +13,13 @@ class DisplayDimensions{
     }
 
     getDisplayMode(): DisplayMode{
-        if(this.width < this.height){
+        return DisplayDimensions.getDisplayMode(this.width, this.height);
+    }
+
+    static getDisplayMode(width: number, height: number): DisplayMode{
+        if(width < height){
             return DisplayMode.VERTICAL;
-        } else if(this.width/this.height >= ultrawide_ratio){
+        } else if(width/height >= ULTRAWIDE_RATIO){
             return DisplayMode.ULTRAWIDE;
         } else {
             return DisplayMode.STANDARD;
